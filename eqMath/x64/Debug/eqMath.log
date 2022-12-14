@@ -1,0 +1,3 @@
+﻿  eqMath.cpp
+E:\Programming\C++\EquinoxEngine\eqMath\src\eqMath.cpp(132,19): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  eqMath.vcxproj -> E:\Programming\C++\EquinoxEngine\x64\Debug\eqMath.lib
