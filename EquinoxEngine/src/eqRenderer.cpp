@@ -137,25 +137,25 @@ namespace eq
 		DrawLine(x1, y1, x2, y2, color);
 	}
 
-	void Renderer::WriteText(const wchar_t* text, int x, int y, const Color& color)
+	void Renderer::draw(std::shared_ptr<Text> text)
 	{
-		int length = wcslen(text);
-		Text textStruct;
-		textStruct.length = length;
-		textStruct.text = text;
-		textStruct.x = x;
-		textStruct.y = y;
-		textStruct.color = color;
-		getInstance().text.push_back(textStruct);
-		//DrawText(deviceContext, text, length, &textFormat, DT_CENTER | DT_CALCRECT);
+		if (text.get()->getType() == DrawableType::TEXT)
+			getActiveText().push_back(text);
 	}
 
-	void Renderer::draw(Drawable& drawable)
+	void Renderer::draw(std::shared_ptr<Drawable> drawable)
 	{
-		if (drawable.getType() == DrawableType::TEXT)
-			getActiveText().push_back(std::make_unique<Drawable>(drawable));
+		if (drawable.get()->getType() == DrawableType::TEXT)
+		{
+			//OutputDebugString(L"Adding Text object\n");
+			//getActiveText().push_back(std::static_pointer_cast<Text>(drawable));
+		}
 		else
-			getActiveShapes().push_back(std::make_unique<Drawable>(drawable));
+		{
+			//OutputDebugString(L"Adding Drawable object\n");
+
+			getActiveShapes().push_back(drawable);
+		}
 	}
 
 	void Renderer::getWindowDimenstions(int* outWidth, int* outHeight)
@@ -208,15 +208,38 @@ namespace eq
 			SRCCOPY
 		);
 		SetBkMode(deviceContext, TRANSPARENT);
-		for (Text text : getInstance().text)
-		{
-			SetTextColor(deviceContext, RGB(text.color.red, text.color.green, text.color.blue));
-			TextOut(deviceContext, text.x, text.y, text.text, text.length);
-		}
 
 		if (buffersSwapped() == true) {
-			getInstance().text.clear();
 			getInstance().m_SwappedBuffers = false;
+			getActiveShapes().clear();
+			getActiveText().clear();
+		}
+	}
+
+	void Renderer::RenderShapes()
+	{
+		
+	}
+
+	void Renderer::RenderText(HDC deviceContext)
+	{
+		std::vector<std::shared_ptr<Text>> textBuffer = getInactiveText();
+
+		wchar_t tb[128];
+		swprintf(tb, 128, L"Size: %d\n", textBuffer.size());
+		//OutputDebugString(tb);
+
+		for (unsigned int i = 0; i < textBuffer.size(); i++)
+		{	
+			//OutputDebugString(L"DOING STUFF\n");
+			std::shared_ptr<Text> text = textBuffer[i];//std::static_pointer_cast<Text>(textBuffer[i]);
+			Color col = text.get()->getColor();
+			int length = text.get()->getText().length();
+			OutputDebugString(text.get()->getText().c_str());
+			Math::Vector2 position = text.get()->getPosition();
+			//OutputDebugString(text->getText().c_str());
+			SetTextColor(deviceContext, RGB(col.red, col.green, col.blue));
+			TextOut(deviceContext, std::floor(position.x), std::floor(position.y), text.get()->getText().c_str(), length);
 		}
 	}
 

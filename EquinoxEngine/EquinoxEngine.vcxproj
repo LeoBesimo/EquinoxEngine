@@ -142,6 +142,7 @@
     <ClInclude Include="src\Shapes\eqShapes.hpp" />
     <ClInclude Include="src\Shapes\Line.hpp" />
     <ClInclude Include="src\Shapes\Rectangle.hpp" />
+    <ClInclude Include="src\Shapes\Text.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\eqApplication.cpp" />

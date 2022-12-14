@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <vector>
 #include <memory>
+#include <wchar.h>
 
 #include <eqMath.hpp>
 #include "Shapes/eqShapes.hpp"
@@ -31,10 +32,9 @@ namespace eq
 
 		HWND m_WindowHandle = 0;
 		BitmapBuffer m_BitmapBuffer[2];
-		std::vector<std::unique_ptr<Drawable>> m_ShapeBuffer[2];
-		std::vector<std::unique_ptr<Drawable>> m_TextBuffer[2];
+		std::vector<std::shared_ptr<Drawable>> m_ShapeBuffer[2];
+		std::vector<std::shared_ptr<Text>> m_TextBuffer[2];
 		Color m_ClearColor;
-		std::vector<Text> text;
 		bool m_Buffer2 = false;
 		bool m_SwappedBuffers = false;
 
@@ -53,17 +53,13 @@ namespace eq
 		static void DrawCircle(Math::Vector2 position, int radius, const Color& color);
 		static void DrawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, const Color& color);
 
-		static void WriteText(const wchar_t* text, int x, int y, const Color& color);
-
-		static void draw(Drawable& drawable);
+		static void draw(std::shared_ptr<Drawable> drawable);
+		static void draw(std::shared_ptr<Text> text);
 
 		static void swapBuffers()
 		{
 			getInstance().m_Buffer2 = !getInstance().m_Buffer2;
 			getInstance().m_SwappedBuffers = true;
-			getActiveShapes().clear();
-			getActiveText().clear();
-
 		}
 
 		static bool buffersSwapped() { return getInstance().m_SwappedBuffers; }
@@ -83,20 +79,23 @@ namespace eq
 		}
 
 	private:
-
 		static BitmapBuffer& getActiveBuffer() { return getInstance().m_BitmapBuffer[getInstance().m_Buffer2]; }
 		static BitmapBuffer& getInactiveBuffer() { return getInstance().m_BitmapBuffer[!getInstance().m_Buffer2]; }
 
-		static std::vector<std::unique_ptr<Drawable>>& getActiveShapes() { return getInstance().m_ShapeBuffer[getInstance().m_Buffer2]; }
-		static std::vector<std::unique_ptr<Drawable>>& getInactiveShapes() { return getInstance().m_ShapeBuffer[!getInstance().m_Buffer2]; }
+		static std::vector<std::shared_ptr<Drawable>>& getActiveShapes() { return getInstance().m_ShapeBuffer[getInstance().m_Buffer2]; }
+		static std::vector<std::shared_ptr<Drawable>>& getInactiveShapes() { return getInstance().m_ShapeBuffer[!getInstance().m_Buffer2]; }
 
-		static std::vector<std::unique_ptr<Drawable>>& getActiveText() { return getInstance().m_TextBuffer[getInstance().m_Buffer2]; }
-		static std::vector<std::unique_ptr<Drawable>>& getInactiveText() { return getInstance().m_TextBuffer[!getInstance().m_Buffer2]; }
+		static std::vector<std::shared_ptr<Text>>& getActiveText() { return getInstance().m_TextBuffer[getInstance().m_Buffer2]; }
+		static std::vector<std::shared_ptr<Text>>& getInactiveText() { return getInstance().m_TextBuffer[!getInstance().m_Buffer2]; }
 
 		inline static void setWindowHandle(HWND m_WindowHandle) { getInstance().m_WindowHandle = m_WindowHandle; }
 		static void getWindowDimenstions(int* outWidth, int* outHeight);
 		static void resizeFrameBuffer(int width, int height);
 		static void copyBufferToWindow(HDC deviceContext, int m_WindowWidth, int m_WindowHeight);
+
+		static void RenderShapes();
+		static void RenderText(HDC devicContext);
+
 		static void clear();
 
 		static void plotLineLow(int x0, int y0, int x1, int y1, const Color& color);

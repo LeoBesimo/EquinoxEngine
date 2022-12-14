@@ -3,15 +3,16 @@
 
 class Testgame : public eq::Application
 {
+private:
+	
 public:
-	void m_Update(float delta)
+	void update(float delta)
 	{
-		OutputDebugString(L"Test\n");
+		//OutputDebugString(L"Test\n");
 	}
 
 	void render()
 	{
-
 	}
 };
 
