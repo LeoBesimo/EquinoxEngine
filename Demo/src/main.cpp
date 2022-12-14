@@ -15,7 +15,7 @@ equinoxAppEntryPoint
 
 		game.m_Update(delta);
 
-		eq::Renderer::DrawCircle(mouse, 10, eq::Color(0, 255, 0));
+		eq::Renderer::DrawCircle(mouse, 30, eq::Color(0, 255, 0));
 	});
 
 	eq::Application::start();

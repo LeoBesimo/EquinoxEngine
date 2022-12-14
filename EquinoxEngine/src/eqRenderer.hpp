@@ -87,11 +87,11 @@ namespace eq
 		static BitmapBuffer& getActiveBuffer() { return getInstance().m_BitmapBuffer[getInstance().m_Buffer2]; }
 		static BitmapBuffer& getInactiveBuffer() { return getInstance().m_BitmapBuffer[!getInstance().m_Buffer2]; }
 
-		static std::vector<std::unique_ptr<Drawable>> getActiveShapes() { return getInstance().m_ShapeBuffer[getInstance().m_Buffer2]; }
-		static std::vector<std::unique_ptr<Drawable>> getInactiveShapes() { return getInstance().m_ShapeBuffer[!getInstance().m_Buffer2]; }
+		static std::vector<std::unique_ptr<Drawable>>& getActiveShapes() { return getInstance().m_ShapeBuffer[getInstance().m_Buffer2]; }
+		static std::vector<std::unique_ptr<Drawable>>& getInactiveShapes() { return getInstance().m_ShapeBuffer[!getInstance().m_Buffer2]; }
 
-		static std::vector<std::unique_ptr<Drawable>> getActiveText() { return getInstance().m_TextBuffer[getInstance().m_Buffer2]; }
-		static std::vector<std::unique_ptr<Drawable>> getInactiveText() { return getInstance().m_TextBuffer[!getInstance().m_Buffer2]; }
+		static std::vector<std::unique_ptr<Drawable>>& getActiveText() { return getInstance().m_TextBuffer[getInstance().m_Buffer2]; }
+		static std::vector<std::unique_ptr<Drawable>>& getInactiveText() { return getInstance().m_TextBuffer[!getInstance().m_Buffer2]; }
 
 		inline static void setWindowHandle(HWND m_WindowHandle) { getInstance().m_WindowHandle = m_WindowHandle; }
 		static void getWindowDimenstions(int* outWidth, int* outHeight);

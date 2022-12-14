@@ -1,12 +1,9 @@
-﻿  eqApplication.cpp
-E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqApplication.cpp(43,20): warning C4244: 'initializing': conversion from 'WPARAM' to 'uint32_t', possible loss of data
-  eqRenderer.cpp
+﻿  eqRenderer.cpp
 E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(142,28): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(281,35): warning C4333: '>>': right shift by too large amount, data loss
-E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(282,34): warning C4333: '>>': right shift by too large amount, data loss
-E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(295,18): warning C4244: 'initializing': conversion from 'float' to 'uint8_t', possible loss of data
-E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(296,20): warning C4244: 'initializing': conversion from 'float' to 'uint8_t', possible loss of data
-E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(297,19): warning C4244: 'initializing': conversion from 'float' to 'uint8_t', possible loss of data
-E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(317,49): warning C4552: '+': result of expression not used
-  Generating Code...
+E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(289,35): warning C4333: '>>': right shift by too large amount, data loss
+E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(290,34): warning C4333: '>>': right shift by too large amount, data loss
+E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(303,18): warning C4244: 'initializing': conversion from 'float' to 'uint8_t', possible loss of data
+E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(304,20): warning C4244: 'initializing': conversion from 'float' to 'uint8_t', possible loss of data
+E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(305,19): warning C4244: 'initializing': conversion from 'float' to 'uint8_t', possible loss of data
+E:\Programming\C++\EquinoxEngine\EquinoxEngine\src\eqRenderer.cpp(325,49): warning C4552: '+': result of expression not used
   EquinoxEngine.vcxproj -> E:\Programming\C++\EquinoxEngine\x64\Debug\EquinoxEngine.lib
