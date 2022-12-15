@@ -17,11 +17,11 @@ namespace eq
 			m_Radius1(radius), Drawable(position, DrawableType::CIRCLE)
 		{}
 
-		Ellipse(Math::Vector2 position, float radius1, float radius2, Color& color) :
+		Ellipse(Math::Vector2 position, float radius1, float radius2, Color color) :
 			m_Radius1(radius1), m_Radius2(radius2), Drawable(position, DrawableType::ELLIPSE, color)
 		{}
 
-		Ellipse(Math::Vector2 position, float radius, Color& color) :
+		Ellipse(Math::Vector2 position, float radius, Color color) :
 			m_Radius1(radius), Drawable(position, DrawableType::CIRCLE, color)
 		{}
 

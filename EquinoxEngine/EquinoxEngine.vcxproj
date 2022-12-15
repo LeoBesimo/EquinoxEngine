@@ -137,6 +137,9 @@
     <ClInclude Include="src\eqRenderUtilities.hpp" />
     <ClInclude Include="src\eqInput.hpp" />
     <ClInclude Include="src\Equinox.hpp" />
+    <ClInclude Include="src\Images\eqImages.hpp" />
+    <ClInclude Include="src\Images\Sprite.hpp" />
+    <ClInclude Include="src\Images\Texture.hpp" />
     <ClInclude Include="src\Shapes\Ellipse.hpp" />
     <ClInclude Include="src\Shapes\Drawable.hpp" />
     <ClInclude Include="src\Shapes\eqShapes.hpp" />
@@ -148,6 +151,7 @@
     <ClCompile Include="src\eqApplication.cpp" />
     <ClCompile Include="src\eqInput.cpp" />
     <ClCompile Include="src\eqRenderer.cpp" />
+    <ClCompile Include="src\Images\Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

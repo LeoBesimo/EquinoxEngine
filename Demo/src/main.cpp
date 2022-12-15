@@ -15,6 +15,10 @@ equinoxAppEntryPoint
 	eq::Rectangle rect(eq::Math::Vector2(200, 200), eq::Math::Vector2(100, 100), eq::Color(255,0,0));
 	rect.setCameraDependent(true);
 
+	eq::Ellipse circle(eq::Math::Vector2(300, 100), 30, eq::Color(0, 255, 0, 128));
+	circle.setCameraDependent(false);
+
+
 	std::shared_ptr<eq::Camera> camera(new eq::Camera);
 	camera.get()->setPosition(eq::Math::Vector2(0, 0));
 	camera.get()->setDimension(eq::Math::Vector2(800, 800));
@@ -47,10 +51,12 @@ equinoxAppEntryPoint
 		game.update(delta);
 		game.render();
 
-		//eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(0, 0, 0, 128));
+		eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(0, 0, 255, 128));
 		eq::Renderer::draw(std::make_shared<eq::Text>(text));
 		eq::Renderer::draw(std::make_shared<eq::Text>(text2));
 		eq::Renderer::draw(std::make_shared<eq::Rectangle>(rect));
+		eq::Renderer::draw(std::make_shared<eq::Ellipse>(circle));
+
 	});
 
 	eq::Application::start();

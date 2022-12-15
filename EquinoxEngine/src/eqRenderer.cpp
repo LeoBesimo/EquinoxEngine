@@ -21,6 +21,22 @@ namespace eq
 
 		*pixel = BlendColor(*pixel, raw_color);//raw_color;
 
+
+	}
+
+	void Renderer::SetPixel(int x, int y, const uint32_t color)
+	{
+		BitmapBuffer& buffer = getActiveBuffer();
+
+		if (x < 0 || x >= buffer.width || y < 0 || y >= buffer.height)
+		{
+			return;
+		}
+
+		uint8_t* row = (uint8_t*)buffer.memory + x * s_BytesPerPixel + y * buffer.pitch;
+		uint32_t* pixel = (uint32_t*)row;
+
+		*pixel = BlendColor(*pixel, color);//raw_color;
 	}
 
 	void Renderer::FillRectangle(const Rect& rect, const Color& color)
