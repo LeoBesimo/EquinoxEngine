@@ -384,28 +384,6 @@ namespace eq
 		return (color.red << 16) | (color.green << 8) | color.blue;
 	}
 
-	uint32_t Renderer::BlendColor(Color original, Color background)
-	{
-		float opacity = original.alpha;
-		uint8_t newRed = opacity * original.red + (1 - opacity) * background.red;
-		uint8_t newGreen = opacity * original.green + (1 - opacity) * background.green;
-		uint8_t newBlue = opacity * original.blue + (1 - opacity) * background.blue;
-
-		return (newRed << 16) | (newGreen << 8) | newBlue;
-	}
-
-	uint32_t Renderer::BlendColor(Color original, uint32_t background)
-	{
-		float opacity = original.alpha;
-		/*uint8_t newRed = (opacity * original.red + (1 - opacity) * (uint8_t) (background >> 16));
-		uint8_t newGreen = (opacity * original.green + (1 - opacity) * (uint8_t) (background >> 8));
-		uint8_t newBlue = opacity * original.blue + (1 - opacity) * (uint8_t) (background);*/
-
-		return ((uint8_t)(opacity * original.red + (1 - opacity) * (uint8_t)(background >> 16)) << 16) |
-			((uint8_t)(opacity * original.green + (1 - opacity) * (uint8_t)(background >> 8)) << 8) |
-			((uint8_t)(opacity * original.blue + (1 - opacity) * (uint8_t)(background)));
-	}
-
 	uint32_t Renderer::BlendColor(uint32_t colorA, uint32_t colorB)
 	{
 		uint8_t alpha = colorB >> 24;

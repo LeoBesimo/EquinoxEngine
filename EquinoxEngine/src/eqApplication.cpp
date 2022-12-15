@@ -155,9 +155,14 @@ namespace eq
 
 					HDC deviceContext = GetDC(m_WindowHandle);
 
+
+
 					int width, height;
 					Renderer::getWindowDimenstions(&width, &height);
 
+					while(Renderer::waitForSwap()) { }
+
+					Renderer::clear();
 					Renderer::RenderShapes();
 					Renderer::copyBufferToWindow(deviceContext, width, height);
 					Renderer::RenderText(deviceContext);
@@ -195,8 +200,6 @@ namespace eq
 					DispatchMessage(&message);
 
 				}
-
-				Renderer::clear();
 
 				getInstance().m_Update(delta);
 

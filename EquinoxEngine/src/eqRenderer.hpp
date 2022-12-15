@@ -74,6 +74,8 @@ namespace eq
 
 		static void setCamera(std::shared_ptr<Camera> camera) { getInstance().m_Camera = camera; }
 
+		static bool waitForSwap() { return !getInstance().m_SwappedBuffers; }
+
 	private:
 		Renderer() { m_BitmapBuffer[0] = {}; m_BitmapBuffer[1] = {}; m_ClearColor = Color(255, 255, 255, 255); alphaScaler = 1 / 255; }
 
@@ -123,8 +125,6 @@ namespace eq
 
 		static Color ColorFromUInt(uint32_t color);
 		static uint32_t UIntFromColor(Color color);
-		static uint32_t BlendColor(Color original, Color Background);
-		static uint32_t BlendColor(Color original, uint32_t background);
 		static uint32_t BlendColor(uint32_t colorA, uint32_t colorB);
 	};
 }

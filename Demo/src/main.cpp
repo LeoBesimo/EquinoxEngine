@@ -12,11 +12,11 @@ equinoxAppEntryPoint
 
 	eq::Text text2(eq::Math::Vector2(100, 100), std::wstring(L"yeet"));
 
-	eq::Line rect(eq::Math::Vector2(200, 200), eq::Math::Vector2(100, 100), eq::Color(255,0,0));
+	eq::Rectangle rect(eq::Math::Vector2(200, 200), eq::Math::Vector2(100, 100), eq::Color(255,0,0));
 	rect.setCameraDependent(true);
 
 	std::shared_ptr<eq::Camera> camera(new eq::Camera);
-	camera.get()->setPosition(eq::Math::Vector2(400, 400));
+	camera.get()->setPosition(eq::Math::Vector2(0, 0));
 	camera.get()->setDimension(eq::Math::Vector2(800, 800));
 
 	eq::Renderer::setClearColor(eq::Color(255, 255, 255));
@@ -50,7 +50,7 @@ equinoxAppEntryPoint
 		//eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(0, 0, 0, 128));
 		eq::Renderer::draw(std::make_shared<eq::Text>(text));
 		eq::Renderer::draw(std::make_shared<eq::Text>(text2));
-		eq::Renderer::draw(std::make_shared<eq::Line>(rect));
+		eq::Renderer::draw(std::make_shared<eq::Rectangle>(rect));
 	});
 
 	eq::Application::start();
