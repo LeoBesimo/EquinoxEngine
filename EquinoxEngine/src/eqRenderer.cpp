@@ -14,12 +14,12 @@ namespace eq
 		{
 			return;
 		}
-		uint32_t raw_color = (color.red << 16) | (color.green << 8) | (color.blue << 0);
+		uint32_t raw_color = (color.alpha << 24) | (color.red << 16) | (color.green << 8) | (color.blue << 0);
 
 		uint8_t* row = (uint8_t*)buffer.memory + x * s_BytesPerPixel + y * buffer.pitch;
 		uint32_t* pixel = (uint32_t*)row;
 
-		*pixel = raw_color;
+		*pixel = BlendColor(*pixel, raw_color);//raw_color;
 
 	}
 
@@ -137,25 +137,28 @@ namespace eq
 		DrawLine(x1, y1, x2, y2, color);
 	}
 
+	void Renderer::draw(std::shared_ptr<Ellipse> ellipse)
+	{
+		if (ellipse.get()->getType() == DrawableType::ELLIPSE || ellipse.get()->getType() == DrawableType::CIRCLE)
+			getActiveEllipses().push_back(ellipse);
+	}
+
+	void Renderer::draw(std::shared_ptr<Line> line)
+	{
+		if (line.get()->getType() == DrawableType::LINE)
+			getActiveLines().push_back(line);
+	}
+
+	void Renderer::draw(std::shared_ptr<Rectangle> rectangle)
+	{
+		if (rectangle.get()->getType() == DrawableType::RECT)
+			getActiveRectangles().push_back(rectangle);
+	}
+
 	void Renderer::draw(std::shared_ptr<Text> text)
 	{
 		if (text.get()->getType() == DrawableType::TEXT)
 			getActiveText().push_back(text);
-	}
-
-	void Renderer::draw(std::shared_ptr<Drawable> drawable)
-	{
-		if (drawable.get()->getType() == DrawableType::TEXT)
-		{
-			//OutputDebugString(L"Adding Text object\n");
-			//getActiveText().push_back(std::static_pointer_cast<Text>(drawable));
-		}
-		else
-		{
-			//OutputDebugString(L"Adding Drawable object\n");
-
-			getActiveShapes().push_back(drawable);
-		}
 	}
 
 	void Renderer::getWindowDimenstions(int* outWidth, int* outHeight)
@@ -211,33 +214,32 @@ namespace eq
 
 		if (buffersSwapped() == true) {
 			getInstance().m_SwappedBuffers = false;
-			getActiveShapes().clear();
+			getActiveEllipses().clear();
+			getActiveLines().clear();
+			getActiveRectangles().clear();
 			getActiveText().clear();
 		}
 	}
 
 	void Renderer::RenderShapes()
 	{
-		
+		RenderRectangles();
+		RenderLines();
+		RenderEllipses();
 	}
 
 	void Renderer::RenderText(HDC deviceContext)
 	{
 		std::vector<std::shared_ptr<Text>> textBuffer = getInactiveText();
 
-		wchar_t tb[128];
-		swprintf(tb, 128, L"Size: %d\n", textBuffer.size());
-		//OutputDebugString(tb);
-
 		for (unsigned int i = 0; i < textBuffer.size(); i++)
-		{	
-			//OutputDebugString(L"DOING STUFF\n");
-			std::shared_ptr<Text> text = textBuffer[i];//std::static_pointer_cast<Text>(textBuffer[i]);
+		{
+			std::shared_ptr<Text> text = textBuffer[i];
 			Color col = text.get()->getColor();
 			int length = text.get()->getText().length();
-			OutputDebugString(text.get()->getText().c_str());
 			Math::Vector2 position = text.get()->getPosition();
-			//OutputDebugString(text->getText().c_str());
+			if (text.get()->isCameraDependent())
+				position += getInstance().m_Camera.get()->getPosition();
 			SetTextColor(deviceContext, RGB(col.red, col.green, col.blue));
 			TextOut(deviceContext, std::floor(position.x), std::floor(position.y), text.get()->getText().c_str(), length);
 		}
@@ -248,6 +250,68 @@ namespace eq
 		BitmapBuffer& buffer = getActiveBuffer();
 
 		FillRectangle(Rect(0, 0, float(buffer.width), float(buffer.height)), getInstance().m_ClearColor);
+	}
+
+	void Renderer::RenderRectangles()
+	{
+		std::vector<std::shared_ptr<Rectangle>> rectBuffer = getInactiveRectangles();
+
+		for (unsigned int i = 0; i < rectBuffer.size(); i++)
+		{
+			std::shared_ptr<Rectangle> rect = rectBuffer[i];
+
+			Math::Vector2 pos = rect.get()->getPosition();
+			if (rect.get()->isCameraDependent())
+				pos += getInstance().m_Camera.get()->getPosition();
+			Math::Vector2 dim = rect.get()->getDimension();
+			Rect r(pos.x, pos.y, dim.x, dim.y);
+			DrawRectangle(r, rect.get()->getColor());
+		}
+	}
+
+	void Renderer::RenderEllipses()
+	{
+		std::vector<std::shared_ptr<Ellipse>> ellipseBuffer = getInactiveEllipses();
+
+		for (unsigned int i = 0; i < ellipseBuffer.size(); i++)
+		{
+			std::shared_ptr<Ellipse> ellipse = ellipseBuffer[i];
+
+			Math::Vector2 pos = ellipse.get()->getPosition();
+			if (ellipse.get()->isCameraDependent())
+				pos += getInstance().m_Camera.get()->getPosition();
+			if (ellipse.get()->getType() == DrawableType::ELLIPSE)
+			{
+				float r1, r2;
+				ellipse.get()->getRadius(&r1, &r2);
+				FillEllipse(pos.x, pos.y, r1, r2, ellipse.get()->getColor());
+			}
+			else
+			{
+				float r;
+				ellipse.get()->getRadius(&r);
+				DrawCircle(pos, r, ellipse.get()->getColor());
+			}
+		}
+	}
+
+	void Renderer::RenderLines()
+	{
+		std::vector<std::shared_ptr<Line>> lineBuffer = getInactiveLines();
+
+		for (unsigned int i = 0; i < lineBuffer.size(); i++)
+		{
+			std::shared_ptr<Line> line = lineBuffer[i];
+
+			Math::Vector2 pos1 = line.get()->getStartPos();
+			Math::Vector2 pos2 = line.get()->getEndPos();
+			if (line.get()->isCameraDependent())
+			{
+				pos1 += getInstance().m_Camera.get()->getPosition();
+				pos2 += getInstance().m_Camera.get()->getPosition();
+			}
+			DrawLine(pos1, pos2, line.get()->getColor());
+		}
 	}
 
 	void Renderer::plotLineLow(int x0, int y0, int x1, int y1, const Color& color)
@@ -341,10 +405,14 @@ namespace eq
 			((uint8_t)(opacity * original.green + (1 - opacity) * (uint8_t)(background >> 8)) << 8) |
 			((uint8_t)(opacity * original.blue + (1 - opacity) * (uint8_t)(background)));
 	}
+
 	uint32_t Renderer::BlendColor(uint32_t colorA, uint32_t colorB)
 	{
-		uint32_t rb = (colorA & 0x00FF00FF) + (((colorB >> 24) * colorB & 0x00FF00FF) >> 8);
-		uint32_t g = (colorA & 0x0000FF00) + (((colorB >> 24) * colorB & 0x0000FF00) >> 8);
-		return (rb & 0x00FF00FF); +(255 & 0xFF000000) + (g & 0x0000FF00);
+		uint8_t alpha = colorB >> 24;
+		uint32_t rb1 = ((0x100 - alpha) * (colorA & 0xFF00FF)) >> 8;
+		uint32_t rb2 = (alpha * (colorB & 0xFF00FF)) >> 8;
+		uint32_t g1 = ((0x100 - alpha) * (colorA & 0x00FF00)) >> 8;
+		uint32_t g2 = (alpha * (colorB & 0x00FF00)) >> 8;
+		return ((rb1 | rb2) & 0xFF00FF) + ((g1 | g2) & 0x00FF00);
 	}
 }

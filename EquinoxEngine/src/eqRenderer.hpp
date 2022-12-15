@@ -12,6 +12,7 @@
 #include <eqMath.hpp>
 #include "Shapes/eqShapes.hpp"
 #include "eqRenderUtilities.hpp"
+#include "eqCamera.hpp"
 
 //#include "Shapes/Drawable.h"
 
@@ -25,6 +26,7 @@ namespace eq
 			WPARAM wParam,
 			LPARAM lParam
 		);
+
 		friend class Application;
 
 	private:
@@ -32,11 +34,15 @@ namespace eq
 
 		HWND m_WindowHandle = 0;
 		BitmapBuffer m_BitmapBuffer[2];
-		std::vector<std::shared_ptr<Drawable>> m_ShapeBuffer[2];
+		std::vector<std::shared_ptr<Rectangle>> m_RectangleBuffer[2];
+		std::vector<std::shared_ptr<Ellipse>> m_EllipseBuffer[2];
+		std::vector<std::shared_ptr<Line>> m_LineBuffer[2];
 		std::vector<std::shared_ptr<Text>> m_TextBuffer[2];
 		Color m_ClearColor;
 		bool m_Buffer2 = false;
 		bool m_SwappedBuffers = false;
+
+		std::shared_ptr<Camera> m_Camera;
 
 		static float alphaScaler;
 
@@ -53,7 +59,9 @@ namespace eq
 		static void DrawCircle(Math::Vector2 position, int radius, const Color& color);
 		static void DrawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, const Color& color);
 
-		static void draw(std::shared_ptr<Drawable> drawable);
+		static void draw(std::shared_ptr<Ellipse> ellipse);
+		static void draw(std::shared_ptr<Line> line);
+		static void draw(std::shared_ptr<Rectangle> rectangle);
 		static void draw(std::shared_ptr<Text> text);
 
 		static void swapBuffers()
@@ -63,6 +71,8 @@ namespace eq
 		}
 
 		static bool buffersSwapped() { return getInstance().m_SwappedBuffers; }
+
+		static void setCamera(std::shared_ptr<Camera> camera) { getInstance().m_Camera = camera; }
 
 	private:
 		Renderer() { m_BitmapBuffer[0] = {}; m_BitmapBuffer[1] = {}; m_ClearColor = Color(255, 255, 255, 255); alphaScaler = 1 / 255; }
@@ -82,8 +92,14 @@ namespace eq
 		static BitmapBuffer& getActiveBuffer() { return getInstance().m_BitmapBuffer[getInstance().m_Buffer2]; }
 		static BitmapBuffer& getInactiveBuffer() { return getInstance().m_BitmapBuffer[!getInstance().m_Buffer2]; }
 
-		static std::vector<std::shared_ptr<Drawable>>& getActiveShapes() { return getInstance().m_ShapeBuffer[getInstance().m_Buffer2]; }
-		static std::vector<std::shared_ptr<Drawable>>& getInactiveShapes() { return getInstance().m_ShapeBuffer[!getInstance().m_Buffer2]; }
+		static std::vector<std::shared_ptr<Rectangle>>& getActiveRectangles() { return getInstance().m_RectangleBuffer[getInstance().m_Buffer2]; }
+		static std::vector<std::shared_ptr<Rectangle>>& getInactiveRectangles() { return getInstance().m_RectangleBuffer[!getInstance().m_Buffer2]; }
+
+		static std::vector<std::shared_ptr<Ellipse>>& getActiveEllipses() { return getInstance().m_EllipseBuffer[getInstance().m_Buffer2]; }
+		static std::vector<std::shared_ptr<Ellipse>>& getInactiveEllipses() { return getInstance().m_EllipseBuffer[!getInstance().m_Buffer2]; }
+
+		static std::vector<std::shared_ptr<Line>>& getActiveLines() { return getInstance().m_LineBuffer[getInstance().m_Buffer2]; }
+		static std::vector<std::shared_ptr<Line>>& getInactiveLines() { return getInstance().m_LineBuffer[!getInstance().m_Buffer2]; }
 
 		static std::vector<std::shared_ptr<Text>>& getActiveText() { return getInstance().m_TextBuffer[getInstance().m_Buffer2]; }
 		static std::vector<std::shared_ptr<Text>>& getInactiveText() { return getInstance().m_TextBuffer[!getInstance().m_Buffer2]; }
@@ -97,6 +113,10 @@ namespace eq
 		static void RenderText(HDC devicContext);
 
 		static void clear();
+
+		static void RenderRectangles();
+		static void RenderEllipses();
+		static void RenderLines();
 
 		static void plotLineLow(int x0, int y0, int x1, int y1, const Color& color);
 		static void plotLineHigh(int x0, int y0, int x1, int y1, const Color& color);

@@ -20,6 +20,8 @@ namespace eq
 			LPARAM lParam
 		);
 
+		friend class std::thread;
+
 	private:
 		HINSTANCE m_hInstance;
 		HWND m_WindowHandle;
@@ -30,7 +32,8 @@ namespace eq
 		int m_WindowHeight;
 
 		std::function<void(float delta)> m_Update;
-		float m_SecondsPerFrame = 1.f / 240.f;
+		float m_SecondsPerFrame = 1.f / 60.f;
+
 
 	public:
 		Application();

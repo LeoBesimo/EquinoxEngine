@@ -12,11 +12,11 @@ namespace eq
 		Math::Vector2 m_End;
 
 	public:
-		Line(Math::Vector2& p1, Math::Vector2& p2) :
+		Line(Math::Vector2 p1, Math::Vector2 p2) :
 			m_Start(p1), m_End(p2), Drawable(Math::Vector2(), DrawableType::LINE)
 		{}
 
-		Line(Math::Vector2& p1, Math::Vector2& p2, Color& color) :
+		Line(Math::Vector2 p1, Math::Vector2 p2, Color color) :
 			m_Start(p1), m_End(p2), Drawable(Math::Vector2(), DrawableType::LINE, color)
 		{}
 

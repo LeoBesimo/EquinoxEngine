@@ -13,15 +13,11 @@ namespace eq
 		std::vector<wchar_t> chars;
 
 	public:
-		Text(Math::Vector2 position, std::wstring& text) :
+		Text(Math::Vector2 position, std::wstring text) :
 			Drawable(position, DrawableType::TEXT)
 		{
 			m_Text = text;
 			chars = std::vector<wchar_t>(text.begin(), text.end());
-			OutputDebugString(text.c_str());
-			//OutputDebugString(m_Text);
-			OutputDebugString(m_Text.c_str());
-			OutputDebugString(L"\n");
 		}
 
 		Text(Math::Vector2 position, std::wstring& text, Color& color) :

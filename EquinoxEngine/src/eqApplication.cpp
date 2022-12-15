@@ -158,8 +158,8 @@ namespace eq
 					int width, height;
 					Renderer::getWindowDimenstions(&width, &height);
 
+					Renderer::RenderShapes();
 					Renderer::copyBufferToWindow(deviceContext, width, height);
-					
 					Renderer::RenderText(deviceContext);
 
 					ValidateRect(m_WindowHandle, NULL);

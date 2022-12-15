@@ -15,7 +15,7 @@ namespace eq
 			m_Dimension(dimension), Drawable(position, DrawableType::RECT)
 		{}
 
-		Rectangle(Math::Vector2 position, Math::Vector2 dimension, Color& color) :
+		Rectangle(Math::Vector2 position, Math::Vector2 dimension, Color color) :
 			m_Dimension(dimension), Drawable(position, DrawableType::RECT, color)
 		{}
 

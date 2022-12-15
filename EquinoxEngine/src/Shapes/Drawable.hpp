@@ -17,6 +17,7 @@ namespace eq
 		Math::Vector2 m_Position;
 		DrawableType m_Type;
 		Color m_Color;
+		bool m_CameraDependent = true;
 
 	public:
 		Drawable() :
@@ -38,5 +39,8 @@ namespace eq
 		Color getColor() { return m_Color; }
 
 		DrawableType getType() { return m_Type; }
+
+		bool isCameraDependent() { return m_CameraDependent; }
+		void setCameraDependent(bool dependent) { m_CameraDependent = dependent; }
 	};
 }
