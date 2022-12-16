@@ -1,6 +1,10 @@
 #include "Equinox.hpp"
 #include "Testgame.hpp"
 
+#include <stdio.h>
+#include <io.h>
+#include <fcntl.h>
+
 equinoxAppEntryPoint
 {
 	Testgame game;
@@ -17,6 +21,21 @@ equinoxAppEntryPoint
 
 	eq::Ellipse circle(eq::Math::Vector2(300, 100), 30, eq::Color(0, 255, 0, 128));
 	circle.setCameraDependent(false);
+
+	eq::BitmapTexture texture(400,400);
+	for (unsigned int i = 0; i < 400; i++)
+	{
+		for (unsigned int j = 0; j < 400; j++)
+		{
+			uint8_t r = (uint8_t)(((float)i / 400) * 255.f);
+			uint8_t g = (uint8_t)((1.f - (float)i / 400) * 255.f);
+			uint8_t b = (uint8_t)(((float)j / 400) * 255.f);
+			uint32_t color = r << 16 | g << 8 | b;
+			texture.setPixel(i, j, color);
+		}
+	}
+
+	texture.save("test.bmp");
 
 
 	std::shared_ptr<eq::Camera> camera(new eq::Camera);

@@ -257,7 +257,7 @@ namespace eq
 			if (text.get()->isCameraDependent())
 				position += getInstance().m_Camera.get()->getPosition();
 			SetTextColor(deviceContext, RGB(col.red, col.green, col.blue));
-			TextOut(deviceContext, std::floor(position.x), std::floor(position.y), text.get()->getText().c_str(), length);
+			TextOut(deviceContext, std::floor(position.x + 0.5f), std::floor(position.y + 0.5f), text.get()->getText().c_str(), length);
 		}
 	}
 

@@ -104,7 +104,7 @@ namespace eq
 			OutputDebugString(L"Failed to Register Window Class\n");
 		}
 
-		DWORD windowStyle = WS_MAXIMIZEBOX | WS_SYSMENU | WS_CAPTION;
+		DWORD windowStyle = CS_HREDRAW | CS_VREDRAW;//WS_MAXIMIZEBOX | WS_SYSMENU | WS_CAPTION;
 
 		RECT windowRect = {};
 		windowRect.left = 0;
@@ -160,7 +160,7 @@ namespace eq
 					int width, height;
 					Renderer::getWindowDimenstions(&width, &height);
 
-					while(Renderer::waitForSwap()) { }
+					while (Renderer::waitForSwap()) {}
 
 					Renderer::clear();
 					Renderer::RenderShapes();
