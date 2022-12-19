@@ -151,6 +151,7 @@
     <ClCompile Include="src\eqApplication.cpp" />
     <ClCompile Include="src\eqInput.cpp" />
     <ClCompile Include="src\eqRenderer.cpp" />
+    <ClCompile Include="src\Images\Sprite.cpp" />
     <ClCompile Include="src\Images\Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

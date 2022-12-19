@@ -13,6 +13,7 @@
 #include "Shapes/eqShapes.hpp"
 #include "eqRenderUtilities.hpp"
 #include "eqCamera.hpp"
+#include "Images/eqImages.hpp"
 
 //#include "Shapes/Drawable.h"
 
@@ -38,6 +39,7 @@ namespace eq
 		std::vector<std::shared_ptr<Ellipse>> m_EllipseBuffer[2];
 		std::vector<std::shared_ptr<Line>> m_LineBuffer[2];
 		std::vector<std::shared_ptr<Text>> m_TextBuffer[2];
+		std::vector<std::shared_ptr<Sprite>> m_SpriteBuffer[2];
 		Color m_ClearColor;
 		bool m_Buffer2 = false;
 		bool m_SwappedBuffers = false;
@@ -59,11 +61,13 @@ namespace eq
 		static void DrawCircle(int originX, int originY, int radius, const Color& color);
 		static void DrawCircle(Math::Vector2 position, int radius, const Color& color);
 		static void DrawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, const Color& color);
+		static void DrawSprite(Sprite& sprite);
 
 		static void draw(std::shared_ptr<Ellipse> ellipse);
 		static void draw(std::shared_ptr<Line> line);
 		static void draw(std::shared_ptr<Rectangle> rectangle);
 		static void draw(std::shared_ptr<Text> text);
+		static void draw(std::shared_ptr<Sprite> sprite);
 
 		static void swapBuffers()
 		{
@@ -107,19 +111,23 @@ namespace eq
 		static std::vector<std::shared_ptr<Text>>& getActiveText() { return getInstance().m_TextBuffer[getInstance().m_Buffer2]; }
 		static std::vector<std::shared_ptr<Text>>& getInactiveText() { return getInstance().m_TextBuffer[!getInstance().m_Buffer2]; }
 
+		static std::vector<std::shared_ptr<Sprite>>& getActiveSprites() { return getInstance().m_SpriteBuffer[getInstance().m_Buffer2]; }
+		static std::vector<std::shared_ptr<Sprite>>& getInactiveSprites() { return getInstance().m_SpriteBuffer[!getInstance().m_Buffer2]; }
+
 		inline static void setWindowHandle(HWND m_WindowHandle) { getInstance().m_WindowHandle = m_WindowHandle; }
 		static void getWindowDimenstions(int* outWidth, int* outHeight);
 		static void resizeFrameBuffer(int width, int height);
 		static void copyBufferToWindow(HDC deviceContext, int m_WindowWidth, int m_WindowHeight);
 
-		static void RenderShapes();
-		static void RenderText(HDC devicContext);
-
 		static void clear();
+		static void clearBuffers();
 
+		static void RenderObjects();
+		static void RenderText(HDC devicContext);
 		static void RenderRectangles();
 		static void RenderEllipses();
 		static void RenderLines();
+		static void RenderSprites();
 
 		static void plotLineLow(int x0, int y0, int x1, int y1, const Color& color);
 		static void plotLineHigh(int x0, int y0, int x1, int y1, const Color& color);

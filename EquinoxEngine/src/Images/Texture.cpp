@@ -22,6 +22,53 @@ namespace eq
 		m_Buffer[x + y * m_Width] = color;
 	}
 
+	bool BitmapTexture::read(const char* path)
+	{
+		std::ifstream in;
+		in.open(path, std::ios::in | std::ios::binary);
+
+		if (!in.is_open())
+			return false;
+
+		const int fileHeaderSize = 14;
+		unsigned char fileHeader[fileHeaderSize];
+		in.read(reinterpret_cast<char*>(fileHeader), fileHeaderSize);
+
+		if (fileHeader[0] != 'B' || fileHeader[1] != 'M')
+			return false;
+
+		const int informationHeaderSize = 40;
+		unsigned char informationHeader[informationHeaderSize];
+		in.read(reinterpret_cast<char*>(informationHeader), informationHeaderSize);
+
+		int fileSize = fileHeader[2] + (fileHeader[3] << 8) + (fileHeader[4] << 16) + (fileHeader[5] << 24);
+
+		m_Width = informationHeader[4] + (informationHeader[5] << 8) + (informationHeader[6] << 16) + (informationHeader[7] << 24);
+		m_Height = informationHeader[8] + (informationHeader[9] << 8) + (informationHeader[10] << 16) + (informationHeader[11] << 24);
+
+		m_Buffer.resize(m_Width * m_Height);
+
+		const int paddingAmmount = ((4 - (m_Width * 4) % 4) % 4);
+
+		for (unsigned int j = 0; j < m_Height; j++)
+		{
+			for (unsigned int i = 0; i < m_Width; i++)
+			{
+				unsigned char colors[4];
+				in.read(reinterpret_cast<char*>(colors), 4);
+				uint8_t red = static_cast<uint8_t>(colors[2]);
+				uint8_t green = static_cast<uint8_t>(colors[1]);
+				uint8_t blue = static_cast<uint8_t>(colors[0]);
+				uint8_t alpha = static_cast<uint8_t>(colors[3]);
+				m_Buffer[i + j * m_Width] = (uint32_t)((alpha << 24) | (red << 16) | (green << 8) | (blue));
+			}
+			in.ignore(paddingAmmount);
+		}
+
+		in.close();
+		return true;
+	}
+
 	bool BitmapTexture::save(const char* path) const
 	{
 		std::ofstream out;
@@ -61,7 +108,7 @@ namespace eq
 		fileHeader[13] = 0;
 
 		//informationHeader
-		
+
 		unsigned char informationHeader[informationHeaderSize];
 
 		informationHeader[0] = informationHeaderSize;
@@ -73,12 +120,12 @@ namespace eq
 		informationHeader[5] = m_Width >> 8;
 		informationHeader[6] = m_Width >> 16;
 		informationHeader[7] = m_Width >> 24;
-		
+
 		informationHeader[8] = m_Height;
 		informationHeader[9] = m_Height >> 8;
 		informationHeader[10] = m_Height >> 16;
 		informationHeader[11] = m_Height >> 24;
-		
+
 		// Planes
 		informationHeader[12] = 1;
 		informationHeader[13] = 0;
@@ -157,7 +204,7 @@ namespace eq
 
 				unsigned char col[] = { b, g, r };
 
-				out.write(reinterpret_cast<char*>(col),3);
+				out.write(reinterpret_cast<char*>(col), 3);
 			}
 			out.write(reinterpret_cast<char*>(bmpPad), paddingAmmount);
 		}

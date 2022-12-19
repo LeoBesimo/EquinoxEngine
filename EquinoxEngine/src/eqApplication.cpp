@@ -163,7 +163,7 @@ namespace eq
 					while (Renderer::waitForSwap()) {}
 
 					Renderer::clear();
-					Renderer::RenderShapes();
+					Renderer::RenderObjects();
 					Renderer::copyBufferToWindow(deviceContext, width, height);
 					Renderer::RenderText(deviceContext);
 

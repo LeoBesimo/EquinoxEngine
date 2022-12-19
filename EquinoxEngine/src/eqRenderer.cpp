@@ -153,6 +153,22 @@ namespace eq
 		DrawLine(x1, y1, x2, y2, color);
 	}
 
+	void Renderer::DrawSprite(Sprite& sprite)
+	{
+		Math::Vector2 position = sprite.m_Position;
+		if (sprite.m_CameraDependent)
+			position += getInstance().m_Camera.get()->getPosition();
+
+		for (unsigned int j = 0; j < sprite.m_Height; j++)
+		{
+			for (unsigned int i = 0; i < sprite.m_Width; i++)
+			{
+				SetPixel(position.x + i, position.y + sprite.m_Height - 1 - j, sprite.getPixel(i, j));
+			}
+		}
+
+	}
+
 	void Renderer::draw(std::shared_ptr<Ellipse> ellipse)
 	{
 		if (ellipse.get()->getType() == DrawableType::ELLIPSE || ellipse.get()->getType() == DrawableType::CIRCLE)
@@ -175,6 +191,11 @@ namespace eq
 	{
 		if (text.get()->getType() == DrawableType::TEXT)
 			getActiveText().push_back(text);
+	}
+
+	void Renderer::draw(std::shared_ptr<Sprite> sprite)
+	{
+		getActiveSprites().push_back(sprite);
 	}
 
 	void Renderer::getWindowDimenstions(int* outWidth, int* outHeight)
@@ -230,18 +251,32 @@ namespace eq
 
 		if (buffersSwapped() == true) {
 			getInstance().m_SwappedBuffers = false;
-			getActiveEllipses().clear();
-			getActiveLines().clear();
-			getActiveRectangles().clear();
-			getActiveText().clear();
+			clearBuffers();
 		}
 	}
 
-	void Renderer::RenderShapes()
+	void Renderer::clear()
+	{
+		BitmapBuffer& buffer = getActiveBuffer();
+
+		FillRectangle(Rect(0, 0, float(buffer.width), float(buffer.height)), getInstance().m_ClearColor);
+	}
+
+	void Renderer::clearBuffers()
+	{
+		getActiveEllipses().clear();
+		getActiveLines().clear();
+		getActiveRectangles().clear();
+		getActiveText().clear();
+		getActiveSprites().clear();
+	}
+
+	void Renderer::RenderObjects()
 	{
 		RenderRectangles();
 		RenderLines();
 		RenderEllipses();
+		RenderSprites();
 	}
 
 	void Renderer::RenderText(HDC deviceContext)
@@ -259,13 +294,6 @@ namespace eq
 			SetTextColor(deviceContext, RGB(col.red, col.green, col.blue));
 			TextOut(deviceContext, std::floor(position.x + 0.5f), std::floor(position.y + 0.5f), text.get()->getText().c_str(), length);
 		}
-	}
-
-	void Renderer::clear()
-	{
-		BitmapBuffer& buffer = getActiveBuffer();
-
-		FillRectangle(Rect(0, 0, float(buffer.width), float(buffer.height)), getInstance().m_ClearColor);
 	}
 
 	void Renderer::RenderRectangles()
@@ -327,6 +355,15 @@ namespace eq
 				pos2 += getInstance().m_Camera.get()->getPosition();
 			}
 			DrawLine(pos1, pos2, line.get()->getColor());
+		}
+	}
+
+	void Renderer::RenderSprites()
+	{
+		std::vector<std::shared_ptr<Sprite>> sprites = getInactiveSprites();
+		for (unsigned int i = 0; i < sprites.size(); i++)
+		{
+			DrawSprite(*sprites[i]);
 		}
 	}
 
