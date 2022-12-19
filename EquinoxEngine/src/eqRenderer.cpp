@@ -163,7 +163,7 @@ namespace eq
 		{
 			for (unsigned int i = 0; i < sprite.m_Width; i++)
 			{
-				SetPixel(position.x + i, position.y + sprite.m_Height - 1 - j, sprite.getPixel(i, j));
+				SetPixel(position.x + i, position.y + j, sprite.getPixel(i, j));
 			}
 		}
 

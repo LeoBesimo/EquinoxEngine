@@ -9,7 +9,7 @@ namespace eq
 			return 0;
 		}
 
-		return m_Buffer[x + y * m_Width];
+		return (255 << 24) |  (m_Buffer[x + y * m_Width] & 0xFFFFFF);
 	}
 
 	void BitmapTexture::setPixel(unsigned int x, unsigned int y, uint32_t color)
@@ -22,6 +22,38 @@ namespace eq
 		m_Buffer[x + y * m_Width] = color;
 	}
 
+	void BitmapTexture::invertY()
+	{
+		std::vector<uint32_t> temp(m_Buffer.size());
+		for (unsigned int j = 0; j < m_Height; j++)
+		{
+			for (unsigned int i = 0; i < m_Width; i++)
+			{
+				unsigned int index = i + j * m_Width;
+				unsigned int indexReversed = i + (m_Height - 1 - j) * m_Width;
+				temp[indexReversed] = m_Buffer[index];
+			}
+		}
+
+		m_Buffer = temp;
+	}
+
+	void BitmapTexture::invertX()
+	{
+		std::vector<uint32_t> temp(m_Buffer.size());
+		for (unsigned int j = 0; j < m_Height; j++)
+		{
+			for (unsigned int i = 0; i < m_Width; i++)
+			{
+				unsigned int index = i + j * m_Width;
+				unsigned int indexReversed = (m_Width - 1 - i) + j * m_Width;
+				temp[indexReversed] = m_Buffer[index];
+			}
+		}
+
+		m_Buffer = temp;
+	}
+
 	bool BitmapTexture::read(const char* path)
 	{
 		std::ifstream in;
@@ -29,44 +61,41 @@ namespace eq
 
 		if (!in.is_open())
 			return false;
+		
+		in.read(reinterpret_cast<char*>(&m_FileHeader), sizeof(BitmapFileHeader));
+		in.read(reinterpret_cast<char*>(&m_InfoHeader), sizeof(BITMAPINFOHEADER));
 
-		const int fileHeaderSize = 14;
-		unsigned char fileHeader[fileHeaderSize];
-		in.read(reinterpret_cast<char*>(fileHeader), fileHeaderSize);
+		if(m_FileHeader.signature)
 
-		if (fileHeader[0] != 'B' || fileHeader[1] != 'M')
-			return false;
-
-		const int informationHeaderSize = 40;
-		unsigned char informationHeader[informationHeaderSize];
-		in.read(reinterpret_cast<char*>(informationHeader), informationHeaderSize);
-
-		int fileSize = fileHeader[2] + (fileHeader[3] << 8) + (fileHeader[4] << 16) + (fileHeader[5] << 24);
-
-		m_Width = informationHeader[4] + (informationHeader[5] << 8) + (informationHeader[6] << 16) + (informationHeader[7] << 24);
-		m_Height = informationHeader[8] + (informationHeader[9] << 8) + (informationHeader[10] << 16) + (informationHeader[11] << 24);
-
-		m_Buffer.resize(m_Width * m_Height);
-
-		const int paddingAmmount = ((4 - (m_Width * 4) % 4) % 4);
-
-		for (unsigned int j = 0; j < m_Height; j++)
+		if (m_InfoHeader.bitsPerPixel <= 3)
 		{
-			for (unsigned int i = 0; i < m_Width; i++)
-			{
-				unsigned char colors[4];
-				in.read(reinterpret_cast<char*>(colors), 4);
-				uint8_t red = static_cast<uint8_t>(colors[2]);
-				uint8_t green = static_cast<uint8_t>(colors[1]);
-				uint8_t blue = static_cast<uint8_t>(colors[0]);
-				uint8_t alpha = static_cast<uint8_t>(colors[3]);
-				m_Buffer[i + j * m_Width] = (uint32_t)((alpha << 24) | (red << 16) | (green << 8) | (blue));
-			}
-			in.ignore(paddingAmmount);
+			return false;
 		}
 
+		// Determine the size of the pixel data
+		const int width = m_InfoHeader.width;
+		const int height = m_InfoHeader.height;
+		const int numPixels = width * height;
+
+		m_Width = width;
+		m_Height = height;
+
+		// Seek to the start of the pixel data in the file
+		in.seekg(m_FileHeader.offsetToPixelData, std::ios::beg);
+
+		// Create an std::vector to store the pixel data
+		std::vector<uint32_t> pixels(numPixels);
+		m_Buffer.resize(numPixels);
+		// Read the pixel data from the file into the vector
+		in.read(reinterpret_cast<char*>(m_Buffer.data()), numPixels * sizeof(uint32_t));
+
+		// Close the file
 		in.close();
-		return true;
+
+		// You can now access the pixel data stored in the vector using the [] operator,
+		// e.g. pixels[0] is the first pixel in the image, pixels[1] is the second pixel, etc.
+
+		return 0;
 	}
 
 	bool BitmapTexture::save(const char* path) const
@@ -77,138 +106,39 @@ namespace eq
 		if (!out.is_open())
 			return false;
 
-		unsigned char bmpPad[3] = { 0,0,0 };
-		const int paddingAmmount = ((4 - (m_Width * 3) % 4) % 4);
+		// Create variables to store the file header and info header
+		BitmapFileHeader fileHeader;
+		BitmapInfoHeader infoHeader;
 
-		const int fileHeaderSize = 14;
-		const int informationHeaderSize = 40;
+		// Fill the file header and info header with the appropriate values
+		fileHeader.signature[0] = 'B';
+		fileHeader.signature[1] = 'M';
+		fileHeader.fileSize = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader) + m_Buffer.size() * sizeof(uint32_t);
+		fileHeader.reserved1 = 0;
+		fileHeader.reserved2 = 0;
+		fileHeader.offsetToPixelData = sizeof(BitmapFileHeader) + sizeof(BitmapInfoHeader);
 
-		const int fileSize = fileHeaderSize + informationHeaderSize + m_Width * m_Height * 3 + paddingAmmount * m_Height;
+		infoHeader.headerSize = sizeof(BitmapInfoHeader);
+		infoHeader.width = m_Width;
+		infoHeader.height = m_Height;
+		infoHeader.planes = 1;
+		infoHeader.bitsPerPixel = 32;
+		infoHeader.compression = 0;
+		infoHeader.imageSize = m_Buffer.size() * sizeof(uint32_t);
+		infoHeader.xResolution = 0;
+		infoHeader.yResolution = 0;
+		infoHeader.colorsInPalette = 0;
+		infoHeader.importantColors = 0;
 
-		// fileHeader
+		// Write the file header and info header to the file
+		out.write(reinterpret_cast<char*>(&fileHeader), sizeof(BitmapFileHeader));
+		out.write(reinterpret_cast<char*>(&infoHeader), sizeof(BitmapInfoHeader));
 
-		unsigned char fileHeader[fileHeaderSize];
+		//std::reverse(m_Buffer.begin(), m_Buffer.end());
+		// Write the pixel data to the file
+		out.write(reinterpret_cast<char*>(const_cast<uint32_t*>(m_Buffer.data())), m_Buffer.size() * sizeof(uint32_t));
 
-		fileHeader[0] = 'B';
-		fileHeader[1] = 'M';
-
-		fileHeader[2] = fileSize;
-		fileHeader[3] = fileSize >> 8;
-		fileHeader[4] = fileSize >> 16;
-		fileHeader[5] = fileSize >> 24;
-
-		fileHeader[6] = 0;
-		fileHeader[7] = 0;
-		fileHeader[8] = 0;
-		fileHeader[9] = 0;
-
-		fileHeader[10] = fileHeaderSize + informationHeaderSize;
-		fileHeader[11] = 0;
-		fileHeader[12] = 0;
-		fileHeader[13] = 0;
-
-		//informationHeader
-
-		unsigned char informationHeader[informationHeaderSize];
-
-		informationHeader[0] = informationHeaderSize;
-		informationHeader[1] = 0;
-		informationHeader[2] = 0;
-		informationHeader[3] = 0;
-
-		informationHeader[4] = m_Width;
-		informationHeader[5] = m_Width >> 8;
-		informationHeader[6] = m_Width >> 16;
-		informationHeader[7] = m_Width >> 24;
-
-		informationHeader[8] = m_Height;
-		informationHeader[9] = m_Height >> 8;
-		informationHeader[10] = m_Height >> 16;
-		informationHeader[11] = m_Height >> 24;
-
-		// Planes
-		informationHeader[12] = 1;
-		informationHeader[13] = 0;
-
-		//Bits per pixel(RGB)
-		informationHeader[14] = 24;
-		informationHeader[15] = 0;
-
-		for (unsigned int i = 16; i < informationHeaderSize; i++)
-		{
-			informationHeader[i] = 0;
-		}
-		/*
-		// Compression
-		informationHeader[16] = 0;
-		informationHeader[17] = 0;
-		informationHeader[18] = 0;
-		informationHeader[19] = 0;
-
-		// Image size
-		informationHeader[20] = 0;
-		informationHeader[21] = 0;
-		informationHeader[22] = 0;
-		informationHeader[23] = 0;
-
-		// x pixels per meter
-		informationHeader[24] = 0;
-		informationHeader[25] = 0;
-		informationHeader[26] = 0;
-		informationHeader[27] = 0;
-
-		// y pixels per meter
-		informationHeader[28] = 0;
-		informationHeader[29] = 0;
-		informationHeader[30] = 0;
-		informationHeader[31] = 0;
-
-		// total colors;
-		informationHeader[32] = 0;
-		informationHeader[33] = 0;
-		informationHeader[34] = 0;
-		informationHeader[35] = 0;
-
-		// important colors
-		informationHeader[36] = 0;
-		informationHeader[37] = 0;
-		informationHeader[38] = 0;
-		informationHeader[39] = 0;
-		*/
-
-
-		out.write(reinterpret_cast<char*>(fileHeader), fileHeaderSize);
-		out.write(reinterpret_cast<char*>(informationHeader), informationHeaderSize);
-
-		wchar_t* textBuffer[128];
-
-
-		for (unsigned int i = 0; i < m_Height; i++)
-		{
-			for (unsigned int j = 0; j < m_Width; j++)
-			{
-				uint32_t color = m_Buffer[j + i * m_Width];
-				uint8_t red = (uint8_t)(color >> 16);
-				uint8_t green = (uint8_t)(color >> 8);
-				uint8_t blue = (uint8_t)(color >> 0);
-				unsigned char r = static_cast<unsigned char>(red);
-				unsigned char g = static_cast<unsigned char>(green);
-				unsigned char b = static_cast<unsigned char>(blue);
-
-				//swprintf(textBuffer, 128, L"%d : %d : %d", (unsigned int) red, (unsigned int)green, (unsigned int)blue);
-				//OutputDebugString(textBuffer);
-				std::wstringstream ss;
-				//ss << red << " " << green << " " << blue << "\n";
-				//LPCWSTR sw = ss.str().c_str();
-				//OutputDebugString(sw);
-
-				unsigned char col[] = { b, g, r };
-
-				out.write(reinterpret_cast<char*>(col), 3);
-			}
-			out.write(reinterpret_cast<char*>(bmpPad), paddingAmmount);
-		}
-
+		// Close the file
 		out.close();
 
 		return true;

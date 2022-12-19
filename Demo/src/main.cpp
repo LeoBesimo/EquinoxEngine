@@ -43,7 +43,12 @@ equinoxAppEntryPoint
 	//texture.save("test.bmp");
 
 	eq::BitmapTexture car;
-	car.read("Car p1.bmp");
+	car.read("People.bmp");
+	//car.setPixel(0, 0, 0xFF00FF00);
+	//car.setPixel(20, 11, 0xFF0000FF);
+	car.invertY();
+	//car.invertX();
+	//car.save("Ume.bmp");
 
 	eq::Sprite sprite(car);
 	sprite.scale(2, 2);
