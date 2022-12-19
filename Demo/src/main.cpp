@@ -43,15 +43,15 @@ equinoxAppEntryPoint
 	//texture.save("test.bmp");
 
 	eq::BitmapTexture car;
-	car.read("People.bmp");
+	car.read("people.bmp");
 	//car.setPixel(0, 0, 0xFF00FF00);
 	//car.setPixel(20, 11, 0xFF0000FF);
 	car.invertY();
 	//car.invertX();
 	//car.save("Ume.bmp");
 
-	eq::Sprite sprite(car);
-	sprite.scale(2, 2);
+	eq::Sprite sprite(0,0,32,16,car);
+	sprite.scale(4, 4);
 	sprite.setAlpha(255);
 
 
@@ -80,6 +80,9 @@ equinoxAppEntryPoint
 		if (eq::Input::isKeyPressed(EQ_D))
 			camera.get()->move(eq::Math::Vector2(5, 0));
 
+		if (eq::Input::isKeyPressed(EQ_I))
+			sprite;
+
 		//camera.setPosition(mouse);
 
 		//eq::Renderer::DrawCircle(camera.get()->getPosition(), 30, eq::Color(0, 0, 0));
@@ -89,7 +92,7 @@ equinoxAppEntryPoint
 
 		eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(0, 0, 255, 128));
 		//eq::Renderer::DrawSprite(sprite);
-		eq::Renderer::draw(std::make_shared<eq::Text>(text));
+		//eq::Renderer::draw(std::make_shared<eq::Text>(text));
 		eq::Renderer::draw(std::make_shared<eq::Text>(text2));
 		eq::Renderer::draw(std::make_shared<eq::Rectangle>(rect));
 		eq::Renderer::draw(std::make_shared<eq::Ellipse>(circle));

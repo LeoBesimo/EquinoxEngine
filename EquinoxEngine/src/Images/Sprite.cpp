@@ -29,7 +29,7 @@ namespace eq
 			for (unsigned int i = 0; i < m_Width; i++)
 			{
 				unsigned int index = i + j * m_Width;
-				m_Buffer[index] = texture.getPixel(i, j) | (255 << 24);
+				m_Buffer[index] = texture.getPixel(i, j);
 			}
 		}
 	}
@@ -42,7 +42,7 @@ namespace eq
 			for (unsigned int i = 0; i < m_Width; i++)
 			{
 				unsigned int index = i + j * m_Width;
-				m_Buffer[index] = texture.getPixel(i + xOffset, j + yOffset) | (255 << 24);
+				m_Buffer[index] = texture.getPixel(i + xOffset, j + yOffset);
 			}
 		}
 	}

@@ -8,8 +8,8 @@ namespace eq
 		{
 			return 0;
 		}
-
-		return (255 << 24) |  (m_Buffer[x + y * m_Width] & 0xFFFFFF);
+		(255 << 24);
+		return (m_Buffer[x + y * m_Width] & 0xffFFFFFF);
 	}
 
 	void BitmapTexture::setPixel(unsigned int x, unsigned int y, uint32_t color)
@@ -65,10 +65,14 @@ namespace eq
 		in.read(reinterpret_cast<char*>(&m_FileHeader), sizeof(BitmapFileHeader));
 		in.read(reinterpret_cast<char*>(&m_InfoHeader), sizeof(BITMAPINFOHEADER));
 
-		if(m_FileHeader.signature)
+		if (m_FileHeader.signature[0] != 'B' || m_FileHeader.signature[1] != 'M')
+		{
+			in.close();
+		}
 
 		if (m_InfoHeader.bitsPerPixel <= 3)
 		{
+			in.close();
 			return false;
 		}
 
