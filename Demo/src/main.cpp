@@ -102,8 +102,8 @@ equinoxAppEntryPoint
 
 		swprintf(charBuffer, 128, L"Framerate %f\n", 1 / delta);
 		std::wstring frameText(charBuffer);
-		//OutputDebugString(charBuffer);
-		
+		OutputDebugString(charBuffer);
+
 		frameRate.setText(frameText);
 
 		game.update(delta);
@@ -112,11 +112,11 @@ equinoxAppEntryPoint
 		eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(255, 0, 0, 160));
 		//eq::Renderer::DrawSprite(sprite);
 		//eq::Renderer::draw(std::make_shared<eq::Text>(text));
-		eq::Renderer::draw(std::make_shared<eq::Text>(text2));
-		eq::Renderer::draw(std::make_shared<eq::Rectangle>(rect));
-		eq::Renderer::draw(std::make_shared<eq::Ellipse>(circle));
-		eq::Renderer::draw(std::make_shared<eq::Sprite>(sprite));
-		eq::Renderer::draw(std::make_shared<eq::Text>(frameRate));
+		eq::Renderer::draw((text2));
+		eq::Renderer::draw((rect));
+		eq::Renderer::draw((circle));
+		eq::Renderer::draw((sprite));
+		eq::Renderer::draw((frameRate));
 
 	});
 

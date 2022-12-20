@@ -35,11 +35,11 @@ namespace eq
 
 		HWND m_WindowHandle = 0;
 		BitmapBuffer m_BitmapBuffer[2];
-		std::vector<std::shared_ptr<Rectangle>> m_RectangleBuffer[2];
-		std::vector<std::shared_ptr<Ellipse>> m_EllipseBuffer[2];
-		std::vector<std::shared_ptr<Line>> m_LineBuffer[2];
-		std::vector<std::shared_ptr<Text>> m_TextBuffer[2];
-		std::vector<std::shared_ptr<Sprite>> m_SpriteBuffer[2];
+		std::vector<Rectangle> m_RectangleBuffer[2];
+		std::vector<Ellipse> m_EllipseBuffer[2];
+		std::vector<Line> m_LineBuffer[2];
+		std::vector<Text> m_TextBuffer[2];
+		std::vector<Sprite> m_SpriteBuffer[2];
 		Color m_ClearColor;
 		bool m_Buffer2 = false;
 		bool m_SwappedBuffers = false;
@@ -63,11 +63,11 @@ namespace eq
 		static void DrawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, const Color& color);
 		static void DrawSprite(Sprite& sprite);
 
-		static void draw(std::shared_ptr<Ellipse> ellipse);
-		static void draw(std::shared_ptr<Line> line);
-		static void draw(std::shared_ptr<Rectangle> rectangle);
-		static void draw(std::shared_ptr<Text> text);
-		static void draw(std::shared_ptr<Sprite> sprite);
+		static void draw(Ellipse ellipse);
+		static void draw(Line line);
+		static void draw(Rectangle rectangle);
+		static void draw(Text text);
+		static void draw(Sprite sprite);
 
 		static void swapBuffers()
 		{
@@ -99,20 +99,20 @@ namespace eq
 		static BitmapBuffer& getActiveBuffer() { return getInstance().m_BitmapBuffer[getInstance().m_Buffer2]; }
 		static BitmapBuffer& getInactiveBuffer() { return getInstance().m_BitmapBuffer[!getInstance().m_Buffer2]; }
 
-		static std::vector<std::shared_ptr<Rectangle>>& getActiveRectangles() { return getInstance().m_RectangleBuffer[getInstance().m_Buffer2]; }
-		static std::vector<std::shared_ptr<Rectangle>>& getInactiveRectangles() { return getInstance().m_RectangleBuffer[!getInstance().m_Buffer2]; }
+		static std::vector<Rectangle>& getActiveRectangles() { return getInstance().m_RectangleBuffer[getInstance().m_Buffer2]; }
+		static std::vector<Rectangle>& getInactiveRectangles() { return getInstance().m_RectangleBuffer[!getInstance().m_Buffer2]; }
 
-		static std::vector<std::shared_ptr<Ellipse>>& getActiveEllipses() { return getInstance().m_EllipseBuffer[getInstance().m_Buffer2]; }
-		static std::vector<std::shared_ptr<Ellipse>>& getInactiveEllipses() { return getInstance().m_EllipseBuffer[!getInstance().m_Buffer2]; }
+		static std::vector<Ellipse>& getActiveEllipses() { return getInstance().m_EllipseBuffer[getInstance().m_Buffer2]; }
+		static std::vector<Ellipse>& getInactiveEllipses() { return getInstance().m_EllipseBuffer[!getInstance().m_Buffer2]; }
 
-		static std::vector<std::shared_ptr<Line>>& getActiveLines() { return getInstance().m_LineBuffer[getInstance().m_Buffer2]; }
-		static std::vector<std::shared_ptr<Line>>& getInactiveLines() { return getInstance().m_LineBuffer[!getInstance().m_Buffer2]; }
+		static std::vector<Line>& getActiveLines() { return getInstance().m_LineBuffer[getInstance().m_Buffer2]; }
+		static std::vector<Line>& getInactiveLines() { return getInstance().m_LineBuffer[!getInstance().m_Buffer2]; }
 
-		static std::vector<std::shared_ptr<Text>>& getActiveText() { return getInstance().m_TextBuffer[getInstance().m_Buffer2]; }
-		static std::vector<std::shared_ptr<Text>>& getInactiveText() { return getInstance().m_TextBuffer[!getInstance().m_Buffer2]; }
+		static std::vector<Text>& getActiveText() { return getInstance().m_TextBuffer[getInstance().m_Buffer2]; }
+		static std::vector<Text>& getInactiveText() { return getInstance().m_TextBuffer[!getInstance().m_Buffer2]; }
 
-		static std::vector<std::shared_ptr<Sprite>>& getActiveSprites() { return getInstance().m_SpriteBuffer[getInstance().m_Buffer2]; }
-		static std::vector<std::shared_ptr<Sprite>>& getInactiveSprites() { return getInstance().m_SpriteBuffer[!getInstance().m_Buffer2]; }
+		static std::vector<Sprite>& getActiveSprites() { return getInstance().m_SpriteBuffer[getInstance().m_Buffer2]; }
+		static std::vector<Sprite>& getInactiveSprites() { return getInstance().m_SpriteBuffer[!getInstance().m_Buffer2]; }
 
 		inline static void setWindowHandle(HWND m_WindowHandle) { getInstance().m_WindowHandle = m_WindowHandle; }
 		static void getWindowDimenstions(int* outWidth, int* outHeight);

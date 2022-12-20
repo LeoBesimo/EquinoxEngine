@@ -155,12 +155,15 @@ namespace eq
 
 					HDC deviceContext = GetDC(m_WindowHandle);
 
-
-
 					int width, height;
 					Renderer::getWindowDimenstions(&width, &height);
 
-					while (Renderer::waitForSwap()) {}
+					while (m_WindowHandle != GetForegroundWindow())
+					{
+						std::this_thread::sleep_for(std::chrono::milliseconds(50));
+					}
+
+					while (Renderer::waitForSwap() && m_WindowHandle == GetForegroundWindow()) {}
 
 					Renderer::clear();
 					Renderer::RenderObjects();
@@ -189,6 +192,11 @@ namespace eq
 					delta = (float)counterElapsed / (float)cpuFrequency.QuadPart;
 				}
 				lastCounter = currentCounter;
+
+				while (m_WindowHandle != GetForegroundWindow())
+				{
+					std::this_thread::sleep_for(std::chrono::milliseconds(50));
+				}
 
 				MSG message;
 				while (PeekMessage(&message, 0, 0, 0, PM_REMOVE))
