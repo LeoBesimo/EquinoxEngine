@@ -32,7 +32,7 @@ namespace eq
 		int m_WindowHeight;
 
 		std::function<void(float delta)> m_Update;
-		float m_SecondsPerFrame = 1.f / 60.f;
+		float m_SecondsPerFrame = 1.f / 120.f;
 
 
 	public:

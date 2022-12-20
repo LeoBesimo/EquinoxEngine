@@ -21,7 +21,7 @@ namespace eq
 		}
 	}
 
-	Sprite::Sprite(unsigned int width, unsigned int height, BitmapTexture& texture) :
+	Sprite::Sprite(BitmapTexture& texture, unsigned int width, unsigned int height) :
 		m_Width(width), m_Height(height), m_Buffer(width* height), m_Position(0, 0)
 	{
 		for (unsigned int j = 0; j < m_Height; j++)
@@ -34,7 +34,7 @@ namespace eq
 		}
 	}
 
-	Sprite::Sprite(unsigned int xOffset, unsigned int yOffset, unsigned int width, unsigned int height, BitmapTexture& texture) :
+	Sprite::Sprite(BitmapTexture& texture, unsigned int xOffset, unsigned int yOffset, unsigned int width, unsigned int height) :
 		m_Width(width), m_Height(height), m_Buffer(width* height), m_Position(0, 0)
 	{
 		for (unsigned int j = 0; j < m_Height; j++)
@@ -45,6 +45,21 @@ namespace eq
 				m_Buffer[index] = texture.getPixel(i + xOffset, j + yOffset);
 			}
 		}
+	}
+
+	void Sprite::setPosition(Math::Vector2 position)
+	{
+		m_Position = position;
+	}
+
+	Math::Vector2 Sprite::getPosition()
+	{
+		return m_Position;
+	}
+
+	void Sprite::move(Math::Vector2 direction)
+	{
+		m_Position += direction;
 	}
 
 	void Sprite::scale(float scaleX, float scaleY)

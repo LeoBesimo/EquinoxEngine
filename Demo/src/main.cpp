@@ -50,7 +50,7 @@ equinoxAppEntryPoint
 	//car.invertX();
 	//car.save("Ume.bmp");
 
-	eq::Sprite sprite(0,0,32,16,car);
+	eq::Sprite sprite(car,16,0,16,16);
 	sprite.scale(4, 4);
 	sprite.setAlpha(255);
 
@@ -58,6 +58,13 @@ equinoxAppEntryPoint
 	std::shared_ptr<eq::Camera> camera(new eq::Camera);
 	camera.get()->setPosition(eq::Math::Vector2(0, 0));
 	camera.get()->setDimension(eq::Math::Vector2(800, 800));
+
+	wchar_t charBuffer[128];
+
+	eq::Text frameRate;
+	frameRate.setCameraDependent(false);
+
+	float speed = 200;
 
 	eq::Renderer::setClearColor(eq::Color(255, 255, 255));
 	eq::Renderer::setCamera(camera);
@@ -71,32 +78,45 @@ equinoxAppEntryPoint
 		//text.setPosition(mouse);
 
 		if (eq::Input::isKeyPressed(EQ_W))
-			camera.get()->move(eq::Math::Vector2(0, -5));
+			camera.get()->move(eq::Math::Vector2(0, -speed) * delta);
 		if (eq::Input::isKeyPressed(EQ_S))
-			camera.get()->move(eq::Math::Vector2(0, 5));
+			camera.get()->move(eq::Math::Vector2(0, speed) * delta);
 
 		if (eq::Input::isKeyPressed(EQ_A))
-			camera.get()->move(eq::Math::Vector2(-5, 0));
+			camera.get()->move(eq::Math::Vector2(-speed, 0) * delta);
 		if (eq::Input::isKeyPressed(EQ_D))
-			camera.get()->move(eq::Math::Vector2(5, 0));
+			camera.get()->move(eq::Math::Vector2(speed, 0) * delta);
 
 		if (eq::Input::isKeyPressed(EQ_I))
-			sprite;
+			sprite.move(eq::Math::Vector2(0,-speed) * delta);
+		if (eq::Input::isKeyPressed(EQ_K))
+			sprite.move(eq::Math::Vector2(0,speed) * delta);
 
+		if (eq::Input::isKeyPressed(EQ_J))
+			sprite.move(eq::Math::Vector2(-speed,0) * delta);
+		if (eq::Input::isKeyPressed(EQ_L))
+			sprite.move(eq::Math::Vector2(speed,0) * delta);
 		//camera.setPosition(mouse);
 
 		//eq::Renderer::DrawCircle(camera.get()->getPosition(), 30, eq::Color(0, 0, 0));
 
+		swprintf(charBuffer, 128, L"Framerate %f\n", 1 / delta);
+		std::wstring frameText(charBuffer);
+		//OutputDebugString(charBuffer);
+		
+		frameRate.setText(frameText);
+
 		game.update(delta);
 		game.render();
 
-		eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(0, 0, 255, 128));
+		eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(255, 0, 0, 160));
 		//eq::Renderer::DrawSprite(sprite);
 		//eq::Renderer::draw(std::make_shared<eq::Text>(text));
 		eq::Renderer::draw(std::make_shared<eq::Text>(text2));
 		eq::Renderer::draw(std::make_shared<eq::Rectangle>(rect));
 		eq::Renderer::draw(std::make_shared<eq::Ellipse>(circle));
 		eq::Renderer::draw(std::make_shared<eq::Sprite>(sprite));
+		eq::Renderer::draw(std::make_shared<eq::Text>(frameRate));
 
 	});
 
