@@ -156,8 +156,11 @@ namespace eq
 	void Renderer::DrawSprite(Sprite& sprite)
 	{
 		Math::Vector2 position = sprite.m_Position;
+		Math::Vector2 scale = sprite.m_Scale;
 		if (sprite.m_CameraDependent)
-			position += getInstance().m_Camera.get()->getPosition();
+		{
+			position = WorldToScreenspace(position); //+= getInstance().m_Camera.get()->getPosition();
+		}
 
 		for (unsigned int j = 0; j < sprite.m_Height; j++)
 		{
@@ -196,6 +199,52 @@ namespace eq
 	void Renderer::draw(Sprite sprite)
 	{
 		getActiveSprites().push_back(sprite);
+	}
+
+	void Renderer::draw(Physics::PhysicsWorld& world)
+	{
+		std::vector<Physics::Shape*> bodies = world.getBodies();
+		for (Physics::Shape* body : bodies)
+		{
+			switch (body->getShapeType())
+			{
+			case Physics::ShapeType::Box:
+			{
+				Physics::BoxShape* box = static_cast<Physics::BoxShape*>(body);
+				std::vector<Math::Vector2> points = box->getCorners();
+				for (unsigned int i = 0; i < points.size(); i++)
+				{
+					unsigned int index = (i + 1) % points.size();
+					Line line(points[i], points[index]);
+					draw(line);
+				}
+				
+				break; 
+			}
+			case Physics::ShapeType::Circle:
+			{
+				Physics::CircleShape* circle = static_cast<Physics::CircleShape*>(body);
+				Ellipse shape(circle->getPosition(), circle->getRadius());
+				Math::Vector2 p2(circle->getRadius() * cos(circle->getAngle()), circle->getRadius() * sin(circle->getAngle()));
+				Line line(circle->getPosition(), p2 + circle->getPosition());
+				draw(line);
+				draw(shape);
+				break;
+			}
+			case Physics::ShapeType::Polygon:
+			{
+				Physics::PolygonShape* polygon = static_cast<Physics::PolygonShape*>(body);
+				std::vector<Math::Vector2> points = polygon->getCorners();
+				for (unsigned int i = 0; i < points.size(); i++)
+				{
+					unsigned int index = (i + 1) % points.size();
+					Line line(points[i], points[index]);
+					draw(line);
+				}
+				break;
+			}
+			}
+		}
 	}
 
 	void Renderer::getWindowDimenstions(int* outWidth, int* outHeight)
@@ -290,7 +339,7 @@ namespace eq
 			int length = text.getText().length();
 			Math::Vector2 position = text.getPosition();
 			if (text.isCameraDependent())
-				position += getInstance().m_Camera.get()->getPosition();
+				position = WorldToScreenspace(position);//+= getInstance().m_Camera.get()->getPosition();
 			SetTextColor(deviceContext, RGB(col.red, col.green, col.blue));
 			TextOut(deviceContext, std::floor(position.x + 0.5f), std::floor(position.y + 0.5f), text.getText().c_str(), length);
 		}
@@ -305,9 +354,14 @@ namespace eq
 			Rectangle rect = rectBuffer[i];
 
 			Math::Vector2 pos = rect.getPosition();
-			if (rect.isCameraDependent())
-				pos += getInstance().m_Camera.get()->getPosition();
 			Math::Vector2 dim = rect.getDimension();
+
+			if (rect.isCameraDependent())
+			{
+				pos = WorldToScreenspace(pos);
+				dim = ApplyCameraTransform(dim);
+
+			}
 			Rect r(pos.x, pos.y, dim.x, dim.y);
 			DrawRectangle(r, rect.getColor());
 		}
@@ -323,18 +377,21 @@ namespace eq
 
 			Math::Vector2 pos = ellipse.getPosition();
 			if (ellipse.isCameraDependent())
-				pos += getInstance().m_Camera.get()->getPosition();
+				pos = WorldToScreenspace(pos);
 			if (ellipse.getType() == DrawableType::ELLIPSE)
 			{
-				float r1, r2;
-				ellipse.getRadius(&r1, &r2);
-				FillEllipse(pos.x, pos.y, r1, r2, ellipse.getColor());
+				Math::Vector2 r;
+				ellipse.getRadius(&r.x, &r.y);
+				if (ellipse.isCameraDependent()) r = ApplyCameraTransform(r);
+				FillEllipse(pos.x, pos.y, r.x, r.y, ellipse.getColor());
 			}
 			else
 			{
 				float r;
 				ellipse.getRadius(&r);
-				DrawCircle(pos, r, ellipse.getColor());
+				Math::Vector2 rad(r, r);
+				if (ellipse.isCameraDependent()) rad = ApplyCameraTransform(rad);
+				DrawCircle(pos, rad.x, ellipse.getColor());
 			}
 		}
 	}
@@ -351,8 +408,8 @@ namespace eq
 			Math::Vector2 pos2 = line.getEndPos();
 			if (line.isCameraDependent())
 			{
-				pos1 += getInstance().m_Camera.get()->getPosition();
-				pos2 += getInstance().m_Camera.get()->getPosition();
+				pos1 = WorldToScreenspace(pos1);//+= getInstance().m_Camera.get()->getPosition();
+				pos2 = WorldToScreenspace(pos2);//+= getInstance().m_Camera.get()->getPosition();
 			}
 			DrawLine(pos1, pos2, line.getColor());
 		}
@@ -365,6 +422,37 @@ namespace eq
 		{
 			DrawSprite(sprites[i]);
 		}
+	}
+
+	Math::Vector2 Renderer::WorldToScreenspace(Math::Vector2 p)
+	{
+		p.y = -p.y;
+		p = ApplyCameraTransform(p);
+		p = ApplyCameraPosition(p);
+		return p;
+	}
+
+	Math::Vector2 Renderer::ScreenToWorldspace(Math::Vector2 p)
+	{
+		//p.y = -p.y;
+		p -= getInstance().m_Camera->getPosition();
+
+		Math::Matrix2x2 transform = getInstance().m_Camera->getTransform();
+		Math::Matrix2x2 invTransform = transform.inverse();
+		p = invTransform * p;
+		p.y = -p.y;
+		return p;
+	}
+
+	Math::Vector2 Renderer::ApplyCameraPosition(Math::Vector2 p)
+	{
+		p += getInstance().m_Camera->getPosition();
+		return p;
+	}
+
+	Math::Vector2 Renderer::ApplyCameraTransform(Math::Vector2 p)
+	{
+		return getInstance().m_Camera->getTransform() * p;
 	}
 
 	void Renderer::plotLineLow(int x0, int y0, int x1, int y1, const Color& color)

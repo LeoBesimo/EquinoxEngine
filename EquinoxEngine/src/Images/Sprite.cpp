@@ -3,7 +3,7 @@
 namespace eq
 {
 	Sprite::Sprite(BitmapTexture& texture) :
-		m_Position(0, 0)
+		m_Position(0, 0), m_Scale(1, 1)
 	{
 		m_Width = texture.m_Width;
 		m_Height = texture.m_Height;
@@ -22,7 +22,7 @@ namespace eq
 	}
 
 	Sprite::Sprite(BitmapTexture& texture, unsigned int width, unsigned int height) :
-		m_Width(width), m_Height(height), m_Buffer(width* height), m_Position(0, 0)
+		m_Width(width), m_Height(height), m_Buffer(width* height), m_Position(0, 0), m_Scale(1, 1)
 	{
 		for (unsigned int j = 0; j < m_Height; j++)
 		{
@@ -35,7 +35,7 @@ namespace eq
 	}
 
 	Sprite::Sprite(BitmapTexture& texture, unsigned int xOffset, unsigned int yOffset, unsigned int width, unsigned int height) :
-		m_Width(width), m_Height(height), m_Buffer(width* height), m_Position(0, 0)
+		m_Width(width), m_Height(height), m_Buffer(width* height), m_Position(0, 0), m_Scale(1, 1)
 	{
 		for (unsigned int j = 0; j < m_Height; j++)
 		{
@@ -66,6 +66,9 @@ namespace eq
 	{
 		float newWidth = m_Width * scaleX;
 		float newHeight = m_Height * scaleY;
+
+		m_Scale.x = scaleX;
+		m_Scale.y = scaleY;
 
 		std::vector<uint32_t> tempBuffer(newWidth * newHeight);
 		;

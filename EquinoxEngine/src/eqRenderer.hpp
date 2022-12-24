@@ -14,6 +14,7 @@
 #include "eqRenderUtilities.hpp"
 #include "eqCamera.hpp"
 #include "Images/eqImages.hpp"
+#include <eqPhysics.hpp>
 
 //#include "Shapes/Drawable.h"
 
@@ -68,6 +69,7 @@ namespace eq
 		static void draw(Rectangle rectangle);
 		static void draw(Text text);
 		static void draw(Sprite sprite);
+		static void draw(Physics::PhysicsWorld& world);
 
 		static void swapBuffers()
 		{
@@ -129,6 +131,13 @@ namespace eq
 		static void RenderLines();
 		static void RenderSprites();
 
+	public:
+		static Math::Vector2 WorldToScreenspace(Math::Vector2 p);
+		static Math::Vector2 ScreenToWorldspace(Math::Vector2 p);
+		static Math::Vector2 ApplyCameraPosition(Math::Vector2 p);
+		static Math::Vector2 ApplyCameraTransform(Math::Vector2 p);
+
+	private:
 		static void plotLineLow(int x0, int y0, int x1, int y1, const Color& color);
 		static void plotLineHigh(int x0, int y0, int x1, int y1, const Color& color);
 

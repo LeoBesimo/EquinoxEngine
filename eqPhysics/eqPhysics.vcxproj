@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)eqMath/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -90,6 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)eqMath/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)eqMath/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,6 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)eqMath/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,6 +131,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\CollisionDetector.cpp" />
+    <ClCompile Include="src\CollisionSolver.cpp" />
+    <ClCompile Include="src\PhysicsWorld.cpp" />
+    <ClCompile Include="src\Shapes\BoxShape.cpp" />
+    <ClCompile Include="src\Shapes\CircleShape.cpp" />
+    <ClCompile Include="src\Shapes\PolygonShape.cpp" />
+    <ClCompile Include="src\Shapes\Shape.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\CollisionSolver.hpp" />
+    <ClInclude Include="src\eqPhysics.hpp" />
+    <ClInclude Include="src\PhysicsWorld.hpp" />
+    <ClInclude Include="src\Shapes\BoxShape.hpp" />
+    <ClInclude Include="src\Shapes\CircleShape.hpp" />
+    <ClInclude Include="src\CollisionDetector.hpp" />
+    <ClInclude Include="src\Shapes\eqShapes.hpp" />
+    <ClInclude Include="src\Shapes\Materials.hpp" />
+    <ClInclude Include="src\Shapes\PolygonShape.hpp" />
+    <ClInclude Include="src\Shapes\Shape.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

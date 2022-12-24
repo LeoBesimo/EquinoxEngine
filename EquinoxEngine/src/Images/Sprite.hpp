@@ -11,6 +11,8 @@ namespace eq
 		unsigned int m_Width;
 		unsigned int m_Height;
 
+		Math::Vector2 m_Scale;
+
 		friend class Renderer;
 
 		Math::Vector2 m_Position;
@@ -21,9 +23,9 @@ namespace eq
 
 	public:
 		Sprite() :
-			m_Width(0), m_Height(0), m_Position(0, 0) {}
+			m_Width(0), m_Height(0), m_Position(0, 0), m_Scale(1,1) {}
 		Sprite(unsigned int width, unsigned int height) :
-			m_Width(width), m_Height(height), m_Buffer(width* height), m_Position(0, 0) {}
+			m_Width(width), m_Height(height), m_Buffer(width* height), m_Position(0, 0), m_Scale(1,1) {}
 
 		Sprite(BitmapTexture& texture);
 		Sprite(BitmapTexture& texture, unsigned int width, unsigned int height);

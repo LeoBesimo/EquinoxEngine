@@ -19,8 +19,8 @@ equinoxAppEntryPoint
 	eq::Rectangle rect(eq::Math::Vector2(200, 200), eq::Math::Vector2(100, 100), eq::Color(255,0,0));
 	rect.setCameraDependent(true);
 
-	eq::Ellipse circle(eq::Math::Vector2(300, 100), 30, eq::Color(0, 255, 0, 128));
-	circle.setCameraDependent(false);
+	eq::Ellipse circle(eq::Math::Vector2(0, -100), 30, eq::Color(0, 255, 0, 128));
+	circle.setCameraDependent(true);
 
 	int w = 200;
 	int h = 200;
@@ -38,6 +38,10 @@ equinoxAppEntryPoint
 		}
 	}
 
+	eq::Physics::PhysicsWorld world(eq::Math::Vector2(2000, 2000));
+	world.addCircle(eq::Math::Vector2(-100, 0), 0, 40, eq::Physics::Materials::DEFAULT);
+	world.addBox(eq::Math::Vector2(0, -200), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(600,20));
+	world.setWorldGravity(eq::Math::Vector2(0, -100));
 	//texture.read("test.bmp");
 
 	//texture.save("test.bmp");
@@ -50,21 +54,23 @@ equinoxAppEntryPoint
 	//car.invertX();
 	//car.save("Ume.bmp");
 
-	eq::Sprite sprite(car,16,0,16,16);
-	sprite.scale(4, 4);
-	sprite.setAlpha(255);
+	eq::Sprite sprite(car);// , 16, 0, 16, 16);
+	sprite.scale(4,4);
 
 
 	std::shared_ptr<eq::Camera> camera(new eq::Camera);
-	camera.get()->setPosition(eq::Math::Vector2(0, 0));
+	camera.get()->setPosition(eq::Math::Vector2(400, 400));
 	camera.get()->setDimension(eq::Math::Vector2(800, 800));
 
 	wchar_t charBuffer[128];
 
 	eq::Text frameRate;
 	frameRate.setCameraDependent(false);
-
+	eq::Text bodies;
+	bodies.setCameraDependent(false);
+	bodies.setPosition(eq::Math::Vector2(0, 15));
 	float speed = 200;
+	float zoomSpeed = 0.8;
 
 	eq::Renderer::setClearColor(eq::Color(255, 255, 255));
 	eq::Renderer::setCamera(camera);
@@ -78,19 +84,19 @@ equinoxAppEntryPoint
 		//text.setPosition(mouse);
 
 		if (eq::Input::isKeyPressed(EQ_W))
-			camera.get()->move(eq::Math::Vector2(0, -speed) * delta);
-		if (eq::Input::isKeyPressed(EQ_S))
 			camera.get()->move(eq::Math::Vector2(0, speed) * delta);
+		if (eq::Input::isKeyPressed(EQ_S))
+			camera.get()->move(eq::Math::Vector2(0, -speed) * delta);
 
 		if (eq::Input::isKeyPressed(EQ_A))
-			camera.get()->move(eq::Math::Vector2(-speed, 0) * delta);
-		if (eq::Input::isKeyPressed(EQ_D))
 			camera.get()->move(eq::Math::Vector2(speed, 0) * delta);
+		if (eq::Input::isKeyPressed(EQ_D))
+			camera.get()->move(eq::Math::Vector2(-speed, 0) * delta);
 
 		if (eq::Input::isKeyPressed(EQ_I))
-			sprite.move(eq::Math::Vector2(0,-speed) * delta);
-		if (eq::Input::isKeyPressed(EQ_K))
 			sprite.move(eq::Math::Vector2(0,speed) * delta);
+		if (eq::Input::isKeyPressed(EQ_K))
+			sprite.move(eq::Math::Vector2(0,-speed) * delta);
 
 		if (eq::Input::isKeyPressed(EQ_J))
 			sprite.move(eq::Math::Vector2(-speed,0) * delta);
@@ -98,26 +104,50 @@ equinoxAppEntryPoint
 			sprite.move(eq::Math::Vector2(speed,0) * delta);
 		//camera.setPosition(mouse);
 
-		//eq::Renderer::DrawCircle(camera.get()->getPosition(), 30, eq::Color(0, 0, 0));
+		if (eq::Input::isKeyPressed(EQ_Q))
+			camera.get()->setTransform(camera.get()->getTransform() - eq::Math::Matrix2x2(zoomSpeed, 0, 0, zoomSpeed) * delta);
+
+		if (eq::Input::isKeyPressed(EQ_E))
+			camera.get()->setTransform(camera.get()->getTransform() + eq::Math::Matrix2x2(zoomSpeed, 0, 0, zoomSpeed) * delta);
+		if (eq::Input::isKeyPressed(EQ_F))
+			camera.get()->setTransform(eq::Math::Matrix2x2(1, 0, 0, 1));
+
+		eq::Math::Vector2 mouseTransformed = eq::Renderer::ScreenToWorldspace(mouse);
+
+		if (eq::Input::wasMouseButtonHit(EQ_MOUSE_LEFT))
+			world.addPolygon(mouseTransformed, 0, 5, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(20,0,0,20));
+
+		if (eq::Input::isKeyPressed(EQ_R))
+			world.addBox(mouseTransformed, eq::Math::QUARTER_PI / 2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(20, 20));
+		if (eq::Input::isKeyPressed(EQ_G))
+			world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT);
+
+		//eq::Renderer::DrawCircle(camera.get()->getPosition(), 10, eq::Color(255, 0, 255));
 
 		swprintf(charBuffer, 128, L"Framerate %f\n", 1 / delta);
 		std::wstring frameText(charBuffer);
-		OutputDebugString(charBuffer);
+		//OutputDebugString(charBuffer);
+
+		swprintf(charBuffer, 128, L"Bodies: %d\n", world.getBodies().size());
+		std::wstring bodyCount(charBuffer);
+		bodies.setText(bodyCount);
 
 		frameRate.setText(frameText);
 
 		game.update(delta);
+		world.update(delta);
 		game.render();
 
-		eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(255, 0, 0, 160));
+		//eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(255, 0, 0, 160));
 		//eq::Renderer::DrawSprite(sprite);
 		//eq::Renderer::draw(std::make_shared<eq::Text>(text));
-		eq::Renderer::draw((text2));
-		eq::Renderer::draw((rect));
-		eq::Renderer::draw((circle));
-		eq::Renderer::draw((sprite));
+		//eq::Renderer::draw((text2));
+		eq::Renderer::draw(bodies);
+		//eq::Renderer::draw((rect));
+		//eq::Renderer::draw((circle));
+		//eq::Renderer::draw((sprite));
 		eq::Renderer::draw((frameRate));
-
+		eq::Renderer::draw(world);
 	});
 
 	eq::Application::start();
