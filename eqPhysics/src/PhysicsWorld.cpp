@@ -50,6 +50,7 @@ namespace eq
 		{
 
 			Manifold manifold;
+			m_ContactPairs.clear();
 
 			for (int i = m_Bodies.size() - 1; i >= 0; i--)
 			{
@@ -58,21 +59,32 @@ namespace eq
 
 			for (unsigned int i = 0; i < m_Bodies.size(); i++)
 			{
+				m_Bodies[i]->update(delta);
+			}
+
+			for (unsigned int i = 0; i < m_Bodies.size(); i++)
+			{
 				Shape* body = m_Bodies[i];
-
-				body->update(delta);
-
 				for (unsigned int j = i + 1; j < m_Bodies.size(); j++)
 				{
-					if (i == j) continue;
-
-					Shape* colliderBody = m_Bodies[j];
-					manifold = m_Detector.detectCollision(body, colliderBody);
-					if (manifold.colliding)
+					Shape* bodyB = m_Bodies[j];
+					if (m_Detector.boundingBoxCollision(body, bodyB))
 					{
-						m_Solver.resolveDynamicWithFriction(manifold);
-						m_Solver.resolveStatic(manifold);
+						ContactPair pair(body, bodyB);
+						m_ContactPairs.push_back(pair);
 					}
+				}
+			}
+
+			for (unsigned int i = 0; i < m_ContactPairs.size(); i++)
+			{
+				Shape* bodyA = m_ContactPairs[i].bodyA;
+				Shape* bodyB = m_ContactPairs[i].bodyB;
+				manifold = m_Detector.detectCollision(bodyA, bodyB);
+				if (manifold.colliding)
+				{
+					m_Solver.resolveDynamicWithFriction(manifold);
+					m_Solver.resolveStatic(manifold);
 				}
 			}
 		}

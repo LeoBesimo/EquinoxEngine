@@ -23,6 +23,7 @@ namespace eq
 
 		private:
 			void applyGravity();
+			void calculateBoundingBox();
 			void calculateUnits();
 		};
 	}

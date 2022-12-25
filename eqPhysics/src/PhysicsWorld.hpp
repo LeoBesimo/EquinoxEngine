@@ -8,6 +8,19 @@ namespace eq
 {
 	namespace Physics
 	{
+
+		struct ContactPair
+		{
+			Shape* bodyA;
+			Shape* bodyB;
+
+			ContactPair(Shape* a, Shape* b)
+			{
+				bodyA = a;
+				bodyB = b;
+			}
+		};
+
 		class PhysicsWorld
 		{
 
@@ -15,6 +28,8 @@ namespace eq
 			std::vector<Shape*> m_Bodies;
 			CollisionDetector m_Detector;
 			CollisionSolver m_Solver;
+
+			std::vector<ContactPair> m_ContactPairs;
 
 			Math::Vector2 m_WorldSize;
 			float m_WorldBorder;

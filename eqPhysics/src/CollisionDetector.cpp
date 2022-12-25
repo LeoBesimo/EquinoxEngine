@@ -736,6 +736,15 @@ namespace eq
 		CollisionDetector::CollisionDetector()
 		{}
 
+		bool CollisionDetector::boundingBoxCollision(Shape * bodyA, Shape * bodyB)
+		{
+			Math::Vector2 bodyAMin = bodyA->getPosition() + bodyA->getBoundingMin();
+			Math::Vector2 bodyAMax = bodyA->getPosition() + bodyA->getBoundingMax();
+			Math::Vector2 bodyBMin = bodyB->getPosition() + bodyB->getBoundingMin();
+			Math::Vector2 bodyBMax = bodyB->getPosition() + bodyB->getBoundingMax();
+			return !(bodyAMax.x < bodyBMin.x || bodyAMin.x > bodyBMax.x || bodyAMax.y < bodyBMin.y || bodyAMin.y > bodyBMax.y);
+		}
+
 		Manifold CollisionDetector::detectCollision(Shape* bodyA, Shape* bodyB)
 		{
 			switch (bodyA->getShapeType())

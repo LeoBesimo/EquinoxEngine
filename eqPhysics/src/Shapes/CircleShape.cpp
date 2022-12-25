@@ -8,6 +8,7 @@ namespace eq
 			Shape(position, angle, ShapeType::Circle, material, Math::Matrix2x2()), m_Radius(radius)
 		{
 			calculateUnits();
+			calculateBoundingBox();
 		}
 
 		void CircleShape::update(float delta)
@@ -22,6 +23,15 @@ namespace eq
 		void CircleShape::applyGravity()
 		{
 			setForce(getForce() + (getGravit() * getMass()));
+		}
+
+		void CircleShape::calculateBoundingBox()
+		{
+			static float scaler = 1.5;
+			Math::Vector2 min = Math::Vector2(-m_Radius * scaler, -m_Radius * scaler);
+			Math::Vector2 max = Math::Vector2(m_Radius * scaler, m_Radius * scaler);
+			setBoundingMin(min);
+			setBoundingMax(max);
 		}
 
 		void CircleShape::calculateUnits()

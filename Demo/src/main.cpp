@@ -7,6 +7,8 @@
 
 equinoxAppEntryPoint
 {
+	srand(time(NULL));
+
 	Testgame game;
 
 	std::wstring t(L"Test");
@@ -117,6 +119,8 @@ equinoxAppEntryPoint
 		if (eq::Input::wasMouseButtonHit(EQ_MOUSE_LEFT))
 			world.addPolygon(mouseTransformed, 0, 5, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(20,0,0,20));
 
+		if (eq::Input::isKeyPressed(EQ_T))
+			world.addPolygon(mouseTransformed, 0, rand() % 7 + 3, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(20, 0, 0, 20));
 		if (eq::Input::isKeyPressed(EQ_R))
 			world.addBox(mouseTransformed, eq::Math::QUARTER_PI / 2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(20, 20));
 		if (eq::Input::isKeyPressed(EQ_G))

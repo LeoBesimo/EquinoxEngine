@@ -25,6 +25,7 @@ namespace eq
 
 		private:
 			void applyGravity();
+			void calculateBoundingBox();
 			void transformPoints();
 			void calculateUnits();
 		};

@@ -43,7 +43,7 @@ namespace eq
 
 		public:
 			CollisionDetector();
-
+			bool boundingBoxCollision(Shape* bodyA, Shape* bodyB);
 			Manifold detectCollision(Shape* bodyA, Shape* bodyB);
 
 		};

@@ -21,6 +21,9 @@ namespace eq
 			ShapeType m_Type;
 			Material m_Material;
 
+			Math::Vector2 m_BoundingBoxMin;
+			Math::Vector2 m_BoundingBoxMax;
+
 			Math::Vector2 m_Position;
 			Math::Vector2 m_Velocity;
 			Math::Vector2 m_Force;
@@ -68,6 +71,9 @@ namespace eq
 			float getInvMass() { return m_InvMass; }
 			float getInvInertia() { return m_InvInertia; }
 
+			Math::Vector2 getBoundingMin() { return m_BoundingBoxMin; }
+			Math::Vector2 getBoundingMax() { return m_BoundingBoxMax; }
+
 			//Set
 			void setShapeType(ShapeType type) { this->m_Type = type; }
 			void setMaterial(Material material) { this->m_Material = material; }
@@ -84,6 +90,9 @@ namespace eq
 
 			void setScale(Math::Matrix2x2 scale) { this->m_Scale = scale; }
 
+			void setBoundingMin(Math::Vector2 min) { this->m_BoundingBoxMin = min; }
+			void setBoundingMax(Math::Vector2 max) { this->m_BoundingBoxMax = max; }
+
 			void setMass(float mass);
 			void setInertia(float inertia);
 
@@ -93,6 +102,7 @@ namespace eq
 
 		private:
 			virtual void applyGravity() = 0;
+			virtual void calculateBoundingBox() = 0;
 			void integrateForces(float delta);
 			void integrateVelocities(float delta);
 

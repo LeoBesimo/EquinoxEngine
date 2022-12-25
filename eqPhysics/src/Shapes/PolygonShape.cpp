@@ -19,6 +19,7 @@ namespace eq
 				count++;
 			}
 			calculateUnits();
+			calculateBoundingBox();
 		}
 
 		void PolygonShape::update(float delta)
@@ -55,6 +56,26 @@ namespace eq
 				Math::Vector2 radius = m_Transformed[i] - getPosition();
 				applyForce(getGravit() * getInertia() * factor, radius);
 			}
+		}
+
+		void PolygonShape::calculateBoundingBox()
+		{
+			float longestX = 0;
+			float longestY = 0;
+			Math::Vector2 position = getPosition();
+			for (unsigned int i = 0; i < m_Transformed.size(); i++)
+			{
+				float x = abs(position.x - m_Transformed[i].x);
+				float y = abs(position.y - m_Transformed[i].y);
+				if (x > longestX) longestX = x;
+				if (y > longestY) longestY = y;
+			}
+
+			float longest = std::max(longestX, longestY);
+			Math::Vector2 min = Math::Vector2(-longest, -longest);
+			Math::Vector2 max = Math::Vector2(longest, longest);
+			setBoundingMin(min);
+			setBoundingMax(max);
 		}
 
 		void PolygonShape::calculateUnits()
