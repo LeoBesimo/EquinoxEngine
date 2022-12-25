@@ -68,6 +68,7 @@ namespace eq
 				for (unsigned int j = i + 1; j < m_Bodies.size(); j++)
 				{
 					Shape* bodyB = m_Bodies[j];
+					if (body->isStatic() && bodyB->isStatic()) continue;
 					if (m_Detector.boundingBoxCollision(body, bodyB))
 					{
 						ContactPair pair(body, bodyB);
@@ -87,6 +88,28 @@ namespace eq
 					m_Solver.resolveStatic(manifold);
 				}
 			}
+		}
+
+		void PhysicsWorld::clearNonStatic()
+		{
+			for (int i = m_Bodies.size() - 1; i >= 0; i--)
+			{
+				if (!m_Bodies[i]->isStatic()) removeBody(i);
+			}
+		}
+
+		void PhysicsWorld::clearStatic()
+		{
+			for (int i = m_Bodies.size() - 1; i >= 0; i--)
+			{
+				if (m_Bodies[i]->isStatic()) removeBody(i);
+			}
+		}
+
+		void PhysicsWorld::clearAll()
+		{
+			clearNonStatic();
+			clearStatic();
 		}
 
 		bool PhysicsWorld::inWorld(Shape* shape)

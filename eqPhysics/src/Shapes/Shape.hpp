@@ -98,6 +98,10 @@ namespace eq
 
 			void setStatic();
 
+			bool canRotate() { return m_InvInertia != 0; }
+			bool canMove() { return m_InvMass != 0; }
+			bool isStatic() { return !canMove() && !canRotate(); }
+
 			virtual void move(Math::Vector2 distance);
 
 		private:

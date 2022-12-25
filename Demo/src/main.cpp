@@ -43,6 +43,8 @@ equinoxAppEntryPoint
 	eq::Physics::PhysicsWorld world(eq::Math::Vector2(2000, 2000));
 	world.addCircle(eq::Math::Vector2(-100, 0), 0, 40, eq::Physics::Materials::DEFAULT);
 	world.addBox(eq::Math::Vector2(0, -200), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(600,20));
+	world.addBox(eq::Math::Vector2(800, 100), eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
+	world.addBox(eq::Math::Vector2(-800, 100), -eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
 	world.setWorldGravity(eq::Math::Vector2(0, -100));
 	//texture.read("test.bmp");
 
@@ -125,6 +127,8 @@ equinoxAppEntryPoint
 			world.addBox(mouseTransformed, eq::Math::QUARTER_PI / 2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(20, 20));
 		if (eq::Input::isKeyPressed(EQ_G))
 			world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT);
+		if (eq::Input::wasKeyHit(EQ_Y))
+			world.clearNonStatic();
 
 		//eq::Renderer::DrawCircle(camera.get()->getPosition(), 10, eq::Color(255, 0, 255));
 

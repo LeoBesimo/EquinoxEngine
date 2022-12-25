@@ -84,6 +84,10 @@ namespace eq
 
 			void update(float delta);
 
+			void clearNonStatic();
+			void clearStatic();
+			void clearAll();
+
 		private:
 			bool inWorld(Shape* shape);
 			void removeBody(unsigned int index);
