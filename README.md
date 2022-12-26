@@ -23,20 +23,20 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
     - Utility functions
 
 ## Definitve Features to Implement
-- [] Multithreaded Rendering for Filled Shapes
-- [] Midpoint Ellipse Algorithm
-- [] Color for Ridgid Bodies
-- [] Filled Triangles
-- [] Sound Support
-- [] Sound Manager
-- [] Animation System
-- [] Line Colliders
-- [] Trigger Colliders
+- [ ] Multithreaded Rendering for Filled Shapes
+- [ ] Midpoint Ellipse Algorithm
+- [ ] Color for Ridgid Bodies
+- [ ] Filled Triangles
+- [ ] Sound Support
+- [ ] Sound Manager
+- [ ] Animation System
+- [ ] Line Colliders
+- [ ] Trigger Colliders
 
 ## Maybe Features to Implement
-- [] Cameras with their own Viewport
-- [] Render directly to Textures
-- [] Scale sprite objects on render using bound Camera matrix
+- [ ] Cameras with their own Viewport
+- [ ] Render directly to Textures
+- [ ] Scale sprite objects on render using bound Camera matrix
 
 ## Resources and References
 
