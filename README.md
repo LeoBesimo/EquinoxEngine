@@ -46,7 +46,7 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
 
 
 ## Feedback
-Feel free to Fork the repository and open Pull Requests if you find any bugs. 
+Feel free to Fork the repository and open Pull Requests if you find any bugs or if you otherwise want to contribute to this project.
 
 - - -
 Licensed under Creative Commons Zero v1.0 Universal
