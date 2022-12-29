@@ -49,19 +49,19 @@ namespace eq
 			return app;
 		}
 
-		inline static void start()
+		inline static void Start()
 		{
 			getInstance().startWindow();
 		}
 
-		inline static void setWindowProperties(const std::wstring& title, const int& width, const int& height)
+		inline static void SetWindowProperties(const std::wstring& title, const int& width, const int& height)
 		{
 			getInstance().m_WindowTitle = title;
 			getInstance().m_WindowWidth = width + 1;
 			getInstance().m_WindowHeight = height + 1;
 		}
 
-		inline static void setApplicationUpdate(const std::function<void(float delta)>& m_Update) { getInstance().m_Update = m_Update; }
+		inline static void SetApplicationUpdate(const std::function<void(float delta)>& m_Update) { getInstance().m_Update = m_Update; }
 
 		inline static std::wstring getWindowTitle() { return getInstance().m_WindowTitle; }
 		inline static int getWindowWidth() { return getInstance().m_WindowWidth; }

@@ -80,8 +80,11 @@ equinoxAppEntryPoint
 
 	eq::Renderer::setClearColor(eq::Color(255, 255, 255));
 	eq::Renderer::setCamera(camera);
-	eq::Application::setWindowProperties(L"Test", 1400, 1400);
-	eq::Application::setApplicationUpdate([&](float delta) {
+
+
+
+	eq::Application::SetWindowProperties(L"Test", 1400, 1400);
+	eq::Application::SetApplicationUpdate([&](float delta) {
 
 		eq::Math::Vector2 mouse;
 	eq::Input::getMousePosition(&mouse);
@@ -169,7 +172,7 @@ equinoxAppEntryPoint
 	eq::Renderer::draw(world);
 	});
 
-	eq::Application::start();
+	eq::Application::Start();
 
 	return 0;
 }

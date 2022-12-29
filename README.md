@@ -1,6 +1,8 @@
 # EquinoxEngine
 
-A small Game Framework written in C++ using the Win32 api. Written for Learning purposes. 
+A small Game Framework written in C++ using the Win32 api. Written for Learning purposes.
+
+1.0 Release comming soon
 
 ## Features
 - [x] Creating a Window
@@ -20,6 +22,25 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
     - 4D Vectors
     - 2x2 Matrix
     - Utility functions
+
+## Usage
+**Link the Libraries and Include the Header files**
+```cpp
+#include<Equinox.hpp>
+
+equinoxAppEntryPoint
+{
+    eq::Application::SetWindowProperties(L"Window Title", Window Width, Window Height);
+    
+    eq::Application::SetApplicationUpdate([&](float delta){
+        // Your update Code goes here
+    });
+
+    eq::Application::Start();
+
+    return 0;
+}
+```
 
 ## Important TODOs
 - Rewrite Sprite Class to contain Original and editable Buffer
