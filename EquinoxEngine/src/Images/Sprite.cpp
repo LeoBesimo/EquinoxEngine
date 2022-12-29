@@ -64,6 +64,18 @@ namespace eq
 
 	void Sprite::rotate(float ang)
 	{
+
+		if (abs(ang - m_Angle) >= 0.01)
+		{
+			float diff = ang - m_Angle;
+			m_Angle = ang;
+			ang = diff;
+		}
+		else
+		{
+			return;
+		}
+
 		Math::Matrix2x2 rotation(-ang);
 
 		std::vector<uint32_t> tempBuffer(m_Buffer.size());
@@ -113,15 +125,7 @@ namespace eq
 
 		m_Buffer = tempBuffer;
 	}
-	void Sprite::setAlpha(uint8_t alpha)
-	{
-		m_Alpha = alpha;
-	}
 
-	uint8_t Sprite::getAlpha()
-	{
-		return m_Alpha;
-	}
 	uint32_t Sprite::getPixel(unsigned int x, unsigned int y)
 	{
 		if (x < 0 || x >= m_Width || y < 0 || y >= m_Height)
@@ -136,9 +140,9 @@ namespace eq
 
 		return col;//(m_Alpha << 24) | (red << 16) | (green << 8) | blue;
 	}
+
 	uint32_t Sprite::billinearInterpolation(float x, float y)
 	{
-
 		if (x < 0 || x >= m_Width || y < 0 || y >= m_Height)
 			return 0;
 
@@ -152,7 +156,7 @@ namespace eq
 		float dy1 = y - y1;
 		float dy2 = y - y2;
 
-		uint32_t value = m_Buffer[x1 + y1 * m_Width];/*m_Buffer[x1 + y1 * m_Width] * dx2 * dy2 +
+		uint32_t value = m_Buffer[x1 + y1 * m_Height];/*m_Buffer[x1 + y1 * m_Width] * dx2 * dy2 +
 			m_Buffer[x2 + y1 * m_Width] * dx1 * dy2 +
 			m_Buffer[x1 + y2 * m_Width] * dx2 * dy1 +
 			m_Buffer[x2 + y2 * m_Width] * dx1 + dy1;*/

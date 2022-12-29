@@ -139,6 +139,7 @@ equinoxAppEntryPoint
 	eq::Renderer::DrawCircle(camera.get()->getPosition(), 10, eq::Color(255, 0, 255));
 
 	sprite.setPosition(box->getPosition() - eq::Math::Vector2(16, -32));
+	sprite.rotate(box->getAngle());
 	//camera->move(eq::Math::Vector2(-box->getVelocity().x, box->getVelocity().y) * delta);
 	//camera->setPosition(box->getPosition() + eq::Math::Vector2(400, 400));
 

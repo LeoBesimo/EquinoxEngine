@@ -13,6 +13,7 @@ namespace eq
 		unsigned int m_OriginalHeight;
 		unsigned int m_Width;
 		unsigned int m_Height;
+		float m_Angle;
 
 		Math::Vector2 m_Scale;
 
@@ -22,7 +23,6 @@ namespace eq
 
 		bool m_CameraDependent = true;
 
-		uint8_t m_Alpha = 255;
 
 	public:
 		Sprite() :
@@ -41,8 +41,6 @@ namespace eq
 		void rotate(float ang);
 
 		void scale(float scaleX, float scaleY);
-		void setAlpha(uint8_t alpha);
-		uint8_t getAlpha();
 
 		uint32_t getPixel(unsigned int x, unsigned int y);
 
