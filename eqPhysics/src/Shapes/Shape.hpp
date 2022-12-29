@@ -41,6 +41,8 @@ namespace eq
 			float m_InvMass;
 			float m_InvInertia;
 
+			uint32_t color;
+
 		public:
 			Shape(Math::Vector2 position, float angle, ShapeType type, Material material, Math::Matrix2x2 scale);
 

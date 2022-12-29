@@ -43,9 +43,10 @@ equinoxAppEntryPoint
 	eq::Physics::PhysicsWorld world(eq::Math::Vector2(2000, 2000));
 	world.addCircle(eq::Math::Vector2(-100, 0), 0, 40, eq::Physics::Materials::DEFAULT);
 	world.addBox(eq::Math::Vector2(0, -200), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(600,20));
-	world.addBox(eq::Math::Vector2(800, 100), eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
-	world.addBox(eq::Math::Vector2(-800, 100), -eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
+	//world.addBox(eq::Math::Vector2(800, 100), eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
+	//world.addBox(eq::Math::Vector2(-800, 100), -eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
 	world.setWorldGravity(eq::Math::Vector2(0, -100));
+	eq::Physics::BoxShape* box = world.addBox(eq::Math::Vector2(0, 100), 0, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(32, 32));
 	//texture.read("test.bmp");
 
 	//texture.save("test.bmp");
@@ -58,7 +59,7 @@ equinoxAppEntryPoint
 	//car.invertX();
 	//car.save("Ume.bmp");
 
-	eq::Sprite sprite(car);// , 16, 0, 16, 16);
+	eq::Sprite sprite(car,16,16);// , 16, 0, 16, 16);
 	sprite.scale(4,4);
 
 
@@ -98,14 +99,19 @@ equinoxAppEntryPoint
 			camera.get()->move(eq::Math::Vector2(-speed, 0) * delta);
 
 		if (eq::Input::isKeyPressed(EQ_I))
-			sprite.move(eq::Math::Vector2(0,speed) * delta);
+			box->applyForce(eq::Math::Vector2(0, 300) * box->getMass());
+			//sprite.move(eq::Math::Vector2(0,speed) * delta);
 		if (eq::Input::isKeyPressed(EQ_K))
-			sprite.move(eq::Math::Vector2(0,-speed) * delta);
+			box->applyForce(eq::Math::Vector2(0, -300) * box->getMass());
+
+			//sprite.move(eq::Math::Vector2(0,-speed) * delta);
 
 		if (eq::Input::isKeyPressed(EQ_J))
-			sprite.move(eq::Math::Vector2(-speed,0) * delta);
+			box->applyForce(eq::Math::Vector2(-300, 0) * box->getMass());
+			//sprite.move(eq::Math::Vector2(-speed,0) * delta);
 		if (eq::Input::isKeyPressed(EQ_L))
-			sprite.move(eq::Math::Vector2(speed,0) * delta);
+			box->applyForce(eq::Math::Vector2(300, 0) * box->getMass());
+			//sprite.move(eq::Math::Vector2(speed,0) * delta);
 		//camera.setPosition(mouse);
 
 		if (eq::Input::isKeyPressed(EQ_Q))
@@ -122,15 +128,18 @@ equinoxAppEntryPoint
 			world.addPolygon(mouseTransformed, 0, 5, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(20,0,0,20));
 
 		if (eq::Input::isKeyPressed(EQ_T))
-			world.addPolygon(mouseTransformed, 0, rand() % 7 + 3, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(20, 0, 0, 20));
+			world.addPolygon(mouseTransformed, 0, rand() % 7 + 3, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(40, 0, 0, 40));
 		if (eq::Input::isKeyPressed(EQ_R))
-			world.addBox(mouseTransformed, eq::Math::QUARTER_PI / 2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(20, 20));
+			world.addBox(mouseTransformed, eq::Math::QUARTER_PI / 2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(40, 40));
 		if (eq::Input::isKeyPressed(EQ_G))
 			world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT);
 		if (eq::Input::wasKeyHit(EQ_Y))
 			world.clearNonStatic();
 
 		//eq::Renderer::DrawCircle(camera.get()->getPosition(), 10, eq::Color(255, 0, 255));
+
+		sprite.setPosition(box->getPosition()- eq::Math::Vector2(16,-32));
+		camera->setPosition(box->getPosition() + eq::Math::Vector2(400,400));
 
 		swprintf(charBuffer, 128, L"Framerate %f\n", 1 / delta);
 		std::wstring frameText(charBuffer);
@@ -147,7 +156,7 @@ equinoxAppEntryPoint
 		game.render();
 
 		//eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(255, 0, 0, 160));
-		//eq::Renderer::DrawSprite(sprite);
+		eq::Renderer::DrawSprite(sprite);
 		//eq::Renderer::draw(std::make_shared<eq::Text>(text));
 		//eq::Renderer::draw((text2));
 		eq::Renderer::draw(bodies);
