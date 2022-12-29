@@ -26,7 +26,7 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
 ## Usage
 **Link the Libraries and Include the Header files**
 ```cpp
-#include<Equinox.hpp>
+#include <Equinox.hpp>
 
 equinoxAppEntryPoint
 {
