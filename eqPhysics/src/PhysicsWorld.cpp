@@ -48,6 +48,8 @@ namespace eq
 
 		void PhysicsWorld::update(float delta)
 		{
+			if (delta >= 1)
+				return;
 
 			Manifold manifold;
 			m_ContactPairs.clear();

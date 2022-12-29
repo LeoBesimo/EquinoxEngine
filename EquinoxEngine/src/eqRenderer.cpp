@@ -155,6 +155,8 @@ namespace eq
 
 	void Renderer::DrawSprite(Sprite& sprite)
 	{
+		Math::Matrix2x2 rotation(0);
+
 		Math::Vector2 position = sprite.m_Position;
 		Math::Vector2 scale = sprite.m_Scale;
 		if (sprite.m_CameraDependent)
@@ -166,7 +168,10 @@ namespace eq
 		{
 			for (unsigned int i = 0; i < sprite.m_Width; i++)
 			{
-				SetPixel(position.x + i, position.y + j, sprite.getPixel(i, j));
+				Math::Vector2 targetPos = Math::Vector2(i, j);
+				targetPos = rotation * targetPos;
+				targetPos += position;
+				SetPixel(targetPos.x + 0.5, targetPos.y + 0.5, sprite.getPixel(i, j));
 			}
 		}
 
@@ -218,8 +223,8 @@ namespace eq
 					Line line(points[i], points[index]);
 					draw(line);
 				}
-				
-				break; 
+
+				break;
 			}
 			case Physics::ShapeType::Circle:
 			{

@@ -62,6 +62,28 @@ namespace eq
 		m_Position += direction;
 	}
 
+	void Sprite::rotate(float ang)
+	{
+		Math::Matrix2x2 rotation(-ang);
+
+		std::vector<uint32_t> tempBuffer(m_Buffer.size());
+		float xOff = m_Width / 2;
+		float yOff = m_Height / 2;
+		Math::Vector2 offset(xOff, yOff);
+
+		for (unsigned int i = 0; i < m_Width; i++)
+		{
+			for (unsigned int j = 0; j < m_Height; j++)
+			{
+				Math::Vector2 original(i - xOff, j - yOff);
+				original = rotation * original;
+				original += offset;
+				tempBuffer[i + j * m_Width] = billinearInterpolation(original.x, original.y);
+			}
+		}
+		m_Buffer = tempBuffer;
+	}
+
 	void Sprite::scale(float scaleX, float scaleY)
 	{
 		float newWidth = m_Width * scaleX;
@@ -71,7 +93,6 @@ namespace eq
 		m_Scale.y = scaleY;
 
 		std::vector<uint32_t> tempBuffer(newWidth * newHeight);
-		;
 
 		for (unsigned int y = 0; y < newHeight; y++)
 		{
@@ -109,10 +130,34 @@ namespace eq
 		}
 
 		uint32_t col = m_Buffer[x + y * m_Width];
-		uint8_t red = (uint8_t)(col >> 16);
-		uint8_t green = (uint8_t)(col >> 8);
-		uint8_t blue = (uint8_t)(col >> 0);
+		//uint8_t red = (uint8_t)(col >> 16);
+		//uint8_t green = (uint8_t)(col >> 8);
+		//uint8_t blue = (uint8_t)(col >> 0);
 
 		return col;//(m_Alpha << 24) | (red << 16) | (green << 8) | blue;
+	}
+	uint32_t Sprite::billinearInterpolation(float x, float y)
+	{
+
+		if (x < 0 || x >= m_Width || y < 0 || y >= m_Height)
+			return 0;
+
+		int x1 = floor(x);
+		int x2 = ceil(x);
+		int y1 = floor(y);
+		int y2 = ceil(y);
+
+		float dx1 = x - x1;
+		float dx2 = x - x2;
+		float dy1 = y - y1;
+		float dy2 = y - y2;
+
+		uint32_t value = m_Buffer[x1 + y1 * m_Width];/*m_Buffer[x1 + y1 * m_Width] * dx2 * dy2 +
+			m_Buffer[x2 + y1 * m_Width] * dx1 * dy2 +
+			m_Buffer[x1 + y2 * m_Width] * dx2 * dy1 +
+			m_Buffer[x2 + y2 * m_Width] * dx1 + dy1;*/
+
+		return value;
+
 	}
 }

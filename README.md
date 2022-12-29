@@ -5,7 +5,6 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
 ## Features
 - [x] Creating a Window
 - [x] Drawing simple Shapes to the Screen
-- [X] Alpha Colorblending
 - [x] Option to use Multithreaded Rendering
 - [x] Supports Camera objects with Scaling Matricies and Position offsets
 - [x] Rigid Body Physics Engine supporting
@@ -21,6 +20,9 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
     - 4D Vectors
     - 2x2 Matrix
     - Utility functions
+
+## Important TODOs
+- Rewrite Sprite Class to contain Original and editable Buffer
 
 ## Definitve Features to Implement
 - [ ] Multithreaded Rendering for Filled Shapes
