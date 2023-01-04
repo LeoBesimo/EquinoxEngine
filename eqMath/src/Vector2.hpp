@@ -100,6 +100,16 @@ namespace eq
 				y /= a.y;
 			}
 
+			bool operator==(Vector2 a)
+			{
+				return (x == a.x && y = a.y);
+			}
+
+			bool operator!=(Vector2 a)
+			{
+				return x != a.x || y != a.y;
+			}
+
 			float lenSqr(void) const  //returns length squared of the vector
 			{
 				return (x * x) + (y * y);
@@ -135,7 +145,7 @@ namespace eq
 			}
 
 		};
-		
+
 		/*Vector2 operator+(Vector2 a, Vector2 b) { return Vector2(a.x + b.x, a.y + b.y); }
 		Vector2 operator+=(Vector2& a, Vector2 b) { a = Vector2(a.x + b.x, a.y + b.y); return a; }
 		Vector2 operator-(Vector2 a, Vector2 b) { return Vector2(a.x - b.x, a.y - b.y);}

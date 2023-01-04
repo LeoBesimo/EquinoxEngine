@@ -55,6 +55,17 @@ namespace eq
 				return a * v.x + b * v.y;
 			}
 
+
+			bool operator==(Matrix2x2 mat)
+			{
+				return a == mat.a && b == mat.b;
+			}
+
+			bool operator!=(Matrix2x2 mat)
+			{
+				return a != mat.a || b != mat.b;
+			}
+
 			float determinant()
 			{
 				return a.cross(b);
@@ -70,15 +81,5 @@ namespace eq
 			}
 
 		};
-
-		bool operator==(Matrix2x2 a, Matrix2x2 b)
-		{
-			return a.a == b.a && a.b == b.b;
-		}
-
-		bool operator!=(Matrix2x2 a, Matrix2x2 b)
-		{
-			return a.a != b.a || a.b != b.b;
-		}
 	}
 }
