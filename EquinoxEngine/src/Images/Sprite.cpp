@@ -8,7 +8,7 @@ namespace eq
 		m_Width = texture.m_Width;
 		m_Height = texture.m_Height;
 
-		m_Buffer = std::vector<uint32_t>(m_Width * m_Height);
+		m_OriginalBuffer = std::vector<uint32_t>(m_Width * m_Height);
 
 		for (unsigned int j = 0; j < m_Height; j++)
 		{
@@ -16,33 +16,33 @@ namespace eq
 			{
 
 				unsigned int index = i + j * m_Width;
-				m_Buffer[index] = texture.m_Buffer[index];
+				m_OriginalBuffer[index] = texture.m_Buffer[index];
 			}
 		}
 	}
 
 	Sprite::Sprite(BitmapTexture& texture, unsigned int width, unsigned int height) :
-		m_Width(width), m_Height(height), m_Buffer(width* height), m_Position(0, 0), m_Scale(1, 1)
+		m_Width(width), m_Height(height), m_OriginalBuffer(width* height), m_Position(0, 0), m_Scale(1, 1)
 	{
 		for (unsigned int j = 0; j < m_Height; j++)
 		{
 			for (unsigned int i = 0; i < m_Width; i++)
 			{
 				unsigned int index = i + j * m_Width;
-				m_Buffer[index] = texture.getPixel(i, j);
+				m_OriginalBuffer[index] = texture.getPixel(i, j);
 			}
 		}
 	}
 
 	Sprite::Sprite(BitmapTexture& texture, unsigned int xOffset, unsigned int yOffset, unsigned int width, unsigned int height) :
-		m_Width(width), m_Height(height), m_Buffer(width* height), m_Position(0, 0), m_Scale(1, 1)
+		m_Width(width), m_Height(height), m_OriginalBuffer(width* height), m_Position(0, 0), m_Scale(1, 1)
 	{
 		for (unsigned int j = 0; j < m_Height; j++)
 		{
 			for (unsigned int i = 0; i < m_Width; i++)
 			{
 				unsigned int index = i + j * m_Width;
-				m_Buffer[index] = texture.getPixel(i + xOffset, j + yOffset);
+				m_OriginalBuffer[index] = texture.getPixel(i + xOffset, j + yOffset);
 			}
 		}
 	}
@@ -62,68 +62,16 @@ namespace eq
 		m_Position += direction;
 	}
 
-	void Sprite::rotate(float ang)
+	void Sprite::rotate(float angle)
 	{
-
-		if (abs(ang - m_Angle) >= 0.01)
-		{
-			float diff = ang - m_Angle;
-			m_Angle = ang;
-			ang = diff;
-		}
-		else
-		{
-			return;
-		}
-
-		Math::Matrix2x2 rotation(-ang);
-
-		std::vector<uint32_t> tempBuffer(m_Buffer.size());
-		float xOff = m_Width / 2;
-		float yOff = m_Height / 2;
-		Math::Vector2 offset(xOff, yOff);
-
-		for (unsigned int i = 0; i < m_Width; i++)
-		{
-			for (unsigned int j = 0; j < m_Height; j++)
-			{
-				Math::Vector2 original(i - xOff, j - yOff);
-				original = rotation * original;
-				original += offset;
-				tempBuffer[i + j * m_Width] = billinearInterpolation(original.x, original.y);
-			}
-		}
-		m_Buffer = tempBuffer;
+		m_Angle = angle;
 	}
 
 	void Sprite::scale(float scaleX, float scaleY)
 	{
-		float newWidth = m_Width * scaleX;
-		float newHeight = m_Height * scaleY;
-
 		m_Scale.x = scaleX;
 		m_Scale.y = scaleY;
-
-		std::vector<uint32_t> tempBuffer(newWidth * newHeight);
-
-		for (unsigned int y = 0; y < newHeight; y++)
-		{
-			for (unsigned int x = 0; x < newWidth; x++)
-			{
-				unsigned int nearestX = (int)floor(x / scaleX);
-				unsigned int nearestY = (int)floor(y / scaleY);
-				unsigned int nearestIndex = nearestX + nearestY * m_Width;
-
-				unsigned int pixelIndex = x + y * newWidth;
-				uint32_t color = m_Buffer[nearestIndex];
-				tempBuffer[pixelIndex] = color;
-			}
-		}
-
-		m_Width = newWidth;
-		m_Height = newHeight;
-
-		m_Buffer = tempBuffer;
+		m_OriginalScale = m_Scale;
 	}
 
 	uint32_t Sprite::getPixel(unsigned int x, unsigned int y)
@@ -133,7 +81,7 @@ namespace eq
 			return 0;
 		}
 
-		uint32_t col = m_Buffer[x + y * m_Width];
+		uint32_t col = m_OriginalBuffer[x + y * m_Width];
 		//uint8_t red = (uint8_t)(col >> 16);
 		//uint8_t green = (uint8_t)(col >> 8);
 		//uint8_t blue = (uint8_t)(col >> 0);
@@ -141,9 +89,68 @@ namespace eq
 		return col;//(m_Alpha << 24) | (red << 16) | (green << 8) | blue;
 	}
 
+	uint32_t Sprite::getTransformedPixel(unsigned int x, unsigned int y)
+	{
+		if (x < 0 || x >= m_ScaledWidth || y < 0 || y >= m_ScaledHeight)
+		{
+			return 0;
+		}
+
+		return m_Buffer[x + y * m_ScaledWidth];
+	}
+
+	void Sprite::applyScaling()
+	{
+		float newWidth = floor(m_Width * m_Scale.x + 0.5f);
+		float newHeight = floor(m_Height * m_Scale.y + 0.5f);
+
+		std::vector<uint32_t> tempBuffer(newWidth * newHeight);
+
+		for (unsigned int y = 0; y < newHeight; y++)
+		{
+			for (unsigned int x = 0; x < newWidth; x++)
+			{
+				unsigned int nearestX = (int)floor(x / m_Scale.x);
+				unsigned int nearestY = (int)floor(y / m_Scale.y);
+				unsigned int nearestIndex = nearestX + nearestY * m_Width;
+
+				unsigned int pixelIndex = x + y * newWidth;
+				uint32_t color = m_OriginalBuffer[nearestIndex];
+				tempBuffer[pixelIndex] = color;
+			}
+		}
+
+		m_ScaledWidth = newWidth;
+		m_ScaledHeight = newHeight;
+
+		m_Buffer = tempBuffer;
+	}
+
+	void Sprite::applyRotation()
+	{
+		Math::Matrix2x2 rotation(-m_Angle);
+
+		std::vector<uint32_t> tempBuffer(m_Buffer.size());
+		float xOff = m_ScaledWidth / 2;
+		float yOff = m_ScaledHeight / 2;
+		Math::Vector2 offset(xOff, yOff);
+
+		for (unsigned int i = 0; i < m_ScaledWidth; i++)
+		{
+			for (unsigned int j = 0; j < m_ScaledHeight; j++)
+			{
+				Math::Vector2 original(i - xOff, j - yOff);
+				original = rotation * original;
+				original += offset;
+				tempBuffer[i + j * m_ScaledWidth] = billinearInterpolation(original.x, original.y);
+			}
+		}
+		m_Buffer = tempBuffer;
+	}
+
 	uint32_t Sprite::billinearInterpolation(float x, float y)
 	{
-		if (x < 0 || x >= m_Width || y < 0 || y >= m_Height)
+		if (x < 0 || x >= m_ScaledWidth || y < 0 || y >= m_ScaledHeight)
 			return 0;
 
 		int x1 = floor(x);
@@ -156,7 +163,7 @@ namespace eq
 		float dy1 = y - y1;
 		float dy2 = y - y2;
 
-		uint32_t value = m_Buffer[x1 + y1 * m_Height];/*m_Buffer[x1 + y1 * m_Width] * dx2 * dy2 +
+		uint32_t value = m_Buffer[x1 + y1 * m_ScaledWidth];/*m_Buffer[x1 + y1 * m_Width] * dx2 * dy2 +
 			m_Buffer[x2 + y1 * m_Width] * dx1 * dy2 +
 			m_Buffer[x1 + y2 * m_Width] * dx2 * dy1 +
 			m_Buffer[x2 + y2 * m_Width] * dx1 + dy1;*/

@@ -70,5 +70,15 @@ namespace eq
 			}
 
 		};
+
+		bool operator==(Matrix2x2 a, Matrix2x2 b)
+		{
+			return a.a == b.a && a.b == b.b;
+		}
+
+		bool operator!=(Matrix2x2 a, Matrix2x2 b)
+		{
+			return a.a != b.a || a.b != b.b;
+		}
 	}
 }

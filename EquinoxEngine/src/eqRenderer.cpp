@@ -161,17 +161,31 @@ namespace eq
 		Math::Vector2 scale = sprite.m_Scale;
 		if (sprite.m_CameraDependent)
 		{
+			Math::Matrix2x2 original = sprite.m_Scale;
+			sprite.m_Scale = (getInstance().m_Camera->getTransform() * sprite.m_OriginalScale);
+			if (original != sprite.m_Scale) sprite.m_IsScaled = false;
 			position = WorldToScreenspace(position); //+= getInstance().m_Camera.get()->getPosition();
 		}
 
-		for (unsigned int j = 0; j < sprite.m_Height; j++)
+		if (!sprite.m_IsTransformed)
 		{
-			for (unsigned int i = 0; i < sprite.m_Width; i++)
+			if (!sprite.m_IsScaled)
+			{
+				sprite.applyScaling();
+				sprite.m_IsScaled = true;
+			}
+			sprite.applyRotation();
+			sprite.m_IsTransformed = true;
+		}
+
+		for (unsigned int j = 0; j < sprite.m_ScaledHeight; j++)
+		{
+			for (unsigned int i = 0; i < sprite.m_ScaledWidth; i++)
 			{
 				Math::Vector2 targetPos = Math::Vector2(i, j);
 				targetPos = rotation * targetPos;
 				targetPos += position;
-				SetPixel(targetPos.x + 0.5, targetPos.y + 0.5, sprite.getPixel(i, j));
+				SetPixel(targetPos.x + 0.5, targetPos.y + 0.5, sprite.getTransformedPixel(i, j));
 			}
 		}
 
