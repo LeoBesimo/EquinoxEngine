@@ -16,12 +16,16 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
 - [x] Support for 32 Bit Bitmap Textures
     - Loading from Disk
     - Saving to Disk
+- [X] Sprites
+    - Creating Sprite Objects from Textures
+    - Scale and Translate Sprite Objects
+    - Option to precompute Sprite Transformations
 - [X] Small Math Library
     - 2D Vectors
     - 3D Vectors
     - 4D Vectors
     - 2x2 Matrix
-    - Utility functions
+    - Some Utility functions
 
 ## Usage
 **Link the Libraries and Include the Header files**
@@ -59,7 +63,7 @@ equinoxAppEntryPoint
 ## Maybe Features to Implement
 - [ ] Cameras with their own Viewport
 - [ ] Render directly to Textures
-- [ ] Scale sprite objects on render using bound Camera matrix
+- [x] Scale sprite objects on render using bound Camera matrix
 
 ## Resources and References
 
