@@ -20,7 +20,7 @@ namespace eq
 			LPARAM lParam
 		);
 
-		friend class std::thread;
+		friend class thread;
 
 	private:
 		HINSTANCE m_hInstance;
@@ -34,6 +34,7 @@ namespace eq
 		std::function<void(float delta)> m_Update;
 		float m_SecondsPerFrame = 1.f / 120.f;
 
+		float m_FrameTime;
 
 	public:
 		Application();
@@ -68,6 +69,9 @@ namespace eq
 		inline static int getWindowHeight() { return getInstance().m_WindowHeight; }
 		inline static HWND getWindowHandle() { return getInstance().m_WindowHandle; }
 		inline static bool isRunning() { return getInstance().m_Running; }
+
+		inline static void setFrameTime(float frameTime) { getInstance().m_FrameTime = frameTime; }
+		inline static float getFrameTime() { return getInstance().m_FrameTime; }
 
 	private:
 		void startWindow();

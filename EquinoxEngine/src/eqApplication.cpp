@@ -149,8 +149,23 @@ namespace eq
 
 			std::thread renderThread([]() {
 
+				LARGE_INTEGER freq;
+				QueryPerformanceFrequency(&freq);
+
+				LARGE_INTEGER last;
+				QueryPerformanceCounter(&last);
+
+				LARGE_INTEGER current;
+
 				while (Application::isRunning())
 				{
+					QueryPerformanceCounter(&current);
+
+					int64_t elapsed = current.QuadPart - last.QuadPart;
+
+					setFrameTime((float)elapsed / (float)freq.QuadPart);
+					last = current;
+
 					HWND m_WindowHandle = Application::getWindowHandle();
 
 					HDC deviceContext = GetDC(m_WindowHandle);

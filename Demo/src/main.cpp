@@ -40,6 +40,8 @@ equinoxAppEntryPoint
 		}
 	}
 
+	float frameCount = 0;
+
 	eq::Physics::PhysicsWorld world(eq::Math::Vector2(4000, 4000));
 	world.addCircle(eq::Math::Vector2(-100, 0), 0, 40, eq::Physics::Materials::DEFAULT);
 	world.addBox(eq::Math::Vector2(0, -200), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(600,20));
@@ -81,9 +83,9 @@ equinoxAppEntryPoint
 	eq::Renderer::setClearColor(eq::Color(255, 255, 255));
 	eq::Renderer::setCamera(camera);
 
-
-
 	eq::Application::SetWindowProperties(L"Test", 1400, 1400);
+
+	//set application update
 	eq::Application::SetApplicationUpdate([&](float delta) {
 
 		eq::Math::Vector2 mouse;
@@ -135,18 +137,20 @@ equinoxAppEntryPoint
 	if (eq::Input::isKeyPressed(EQ_R))
 		world.addBox(mouseTransformed, eq::Math::QUARTER_PI / 2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(40, 40));
 	if (eq::Input::isKeyPressed(EQ_G))
-		world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT);
+		for(int i = 0; i < 3; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT);
 	if (eq::Input::wasKeyHit(EQ_Y))
 		world.clearNonStatic();
 
 	eq::Renderer::DrawCircle(camera.get()->getPosition(), 10, eq::Color(255, 0, 255));
 
-	sprite.setPosition(box->getPosition() - eq::Math::Vector2(16, -32));
-	sprite.rotate(-box->getAngle());
+	//sprite.setPosition(box->getPosition() - eq::Math::Vector2(16, -32));
+	//sprite.rotate(-box->getAngle());
+	sprite.rotate(frameCount / 100);
+	frameCount++;
 	//camera->move(eq::Math::Vector2(-box->getVelocity().x, box->getVelocity().y) * delta);
 	//camera->setPosition(box->getPosition() + eq::Math::Vector2(400, 400));
 
-	swprintf(charBuffer, 128, L"Framerate %f\n", 1 / delta);
+	swprintf(charBuffer, 128, L"Framerate: %f     FrameTime: %f ms", 1 / delta, eq::Application::getFrameTime() * 1000);
 	std::wstring frameText(charBuffer);
 	//OutputDebugString(charBuffer);
 

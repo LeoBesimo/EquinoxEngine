@@ -100,7 +100,7 @@ namespace eq
 				y /= a.y;
 			}
 
-			bool operator==(Vector2 a)
+			/*bool operator==(Vector2 a)
 			{
 				return (x == a.x && y = a.y);
 			}
@@ -108,7 +108,7 @@ namespace eq
 			bool operator!=(Vector2 a)
 			{
 				return x != a.x || y != a.y;
-			}
+			}*/
 
 			float lenSqr(void) const  //returns length squared of the vector
 			{

@@ -24,8 +24,8 @@ namespace eq
 		Math::Vector2 m_Position;
 
 		bool m_CameraDependent = true;
-		bool m_IsTransformed = false;
-		bool m_IsScaled = false;
+		bool m_PreTransformed = false;
+		bool m_Changed = false;
 
 
 	public:
@@ -46,6 +46,8 @@ namespace eq
 		void scale(float scaleX, float scaleY);
 
 		uint32_t getPixel(unsigned int x, unsigned int y);
+
+		void preprocessSprite();
 
 	private:
 		Math::Vector2 getScale() { return m_Scale; }

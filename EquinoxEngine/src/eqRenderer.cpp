@@ -162,20 +162,15 @@ namespace eq
 		if (sprite.m_CameraDependent)
 		{
 			Math::Matrix2x2 original = sprite.m_Scale;
-			sprite.m_Scale = (getInstance().m_Camera->getTransform() * sprite.m_OriginalScale);
-			if (original != sprite.m_Scale) sprite.m_IsScaled = false;
+			if(!sprite.m_PreTransformed || sprite.m_Changed) sprite.m_Scale = (getInstance().m_Camera->getTransform() * sprite.m_OriginalScale);
 			position = WorldToScreenspace(position); //+= getInstance().m_Camera.get()->getPosition();
 		}
 
-		if (!sprite.m_IsTransformed)
+		if (!sprite.m_PreTransformed || sprite.m_Changed)
 		{
-			if (!sprite.m_IsScaled)
-			{
-				sprite.applyScaling();
-				sprite.m_IsScaled = true;
-			}
+			sprite.applyScaling();
 			sprite.applyRotation();
-			sprite.m_IsTransformed = true;
+			sprite.m_Changed = false;
 		}
 
 		for (unsigned int j = 0; j < sprite.m_ScaledHeight; j++)

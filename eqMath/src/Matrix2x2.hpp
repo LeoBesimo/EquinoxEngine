@@ -56,7 +56,7 @@ namespace eq
 			}
 
 
-			bool operator==(Matrix2x2 mat)
+			/*bool operator==(Matrix2x2 mat)
 			{
 				return a == mat.a && b == mat.b;
 			}
@@ -64,7 +64,7 @@ namespace eq
 			bool operator!=(Matrix2x2 mat)
 			{
 				return a != mat.a || b != mat.b;
-			}
+			}*/
 
 			float determinant()
 			{

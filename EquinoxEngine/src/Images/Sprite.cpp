@@ -65,6 +65,7 @@ namespace eq
 	void Sprite::rotate(float angle)
 	{
 		m_Angle = angle;
+		m_Changed = true;
 	}
 
 	void Sprite::scale(float scaleX, float scaleY)
@@ -72,6 +73,7 @@ namespace eq
 		m_Scale.x = scaleX;
 		m_Scale.y = scaleY;
 		m_OriginalScale = m_Scale;
+		m_Changed = true;
 	}
 
 	uint32_t Sprite::getPixel(unsigned int x, unsigned int y)
@@ -87,6 +89,14 @@ namespace eq
 		//uint8_t blue = (uint8_t)(col >> 0);
 
 		return col;//(m_Alpha << 24) | (red << 16) | (green << 8) | blue;
+	}
+
+	void Sprite::preprocessSprite()
+	{
+		m_Changed = false;
+		m_PreTransformed = true;
+		applyScaling();
+		applyRotation();
 	}
 
 	uint32_t Sprite::getTransformedPixel(unsigned int x, unsigned int y)
