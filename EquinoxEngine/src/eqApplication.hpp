@@ -68,10 +68,12 @@ namespace eq
 		inline static int getWindowWidth() { return getInstance().m_WindowWidth; }
 		inline static int getWindowHeight() { return getInstance().m_WindowHeight; }
 		inline static HWND getWindowHandle() { return getInstance().m_WindowHandle; }
-		inline static bool isRunning() { return getInstance().m_Running; }
+		inline static bool IsRunning() { return getInstance().m_Running; }
 
-		inline static void setFrameTime(float frameTime) { getInstance().m_FrameTime = frameTime; }
-		inline static float getFrameTime() { return getInstance().m_FrameTime; }
+		inline static void setFrameRate(float frameRate) { getInstance().m_SecondsPerFrame = 1 / frameRate; }
+
+		inline static void SetFrameTime(float frameTime) { getInstance().m_FrameTime = frameTime; }
+		inline static float GetFrameTime() { return getInstance().m_FrameTime; }
 
 	private:
 		void startWindow();

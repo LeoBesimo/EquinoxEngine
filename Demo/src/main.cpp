@@ -83,7 +83,8 @@ equinoxAppEntryPoint
 	eq::Renderer::setClearColor(eq::Color(255, 255, 255));
 	eq::Renderer::setCamera(camera);
 
-	eq::Application::SetWindowProperties(L"Test", 1400, 1400);
+	eq::Application::SetWindowProperties(L"Test", 1400, 1000);
+	eq::Application::setFrameRate(60);
 
 	//set application update
 	eq::Application::SetApplicationUpdate([&](float delta) {
@@ -150,11 +151,11 @@ equinoxAppEntryPoint
 	//camera->move(eq::Math::Vector2(-box->getVelocity().x, box->getVelocity().y) * delta);
 	//camera->setPosition(box->getPosition() + eq::Math::Vector2(400, 400));
 
-	swprintf(charBuffer, 128, L"Framerate: %f     FrameTime: %f ms", 1 / delta, eq::Application::getFrameTime() * 1000);
+	swprintf(charBuffer, 128, L"Framerate: %f     FrameTime: %f ms", 1 / delta, eq::Application::GetFrameTime() * 1000);
 	std::wstring frameText(charBuffer);
 	//OutputDebugString(charBuffer);
 
-	swprintf(charBuffer, 128, L"Bodies: %d\n", world.getBodies().size());
+	swprintf(charBuffer, 128, L"Bodies: %zd\n", world.getBodies().size());
 	std::wstring bodyCount(charBuffer);
 	bodies.setText(bodyCount);
 

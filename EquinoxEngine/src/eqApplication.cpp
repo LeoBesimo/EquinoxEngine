@@ -157,13 +157,13 @@ namespace eq
 
 				LARGE_INTEGER current;
 
-				while (Application::isRunning())
+				while (Application::IsRunning())
 				{
 					QueryPerformanceCounter(&current);
 
 					int64_t elapsed = current.QuadPart - last.QuadPart;
 
-					setFrameTime((float)elapsed / (float)freq.QuadPart);
+					SetFrameTime((float)elapsed / (float)freq.QuadPart);
 					last = current;
 
 					HWND m_WindowHandle = Application::getWindowHandle();
