@@ -64,13 +64,13 @@ namespace eq
 
 		inline static void SetApplicationUpdate(const std::function<void(float delta)>& m_Update) { getInstance().m_Update = m_Update; }
 
-		inline static std::wstring getWindowTitle() { return getInstance().m_WindowTitle; }
-		inline static int getWindowWidth() { return getInstance().m_WindowWidth; }
-		inline static int getWindowHeight() { return getInstance().m_WindowHeight; }
-		inline static HWND getWindowHandle() { return getInstance().m_WindowHandle; }
+		inline static std::wstring GetWindowTitle() { return getInstance().m_WindowTitle; }
+		inline static int GetWindowWidth() { return getInstance().m_WindowWidth; }
+		inline static int GetWindowHeight() { return getInstance().m_WindowHeight; }
+		inline static HWND GetWindowHandle() { return getInstance().m_WindowHandle; }
 		inline static bool IsRunning() { return getInstance().m_Running; }
 
-		inline static void setFrameRate(float frameRate) { getInstance().m_SecondsPerFrame = 1 / frameRate; }
+		inline static void SetFrameRate(float frameRate) { getInstance().m_SecondsPerFrame = 1 / frameRate; }
 
 		inline static void SetFrameTime(float frameTime) { getInstance().m_FrameTime = frameTime; }
 		inline static float GetFrameTime() { return getInstance().m_FrameTime; }

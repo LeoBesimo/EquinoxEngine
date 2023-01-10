@@ -1,4 +1,4 @@
-# EquinoxEngine
+# Equinox Engine
 
 A small Game Framework written in C++ using the Win32 api. Written for Learning purposes.
 
@@ -46,8 +46,16 @@ equinoxAppEntryPoint
 }
 ```
 
+## Important Usage Information
+ - The Bitmap Class was tested with Aseprite Bitmaps, chance for wrong loading with bitmaps from other programms
+ - There is currently no option to draw ellipse outlines
+ - Precomputed sprites don't get Scaled with the bound Camera matrix
+ - There is no default Camera bound to the Renderer, a Camera object has to be assigned to the Renderer before the first draw call
+ - The Renderer begins to flicker at high Framerates due to async update and render threads
+ - Renderer flickers at large Camera scales due to async update and render threads
+
 ## Important TODOs
-- Rewrite Sprite Class to contain Original and editable Buffer
+ - [ ] Fix penetration distance calculation for Polygon and box shapes
 
 ## Definitve Features to Implement
 - [ ] Multithreaded Rendering for Filled Shapes
@@ -59,6 +67,8 @@ equinoxAppEntryPoint
 - [ ] Animation System
 - [ ] Line Colliders
 - [ ] Trigger Colliders
+- [ ] Sync update and render threads
+- [ ] Default bound Camera object
 
 ## Maybe Features to Implement
 - [ ] Cameras with their own Viewport

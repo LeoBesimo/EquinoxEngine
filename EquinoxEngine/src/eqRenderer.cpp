@@ -312,7 +312,7 @@ namespace eq
 		);
 		SetBkMode(deviceContext, TRANSPARENT);
 
-		if (buffersSwapped() == true) {
+		if (BuffersSwapped() == true) {
 			getInstance().m_SwappedBuffers = false;
 			clearBuffers();
 		}

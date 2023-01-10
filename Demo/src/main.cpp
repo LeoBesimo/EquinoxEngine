@@ -63,6 +63,7 @@ equinoxAppEntryPoint
 
 	eq::Sprite sprite(car,16,16);// , 16, 0, 16, 16);
 	sprite.scale(4,4);
+	sprite.preprocessSprite();
 	//sprite.rotate(eq::Math::QUARTER_PI / 2);
 
 
@@ -80,16 +81,16 @@ equinoxAppEntryPoint
 	float speed = 200;
 	float zoomSpeed = 0.8;
 
-	eq::Renderer::setClearColor(eq::Color(255, 255, 255));
-	eq::Renderer::setCamera(camera);
+	eq::Renderer::SetClearColor(eq::Color(255, 255, 255));
+	eq::Renderer::SetCamera(camera);
 
 	eq::Application::SetWindowProperties(L"Test", 1400, 1000);
-	eq::Application::setFrameRate(60);
+	eq::Application::SetFrameRate(60);
 
 	//set application update
 	eq::Application::SetApplicationUpdate([&](float delta) {
 
-		eq::Math::Vector2 mouse;
+	eq::Math::Vector2 mouse;
 	eq::Input::getMousePosition(&mouse);
 
 	//text.setPosition(mouse);
@@ -138,15 +139,15 @@ equinoxAppEntryPoint
 	if (eq::Input::isKeyPressed(EQ_R))
 		world.addBox(mouseTransformed, eq::Math::QUARTER_PI / 2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(40, 40));
 	if (eq::Input::isKeyPressed(EQ_G))
-		for(int i = 0; i < 3; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT);
+		for (int i = 0; i < 3; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT);
 	if (eq::Input::wasKeyHit(EQ_Y))
 		world.clearNonStatic();
 
-	eq::Renderer::DrawCircle(camera.get()->getPosition(), 10, eq::Color(255, 0, 255));
+	//eq::Renderer::DrawCircle(camera.get()->getPosition(), 10, eq::Color(255, 0, 255));
 
 	//sprite.setPosition(box->getPosition() - eq::Math::Vector2(16, -32));
 	//sprite.rotate(-box->getAngle());
-	sprite.rotate(frameCount / 100);
+	//sprite.rotate(frameCount / 100);
 	frameCount++;
 	//camera->move(eq::Math::Vector2(-box->getVelocity().x, box->getVelocity().y) * delta);
 	//camera->setPosition(box->getPosition() + eq::Math::Vector2(400, 400));

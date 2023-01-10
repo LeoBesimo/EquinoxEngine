@@ -166,7 +166,7 @@ namespace eq
 					SetFrameTime((float)elapsed / (float)freq.QuadPart);
 					last = current;
 
-					HWND m_WindowHandle = Application::getWindowHandle();
+					HWND m_WindowHandle = Application::GetWindowHandle();
 
 					HDC deviceContext = GetDC(m_WindowHandle);
 
@@ -178,7 +178,7 @@ namespace eq
 						std::this_thread::sleep_for(std::chrono::milliseconds(50));
 					}
 
-					while (Renderer::waitForSwap() && m_WindowHandle == GetForegroundWindow()) {}
+					while (Renderer::WaitForSwap() && m_WindowHandle == GetForegroundWindow()) {}
 
 					Renderer::clear();
 					Renderer::RenderObjects();

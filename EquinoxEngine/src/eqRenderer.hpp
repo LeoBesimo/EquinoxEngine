@@ -50,7 +50,7 @@ namespace eq
 		static float alphaScaler;
 
 	public:
-		static void setClearColor(const Color& color) { getInstance().m_ClearColor = color; }
+		static void SetClearColor(const Color& color) { getInstance().m_ClearColor = color; }
 		static void SetPixel(int x, int y, const Color& color);
 		static void SetPixel(int x, int y, const uint32_t color);
 		static void FillRectangle(const Rect& rect, const Color& color);
@@ -77,11 +77,11 @@ namespace eq
 			getInstance().m_SwappedBuffers = true;
 		}
 
-		static bool buffersSwapped() { return getInstance().m_SwappedBuffers; }
+		static bool BuffersSwapped() { return getInstance().m_SwappedBuffers; }
 
-		static void setCamera(std::shared_ptr<Camera> camera) { getInstance().m_Camera = camera; }
+		static void SetCamera(std::shared_ptr<Camera> camera) { getInstance().m_Camera = camera; }
 
-		static bool waitForSwap() { return !getInstance().m_SwappedBuffers; }
+		static bool WaitForSwap() { return !getInstance().m_SwappedBuffers; }
 
 	private:
 		Renderer() { m_BitmapBuffer[0] = {}; m_BitmapBuffer[1] = {}; m_ClearColor = Color(255, 255, 255, 255); alphaScaler = 1 / 255; }
