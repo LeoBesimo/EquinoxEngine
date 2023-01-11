@@ -4,6 +4,12 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
 
 1.0 Release comming soon
 
+## Modules
+- [Application](docs/application.md)
+- [Renderer](docs/renderer.md)
+- [Math](docs/math.md)
+- [Physics](docs/physics.md)
+
 ## Features
 - [x] Creating a Window
 - [x] Drawing simple Shapes to the Screen
@@ -27,7 +33,7 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
     - 2x2 Matrix
     - Some Utility functions
 
-## Usage
+## main.cpp
 **Link the Libraries and Include the Header files**
 ```cpp
 #include <Equinox.hpp>
