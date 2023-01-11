@@ -62,7 +62,7 @@ namespace eq
 			getInstance().m_WindowHeight = height + 1;
 		}
 
-		inline static void SetApplicationUpdate(const std::function<void(float delta)>& m_Update) { getInstance().m_Update = m_Update; }
+		inline static void SetApplicationUpdate(const std::function<void(float delta)>& update) { getInstance().m_Update = update; }
 
 		inline static std::wstring GetWindowTitle() { return getInstance().m_WindowTitle; }
 		inline static int GetWindowWidth() { return getInstance().m_WindowWidth; }
