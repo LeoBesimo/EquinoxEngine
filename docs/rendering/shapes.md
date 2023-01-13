@@ -94,3 +94,34 @@ Create a shape shape object and pass it to the renderer
     // Writes the first Radius to the passed paramater
     // Circles only
   ```
+
+### Line Shape
+#### Constructors
+- ```cpp
+  
+  //
+  ```
+
+- ```cpp
+  
+  //
+  ```
+
+#### Getters
+#### Setters
+
+
+### Rectangle Shape
+#### Constructors
+- ```cpp
+  
+  //
+  ```
+
+- ```cpp
+  
+  //
+  ```
+  
+#### Getters
+#### Setters
