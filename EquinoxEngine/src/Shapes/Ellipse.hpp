@@ -25,8 +25,8 @@ namespace eq
 			m_Radius1(radius), Drawable(position, DrawableType::CIRCLE, color)
 		{}
 
-		void getRadius(float* radius1, float* radius2) { *radius1 = m_Radius1; *radius2 = m_Radius2; }
-		void getRadius(float* radius) { *radius = m_Radius1; }
+		void getRadius(float& radius1, float& radius2) { radius1 = m_Radius1; radius2 = m_Radius2; }
+		void getRadius(float& radius) { radius = m_Radius1; }
 
 		void setRadius(float radius) { m_Radius1 = radius; }
 		void setRadius(float radius1, float radius2) { m_Radius1 = radius1; m_Radius2 = radius2; }

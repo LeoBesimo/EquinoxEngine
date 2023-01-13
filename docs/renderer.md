@@ -7,7 +7,6 @@ This module handles the Rendering.
 ## Sub Modules
 - [Camera](rendering/camera.md)
 - [Shapes](rendering/shapes.md)
+- [Text](rendering/text.md)
 - [Sprite](rendering/sprite.md)
 - [Bitmap Textures](rendering/bitmap.md)
-
-# 

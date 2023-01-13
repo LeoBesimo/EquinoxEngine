@@ -2,6 +2,8 @@
 
 This module is responsible for handling the Window creation and update loop. It is packed into a static class.
 
+## [Readme](../README.md)
+
 ```cpp
 
 #include "Equinox.hpp"

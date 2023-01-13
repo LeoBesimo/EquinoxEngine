@@ -395,14 +395,14 @@ namespace eq
 			if (ellipse.getType() == DrawableType::ELLIPSE)
 			{
 				Math::Vector2 r;
-				ellipse.getRadius(&r.x, &r.y);
+				ellipse.getRadius(r.x, r.y);
 				if (ellipse.isCameraDependent()) r = ApplyCameraTransform(r);
 				FillEllipse(pos.x, pos.y, r.x, r.y, ellipse.getColor());
 			}
 			else
 			{
 				float r;
-				ellipse.getRadius(&r);
+				ellipse.getRadius(r);
 				Math::Vector2 rad(r, r);
 				if (ellipse.isCameraDependent()) rad = ApplyCameraTransform(rad);
 				DrawCircle(pos, rad.x, ellipse.getColor());
