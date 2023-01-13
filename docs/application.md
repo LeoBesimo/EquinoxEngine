@@ -9,6 +9,7 @@ This module is responsible for handling the Window creation and update loop. It 
 equinoxAppEntryPoint
 {
     eq::Application::SetWindowProperties(L"Window Title", Window Width, Window Height); 
+    eq::Application::SetApplicationUpdate([&](float delta){});
     eq::Application::Start();
 }
 
