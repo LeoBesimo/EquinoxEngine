@@ -47,6 +47,9 @@ namespace eq
 
 		uint32_t getPixel(unsigned int x, unsigned int y);
 
+		bool isCameraDependent() { return m_CameraDependent; }
+		void setCameraDependent(bool dependent) { m_CameraDependent = dependent; }
+
 		void preprocessSprite();
 
 	private:

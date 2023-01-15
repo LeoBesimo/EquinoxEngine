@@ -23,6 +23,9 @@ namespace eq
 		Math::Vector2 getStartPos() { return m_Start; }
 		Math::Vector2 getEndPos() { return m_End; }
 
+		void setStartPos(Math::Vector2 startPos) { m_Start = startPos; }
+		void setEndPos(Math::Vector2 endPos) { m_End = endPos; }
+
 		void getStartPos(int* x, int* y) { *x = (int)m_Start.x; *y = (int)m_Start.y; }
 		void getEndPos(int* x, int* y) { *x = (int)m_End.x; *y = (int)m_End.y; };
 	};

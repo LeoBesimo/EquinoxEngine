@@ -15,7 +15,9 @@ namespace eq
 	public:
 		Text() :
 			Drawable(Math::Vector2(), DrawableType::TEXT)
-		{}
+		{
+			m_Text = L"";
+		}
 
 		Text(Math::Vector2 position, std::wstring text) :
 			Drawable(position, DrawableType::TEXT)
@@ -30,7 +32,7 @@ namespace eq
 			m_Text = text;
 		}
 
-		std::wstring& getText() { return m_Text; }
+		std::wstring getText() { return m_Text; }
 		void setText(std::wstring& text) { m_Text = text; }
 	};
 }
