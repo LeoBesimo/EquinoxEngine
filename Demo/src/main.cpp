@@ -170,12 +170,12 @@ equinoxAppEntryPoint
 	eq::Renderer::DrawSprite(sprite);
 	//eq::Renderer::draw(std::make_shared<eq::Text>(text));
 	//eq::Renderer::draw((text2));
-	eq::Renderer::draw(bodies);
+	eq::Renderer::Draw(bodies);
 	//eq::Renderer::draw((rect));
 	//eq::Renderer::draw((circle));
 	//eq::Renderer::draw((sprite));
-	eq::Renderer::draw((frameRate));
-	eq::Renderer::draw(world);
+	eq::Renderer::Draw((frameRate));
+	eq::Renderer::Draw(world);
 	});
 
 	eq::Application::Start();

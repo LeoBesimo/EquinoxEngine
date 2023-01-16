@@ -64,12 +64,12 @@ namespace eq
 		static void DrawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, const Color& color);
 		static void DrawSprite(Sprite& sprite);
 
-		static void draw(Ellipse ellipse);
-		static void draw(Line line);
-		static void draw(Rectangle rectangle);
-		static void draw(Text text);
-		static void draw(Sprite sprite);
-		static void draw(Physics::PhysicsWorld& world);
+		static void Draw(Ellipse ellipse);
+		static void Draw(Line line);
+		static void Draw(Rectangle rectangle);
+		static void Draw(Text text);
+		static void Draw(Sprite sprite);
+		static void Draw(Physics::PhysicsWorld& world);
 
 		static void swapBuffers()
 		{

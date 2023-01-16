@@ -186,36 +186,36 @@ namespace eq
 
 	}
 
-	void Renderer::draw(Ellipse ellipse)
+	void Renderer::Draw(Ellipse ellipse)
 	{
 		if (ellipse.getType() == DrawableType::ELLIPSE || ellipse.getType() == DrawableType::CIRCLE)
 			getActiveEllipses().push_back(ellipse);
 	}
 
-	void Renderer::draw(Line line)
+	void Renderer::Draw(Line line)
 	{
 		if (line.getType() == DrawableType::LINE)
 			getActiveLines().push_back(line);
 	}
 
-	void Renderer::draw(Rectangle rectangle)
+	void Renderer::Draw(Rectangle rectangle)
 	{
 		if (rectangle.getType() == DrawableType::RECT)
 			getActiveRectangles().push_back(rectangle);
 	}
 
-	void Renderer::draw(Text text)
+	void Renderer::Draw(Text text)
 	{
 		if (text.getType() == DrawableType::TEXT)
 			getActiveText().push_back(text);
 	}
 
-	void Renderer::draw(Sprite sprite)
+	void Renderer::Draw(Sprite sprite)
 	{
 		getActiveSprites().push_back(sprite);
 	}
 
-	void Renderer::draw(Physics::PhysicsWorld& world)
+	void Renderer::Draw(Physics::PhysicsWorld& world)
 	{
 		std::vector<Physics::Shape*> bodies = world.getBodies();
 		for (Physics::Shape* body : bodies)
@@ -230,7 +230,7 @@ namespace eq
 				{
 					unsigned int index = (i + 1) % points.size();
 					Line line(points[i], points[index]);
-					draw(line);
+					Draw(line);
 				}
 
 				break;
@@ -241,8 +241,8 @@ namespace eq
 				Ellipse shape(circle->getPosition(), circle->getRadius());
 				Math::Vector2 p2(circle->getRadius() * cos(circle->getAngle()), circle->getRadius() * sin(circle->getAngle()));
 				Line line(circle->getPosition(), p2 + circle->getPosition());
-				draw(line);
-				draw(shape);
+				Draw(line);
+				Draw(shape);
 				break;
 			}
 			case Physics::ShapeType::Polygon:
@@ -253,7 +253,7 @@ namespace eq
 				{
 					unsigned int index = (i + 1) % points.size();
 					Line line(points[i], points[index]);
-					draw(line);
+					Draw(line);
 				}
 				break;
 			}
