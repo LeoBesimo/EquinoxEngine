@@ -2,6 +2,8 @@
 
 This module handles singlethreadded and multithreadded Rendering.
 
+[![GitHub Streak](http://github-readme-streak-stats.herokuapp.com?user=leobesimo&theme=dark&background=000000)](https://git.io/streak-stats)
+
 ## [Readme](../README.md)
 
 ## Sub Modules
