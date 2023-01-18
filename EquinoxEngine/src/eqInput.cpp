@@ -5,22 +5,22 @@ namespace eq
 	Input::KeyboardInputMap Input::keyboard;
 	Input::MouseInputMap Input::mouse;
 
-	Input::KeyState Input::getKeyState(uint32_t keycode)
+	Input::KeyState Input::GetKeyState(uint32_t keycode)
 	{
 		return keyboard.keys[keycode];
 	}
 
-	bool Input::isKeyPressed(uint32_t keycode)
+	bool Input::IsKeyPressed(uint32_t keycode)
 	{
 		return keyboard.keys[keycode].isDown;
 	}
 
-	bool  Input::isKeyReleased(uint32_t keycode)
+	bool  Input::IsKeyReleased(uint32_t keycode)
 	{
 		return !keyboard.keys[keycode].isDown;
 	}
 
-	bool  Input::wasKeyHit(uint32_t keycode)
+	bool  Input::WasKeyHit(uint32_t keycode)
 	{
 		bool keyHit = ((!keyboard.keys[keycode].wasDown) && keyboard.keys[keycode].isDown);
 		keyboard.keys[keycode].wasDown = 0;
@@ -150,7 +150,7 @@ namespace eq
 		}
 	}
 
-	Input::Position Input::getMousePosition(Math::Vector2* position)
+	Input::Position Input::GetMousePosition(Math::Vector2* position)
 	{
 		if (position)
 		{
@@ -161,18 +161,18 @@ namespace eq
 		return mouse.position;
 	}
 
-	bool Input::isMouseButtonPressed(unsigned int buttonCode)
+	bool Input::IsMouseButtonPressed(unsigned int buttonCode)
 	{
 		return mouse.buttons[buttonCode].isDown;
 	}
 
-	bool Input::isMouseButtonReleased(unsigned int buttonCode)
+	bool Input::IsMouseButtonReleased(unsigned int buttonCode)
 	{
 		return mouse.buttons[buttonCode].wasDown;
 
 	}
 
-	bool Input::wasMouseButtonHit(unsigned int buttonCode)
+	bool Input::WasMouseButtonHit(unsigned int buttonCode)
 	{
 		bool hit = ((!mouse.buttons[buttonCode].wasDown) && mouse.buttons[buttonCode].isDown);
 		mouse.buttons[buttonCode].wasDown = 0;

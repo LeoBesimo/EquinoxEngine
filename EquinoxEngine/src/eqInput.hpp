@@ -119,15 +119,15 @@ namespace eq
 		static MouseInputMap mouse;
 
 	public:
-		static KeyState getKeyState(uint32_t keycode);
-		static bool isKeyPressed(uint32_t keycode);
-		static bool isKeyReleased(uint32_t keycode);
-		static bool wasKeyHit(uint32_t keycode);
+		static KeyState GetKeyState(uint32_t keycode);
+		static bool IsKeyPressed(uint32_t keycode);
+		static bool IsKeyReleased(uint32_t keycode);
+		static bool WasKeyHit(uint32_t keycode);
 
-		static Position getMousePosition(Math::Vector2* position = nullptr);
-		static bool isMouseButtonPressed(unsigned int buttonCode);
-		static bool isMouseButtonReleased(unsigned int buttonCode);
-		static bool wasMouseButtonHit(unsigned int buttonCode);
+		static Position GetMousePosition(Math::Vector2* position = nullptr);
+		static bool IsMouseButtonPressed(unsigned int buttonCode);
+		static bool IsMouseButtonReleased(unsigned int buttonCode);
+		static bool WasMouseButtonHit(unsigned int buttonCode);
 
 	private:
 		static void processKeyboardInput(uint32_t keycode, bool wasDown, bool isDown);

@@ -91,56 +91,56 @@ equinoxAppEntryPoint
 	eq::Application::SetApplicationUpdate([&](float delta) {
 
 	eq::Math::Vector2 mouse;
-	eq::Input::getMousePosition(&mouse);
+	eq::Input::GetMousePosition(&mouse);
 
 	//text.setPosition(mouse);
 
-	if (eq::Input::isKeyPressed(EQ_W))
+	if (eq::Input::IsKeyPressed(EQ_W))
 		camera.get()->move(eq::Math::Vector2(0, speed) * delta);
-	if (eq::Input::isKeyPressed(EQ_S))
+	if (eq::Input::IsKeyPressed(EQ_S))
 		camera.get()->move(eq::Math::Vector2(0, -speed) * delta);
 
-	if (eq::Input::isKeyPressed(EQ_A))
+	if (eq::Input::IsKeyPressed(EQ_A))
 		camera.get()->move(eq::Math::Vector2(speed, 0) * delta);
-	if (eq::Input::isKeyPressed(EQ_D))
+	if (eq::Input::IsKeyPressed(EQ_D))
 		camera.get()->move(eq::Math::Vector2(-speed, 0) * delta);
 
-	if (eq::Input::isKeyPressed(EQ_I))
+	if (eq::Input::IsKeyPressed(EQ_I))
 		box->applyForce(eq::Math::Vector2(0, 300) * box->getMass());
 	//sprite.move(eq::Math::Vector2(0,speed) * delta);
-	if (eq::Input::isKeyPressed(EQ_K))
+	if (eq::Input::IsKeyPressed(EQ_K))
 		box->applyForce(eq::Math::Vector2(0, -300) * box->getMass());
 
 	//sprite.move(eq::Math::Vector2(0,-speed) * delta);
 
-	if (eq::Input::isKeyPressed(EQ_J))
+	if (eq::Input::IsKeyPressed(EQ_J))
 		box->applyForce(eq::Math::Vector2(-300, 0) * box->getMass());
 	//sprite.move(eq::Math::Vector2(-speed,0) * delta);
-	if (eq::Input::isKeyPressed(EQ_L))
+	if (eq::Input::IsKeyPressed(EQ_L))
 		box->applyForce(eq::Math::Vector2(300, 0) * box->getMass());
 	//sprite.move(eq::Math::Vector2(speed,0) * delta);
 	//camera.setPosition(mouse);
 
-	if (eq::Input::isKeyPressed(EQ_Q))
+	if (eq::Input::IsKeyPressed(EQ_Q))
 		camera.get()->setTransform(camera.get()->getTransform() - eq::Math::Matrix2x2(zoomSpeed, 0, 0, zoomSpeed) * delta);
 
-	if (eq::Input::isKeyPressed(EQ_E))
+	if (eq::Input::IsKeyPressed(EQ_E))
 		camera.get()->setTransform(camera.get()->getTransform() + eq::Math::Matrix2x2(zoomSpeed, 0, 0, zoomSpeed) * delta);
-	if (eq::Input::isKeyPressed(EQ_F))
+	if (eq::Input::IsKeyPressed(EQ_F))
 		camera.get()->setTransform(eq::Math::Matrix2x2(1, 0, 0, 1));
 
 	eq::Math::Vector2 mouseTransformed = eq::Renderer::ScreenToWorldspace(mouse);
 
-	if (eq::Input::wasMouseButtonHit(EQ_MOUSE_LEFT))
+	if (eq::Input::WasMouseButtonHit(EQ_MOUSE_LEFT))
 		world.addPolygon(mouseTransformed, 0, 5, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(20, 0, 0, 20));
 
-	if (eq::Input::isKeyPressed(EQ_T))
+	if (eq::Input::IsKeyPressed(EQ_T))
 		world.addPolygon(mouseTransformed, 0, rand() % 7 + 3, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(40, 0, 0, 40));
-	if (eq::Input::isKeyPressed(EQ_R))
+	if (eq::Input::IsKeyPressed(EQ_R))
 		world.addBox(mouseTransformed, eq::Math::QUARTER_PI / 2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(40, 40));
-	if (eq::Input::isKeyPressed(EQ_G))
+	if (eq::Input::IsKeyPressed(EQ_G))
 		for (int i = 0; i < 3; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT);
-	if (eq::Input::wasKeyHit(EQ_Y))
+	if (eq::Input::WasKeyHit(EQ_Y))
 		world.clearNonStatic();
 
 	//eq::Renderer::DrawCircle(camera.get()->getPosition(), 10, eq::Color(255, 0, 255));

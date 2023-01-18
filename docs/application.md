@@ -1,6 +1,7 @@
 # eq::Application
 
-This module is responsible for handling the Window creation and update loop. It is packed into a static class.
+This module is responsible for handling the Window creation and update loop. It is packed into a static class.   
+Everything in this library is contained within the eq Namespace.
 
 ## [Readme](../README.md)
 
