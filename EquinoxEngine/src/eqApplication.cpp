@@ -172,12 +172,12 @@ namespace eq
 
 					int width, height;
 					Renderer::getWindowDimenstions(&width, &height);
-
+#ifdef NDEBUG
 					while (m_WindowHandle != GetForegroundWindow())
 					{
 						std::this_thread::sleep_for(std::chrono::milliseconds(50));
 					}
-
+#endif // !debug
 					while (Renderer::WaitForSwap() && m_WindowHandle == GetForegroundWindow()) {}
 
 					Renderer::clear();
@@ -207,12 +207,12 @@ namespace eq
 					delta = (float)counterElapsed / (float)cpuFrequency.QuadPart;
 				}
 				lastCounter = currentCounter;
-
+#ifdef NDEBUG
 				while (m_WindowHandle != GetForegroundWindow())
 				{
 					std::this_thread::sleep_for(std::chrono::milliseconds(50));
 				}
-
+#endif
 				MSG message;
 				while (PeekMessage(&message, 0, 0, 0, PM_REMOVE))
 				{

@@ -4,7 +4,7 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
 
 1.0 Release comming soon
 
-## Modules
+## [Modules](docs/Modules.md)
 - [Application](docs/application.md)
 - [Renderer](docs/renderer.md)
 - [Input](docs/input.md)

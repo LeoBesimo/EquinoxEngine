@@ -5,9 +5,12 @@ Keys and Mouse Buttons are defined outside of the eq Namespace
 
 ## [Readme](../README.md)
 
--[Utility](#utility)
--[Keys](#keys)
--[Mouse Buttons](#mouse-buttons)
+- [eq::Input](#eqinput)
+  - [Readme](#readme)
+    - [Key State](#key-state)
+    - [Utility](#utility)
+    - [Keys](#keys)
+    - [Mouse Buttons](#mouse-buttons)
 
 ### Key State
 - ```cpp
