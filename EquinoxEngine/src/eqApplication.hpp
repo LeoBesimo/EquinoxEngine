@@ -5,6 +5,7 @@
 #include <string>
 #include <functional>
 #include <thread>
+#include <WinUser.h>
 
 #include "eqRenderer.hpp"
 #include "eqInput.hpp"
@@ -71,6 +72,9 @@ namespace eq
 		inline static bool IsRunning() { return getInstance().m_Running; }
 
 		inline static void SetFrameRate(float frameRate) { getInstance().m_SecondsPerFrame = 1 / frameRate; }
+
+		static void SetFullscreen();
+		static void SetWindowSize(unsigned int x, unsigned int y);
 
 		inline static void SetFrameTime(float frameTime) { getInstance().m_FrameTime = frameTime; }
 		inline static float GetFrameTime() { return getInstance().m_FrameTime; }

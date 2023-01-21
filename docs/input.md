@@ -3,14 +3,12 @@
 This module is responsible for handling Keyboard and Mouse Inputs. It is contained within a static class.   
 Keys and Mouse Buttons are defined outside of the eq Namespace
 
-## [Readme](../README.md)
-
-- [eq::Input](#eqinput)
-  - [Readme](#readme)
-    - [Key State](#key-state)
-    - [Utility](#utility)
-    - [Keys](#keys)
-    - [Mouse Buttons](#mouse-buttons)
+## [Readme](../README.md) 
+<!-- no toc -->
+- [Key State](#key-state)
+- [Utility](#utility)
+- [Keys](#keys)
+- [Mouse Buttons](#mouse-buttons)
 
 ### Key State
 - ```cpp

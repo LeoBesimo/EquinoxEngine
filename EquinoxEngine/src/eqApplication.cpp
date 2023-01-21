@@ -64,6 +64,9 @@ namespace eq
 			Input::updateMousePosition(lParam);
 		}break;
 
+		case WM_ERASEBKGND:
+			return (LRESULT)1;
+
 		case WM_PAINT:
 		{
 			OutputDebugString(L"window paint\n");
@@ -86,10 +89,39 @@ namespace eq
 		return result;
 	}
 
+	void Application::SetFullscreen()
+	{
+		if (!getInstance().m_WindowHandle) return;
+
+		int newWidth = GetSystemMetrics(SM_CXSCREEN);
+		int newHeight = GetSystemMetrics(SM_CYSCREEN);
+
+		Renderer::resizeFrameBuffer(newWidth, newHeight);
+		SetWindowLong(getInstance().m_WindowHandle, GWL_STYLE, 0);
+		SetWindowPos(getInstance().m_WindowHandle, HWND_TOP, 0, 0, newWidth, newHeight, SWP_ASYNCWINDOWPOS | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
+		return;
+	}
+
+	void Application::SetWindowSize(unsigned int newWidth, unsigned int newHeight)
+	{
+		if (!getInstance().m_WindowHandle) return;
+
+		Renderer::resizeFrameBuffer(newWidth, newHeight);
+		SetWindowLong(getInstance().m_WindowHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+		LONG style = GetWindowLong(getInstance().m_WindowHandle, GWL_STYLE);
+		style &= ~WS_THICKFRAME;
+		style &= ~WS_MAXIMIZEBOX;
+		SetWindowLong(getInstance().m_WindowHandle, GWL_STYLE, style);
+
+		int x = (GetSystemMetrics(SM_CXSCREEN) - newWidth) / 2;
+		int y = (GetSystemMetrics(SM_CYSCREEN) - newHeight) / 2;
+
+		SetWindowPos(getInstance().m_WindowHandle, HWND_TOP, x, y, newWidth, newHeight, SWP_ASYNCWINDOWPOS | SWP_SHOWWINDOW);
+		return;
+	}
+
 	void Application::startWindow()
 	{
-
-
 		const wchar_t* className = L"Equinox Window";
 
 		WNDCLASS windowClass = {};
@@ -133,6 +165,12 @@ namespace eq
 		{
 			OutputDebugString(L"Application Init\n");
 			m_Running = true;
+
+			LONG style = GetWindowLong(m_WindowHandle, GWL_STYLE);
+			style &= ~WS_THICKFRAME;
+			style &= ~WS_MAXIMIZEBOX;
+			SetWindowLong(m_WindowHandle, GWL_STYLE, style);
+			SetWindowPos(m_WindowHandle, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
 			Renderer::setWindowHandle(m_WindowHandle);
 
@@ -188,6 +226,8 @@ namespace eq
 					ValidateRect(m_WindowHandle, NULL);
 
 					ReleaseDC(m_WindowHandle, deviceContext);
+
+					Renderer::SetFrameFinished(true);
 				}
 
 				});
@@ -226,8 +266,10 @@ namespace eq
 
 				getInstance().m_Update(delta);
 
-				Renderer::swapBuffers();
+				while (!Renderer::FinishedFrame()) {}
 
+				Renderer::swapBuffers();
+				Renderer::SetFrameFinished(false);
 			}
 
 			renderThread.join();

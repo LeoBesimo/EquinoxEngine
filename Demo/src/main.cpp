@@ -61,9 +61,9 @@ equinoxAppEntryPoint
 	//car.invertX();
 	//car.save("Ume.bmp");
 
-	eq::Sprite sprite(car,16,16);// , 16, 0, 16, 16);
+	eq::Sprite sprite(car);// , 16, 0, 16, 16);
 	sprite.scale(4,4);
-	sprite.preprocessSprite();
+	//sprite.preprocessSprite();
 	//sprite.rotate(eq::Math::QUARTER_PI / 2);
 
 
@@ -84,7 +84,7 @@ equinoxAppEntryPoint
 	eq::Renderer::SetClearColor(eq::Color(255, 255, 255));
 	eq::Renderer::SetCamera(camera);
 
-	eq::Application::SetWindowProperties(L"Test", 1400, 1000);
+	eq::Application::SetWindowProperties(L"Test", 1000, 800);
 	eq::Application::SetFrameRate(60);
 
 	//set application update
@@ -110,6 +110,10 @@ equinoxAppEntryPoint
 	//sprite.move(eq::Math::Vector2(0,speed) * delta);
 	if (eq::Input::IsKeyPressed(EQ_K))
 		box->applyForce(eq::Math::Vector2(0, -300) * box->getMass());
+
+	if (eq::Input::WasKeyHit(EQ_P)) eq::Application::SetFullscreen();
+    if (eq::Input::WasKeyHit(EQ_O)) eq::Application::SetWindowSize(800, 600);
+	if (eq::Input::WasKeyHit(EQ_K)) OutputDebugString(L"Test\n");
 
 	//sprite.move(eq::Math::Vector2(0,-speed) * delta);
 

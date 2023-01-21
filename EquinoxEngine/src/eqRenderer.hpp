@@ -45,7 +45,10 @@ namespace eq
 		bool m_Buffer2 = false;
 		bool m_SwappedBuffers = false;
 
+		bool m_FrameFinished = true;
+
 		std::shared_ptr<Camera> m_Camera;
+
 
 		static float alphaScaler;
 
@@ -82,6 +85,9 @@ namespace eq
 		static void SetCamera(std::shared_ptr<Camera> camera) { getInstance().m_Camera = camera; }
 
 		static bool WaitForSwap() { return !getInstance().m_SwappedBuffers; }
+
+		static void SetFrameFinished(bool finished) { getInstance().m_FrameFinished = finished; }
+		static bool FinishedFrame() { return getInstance().m_FrameFinished; }
 
 	private:
 		Renderer() { m_BitmapBuffer[0] = {}; m_BitmapBuffer[1] = {}; m_ClearColor = Color(255, 255, 255, 255); alphaScaler = 1 / 255; }
@@ -123,6 +129,7 @@ namespace eq
 
 		static void clear();
 		static void clearBuffers();
+		static bool buffersEmpty();
 
 		static void RenderObjects();
 		static void RenderText(HDC devicContext);

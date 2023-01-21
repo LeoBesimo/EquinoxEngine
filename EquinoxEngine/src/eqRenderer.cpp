@@ -272,6 +272,10 @@ namespace eq
 
 	void Renderer::resizeFrameBuffer(int width, int height)
 	{
+		while (!FinishedFrame() && !buffersEmpty()) {}
+
+		getInstance().clearBuffers();
+
 		for (unsigned int i = 0; i < 2; i++)
 		{
 			BitmapBuffer& buffer = getInstance().m_BitmapBuffer[i];
@@ -334,6 +338,22 @@ namespace eq
 		getActiveSprites().clear();
 	}
 
+	bool Renderer::buffersEmpty()
+	{
+		bool empty = false;
+		empty |= !getActiveRectangles().empty();
+		empty |= !getInactiveRectangles().empty();
+		empty |= !getActiveEllipses().empty();
+		empty |= !getInactiveEllipses().empty();
+		empty |= !getActiveLines().empty();
+		empty |= !getInactiveLines().empty();
+		empty |= !getActiveText().empty();
+		empty |= !getInactiveText().empty();
+		empty |= !getActiveSprites().empty();
+		empty |= !getInactiveSprites().empty();
+		return !empty;
+	}
+
 	void Renderer::RenderObjects()
 	{
 		RenderRectangles();
@@ -355,7 +375,13 @@ namespace eq
 			if (text.isCameraDependent())
 				position = WorldToScreenspace(position);//+= getInstance().m_Camera.get()->getPosition();
 			SetTextColor(deviceContext, RGB(col.red, col.green, col.blue));
-			TextOut(deviceContext, std::floor(position.x + 0.5f), std::floor(position.y + 0.5f), text.getText().c_str(), length);
+			SetBkMode(deviceContext, TRANSPARENT);
+
+			RECT rect;
+			rect.left = std::floor(position.x + 0.5f);
+			rect.top = std::floor(position.y + 0.5f);
+			DrawText(deviceContext, text.getText().c_str(), -1, &rect, DT_SINGLELINE | DT_NOCLIP);
+			//TextOut(deviceContext, std::floor(position.x + 0.5f), std::floor(position.y + 0.5f), text.getText().c_str(), length);
 		}
 	}
 
