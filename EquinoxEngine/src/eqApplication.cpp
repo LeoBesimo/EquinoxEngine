@@ -96,6 +96,9 @@ namespace eq
 		int newWidth = GetSystemMetrics(SM_CXSCREEN);
 		int newHeight = GetSystemMetrics(SM_CYSCREEN);
 
+		getInstance().m_WindowWidth = newWidth;
+		getInstance().m_WindowHeight = newHeight;
+
 		Renderer::resizeFrameBuffer(newWidth, newHeight);
 		SetWindowLong(getInstance().m_WindowHandle, GWL_STYLE, 0);
 		SetWindowPos(getInstance().m_WindowHandle, HWND_TOP, 0, 0, newWidth, newHeight, SWP_ASYNCWINDOWPOS | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
@@ -115,6 +118,9 @@ namespace eq
 
 		int x = (GetSystemMetrics(SM_CXSCREEN) - newWidth) / 2;
 		int y = (GetSystemMetrics(SM_CYSCREEN) - newHeight) / 2;
+
+		getInstance().m_WindowWidth = newWidth;
+		getInstance().m_WindowHeight = newHeight;
 
 		SetWindowPos(getInstance().m_WindowHandle, HWND_TOP, x, y, newWidth, newHeight, SWP_ASYNCWINDOWPOS | SWP_SHOWWINDOW);
 		return;
@@ -197,35 +203,70 @@ namespace eq
 
 				while (Application::IsRunning())
 				{
-					QueryPerformanceCounter(&current);
-
-					int64_t elapsed = current.QuadPart - last.QuadPart;
-
-					SetFrameTime((float)elapsed / (float)freq.QuadPart);
-					last = current;
 
 					HWND m_WindowHandle = Application::GetWindowHandle();
-
 					HDC deviceContext = GetDC(m_WindowHandle);
-
-					int width, height;
-					Renderer::getWindowDimenstions(&width, &height);
+					RECT rc;
+					HDC hdcMem;
+					HBITMAP hbmMem, hbmOld;
 #ifdef NDEBUG
 					while (m_WindowHandle != GetForegroundWindow())
 					{
 						std::this_thread::sleep_for(std::chrono::milliseconds(50));
 					}
 #endif // !debug
+
 					while (Renderer::WaitForSwap() && m_WindowHandle == GetForegroundWindow()) {}
+					Renderer::SetFrameFinished(false);
+
+
+					int width, height;
+					Renderer::getWindowDimenstions(&width, &height);
+
+					//HBRUSH hbrBkGnd;
+					//HFONT hfntOld;
+
+					GetClientRect(m_WindowHandle, &rc);
+					hdcMem = CreateCompatibleDC(deviceContext);
+					hbmMem = CreateCompatibleBitmap(deviceContext, rc.right - rc.left, rc.bottom - rc.top);
+					hbmOld = (HBITMAP) SelectObject(hdcMem, hbmMem);
+					
+					//hbrBkGnd = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
+					//FillRect(hdcMem, &rc, hbrBkGnd);
+					//DeleteObject(hbrBkGnd);
+
+					QueryPerformanceCounter(&current);
+
+					//int64_t elapsed = current.QuadPart - last.QuadPart;
+
+					//SetFrameTime((float)elapsed / (float)freq.QuadPart);
+					last = current;
 
 					Renderer::clear();
 					Renderer::RenderObjects();
-					Renderer::copyBufferToWindow(deviceContext, width, height);
-					Renderer::RenderText(deviceContext);
+					Renderer::copyBufferToWindow(hdcMem, width, height);
+					Renderer::RenderText(hdcMem);
+
+					BitBlt(deviceContext,
+						rc.left, rc.top,
+						rc.right - rc.left, rc.bottom - rc.top,
+						hdcMem,
+						0, 0,
+						SRCCOPY);
+
+					SelectObject(hdcMem, hbmOld);
+					DeleteObject(hbmMem);
+					DeleteDC(hdcMem);
 
 					ValidateRect(m_WindowHandle, NULL);
 
 					ReleaseDC(m_WindowHandle, deviceContext);
+
+					QueryPerformanceCounter(&current);
+
+					int64_t elapsed = current.QuadPart - last.QuadPart;
+					SetFrameTime((float)elapsed / (float)freq.QuadPart);
+					last = current;
 
 					Renderer::SetFrameFinished(true);
 				}
@@ -267,9 +308,7 @@ namespace eq
 				getInstance().m_Update(delta);
 
 				while (!Renderer::FinishedFrame()) {}
-
 				Renderer::swapBuffers();
-				Renderer::SetFrameFinished(false);
 			}
 
 			renderThread.join();

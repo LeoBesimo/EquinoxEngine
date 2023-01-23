@@ -22,18 +22,28 @@ equinoxAppEntryPoint
 ### Main Functions
 - ```cpp
     void eq::Application::SetWindowProperties(const std::wstring% windowTitle, const int& width, const int& height);
-    // Sets the Properties for the application window;
+    // Sets the Properties for the application window
     // Default Application Parameters are L"Equinox Application", 1920, 1080
     ```
 - ```cpp 
     void eq::Application::SetApplicationUpdate(const std::function<void(float delta)>& update);
-    // Sets the Application update method;
+    // Sets the Application update method
     ```
 - ```cpp
     void eq::Application::Start();
-    // Starts the Application and creates the Window;
+    // Starts the Application and creates the Window
     ```
 ### Optional Functions
+- ```cpp
+  void eq::Application::SetWindowSize(unsigned int width, unsigned int height);
+  // Resizes the Window to the passed width and height and centers it on the Screen
+  ```
+
+- ```cpp
+  void eq::Application::SetFullscreen();
+  //  Resiizes the Window and removes the Border to make the Window Fullscreen
+  ```
+
 - ```cpp
     void eq::Application::SetFrameRate(float frameRate);
     // Sets the Maximum Framerate

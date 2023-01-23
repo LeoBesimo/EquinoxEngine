@@ -74,7 +74,7 @@ namespace eq
 		inline static void SetFrameRate(float frameRate) { getInstance().m_SecondsPerFrame = 1 / frameRate; }
 
 		static void SetFullscreen();
-		static void SetWindowSize(unsigned int x, unsigned int y);
+		static void SetWindowSize(unsigned int width, unsigned int height);
 
 		inline static void SetFrameTime(float frameTime) { getInstance().m_FrameTime = frameTime; }
 		inline static float GetFrameTime() { return getInstance().m_FrameTime; }

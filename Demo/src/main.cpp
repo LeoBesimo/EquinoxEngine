@@ -53,6 +53,14 @@ equinoxAppEntryPoint
 
 	//texture.save("test.bmp");
 
+	eq::BitmapTexture wall;
+	wall.read("WorldSpriteSheet.bmp");
+	wall.invertY();
+	eq::Sprite wallPart(wall, 16, 16);
+	wallPart.setCameraDependent(false);
+	wallPart.scale(2, 2);
+	wallPart.preprocessSprite();
+
 	eq::BitmapTexture car;
 	car.read("people.bmp");
 	//car.setPixel(0, 0, 0xFF00FF00);
@@ -112,7 +120,7 @@ equinoxAppEntryPoint
 		box->applyForce(eq::Math::Vector2(0, -300) * box->getMass());
 
 	if (eq::Input::WasKeyHit(EQ_P)) eq::Application::SetFullscreen();
-    if (eq::Input::WasKeyHit(EQ_O)) eq::Application::SetWindowSize(800, 600);
+	if (eq::Input::WasKeyHit(EQ_O)) eq::Application::SetWindowSize(800, 600);
 	if (eq::Input::WasKeyHit(EQ_K)) OutputDebugString(L"Test\n");
 
 	//sprite.move(eq::Math::Vector2(0,-speed) * delta);
@@ -171,7 +179,17 @@ equinoxAppEntryPoint
 	game.render();
 
 	//eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(255, 0, 0, 160));
-	eq::Renderer::DrawSprite(sprite);
+	//eq::Renderer::DrawSprite(sprite);
+	//eq::Renderer::Draw(sprite);
+
+	for (unsigned int x = 0; x < eq::Application::GetWindowWidth(); x += 32)
+	{
+		for (unsigned int y = 0; y < eq::Application::GetWindowHeight(); y += 32)
+		{
+			wallPart.setPosition(eq::Math::Vector2(x, y));
+			//eq::Renderer::DrawSprite(wallPart);
+		}
+	}
 	//eq::Renderer::draw(std::make_shared<eq::Text>(text));
 	//eq::Renderer::draw((text2));
 	eq::Renderer::Draw(bodies);

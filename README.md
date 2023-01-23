@@ -59,7 +59,6 @@ equinoxAppEntryPoint
  - Precomputed sprites don't get Scaled with the bound Camera matrix
  - There is no default Camera bound to the Renderer, a Camera object has to be assigned to the Renderer before the first draw call
  - The Renderer begins to flicker at high Framerates due to async update and render threads
- - Renderer flickers at large Camera scales due to async update and render threads
  - Can Crash due to Async update and render threads
 
 ## Important TODOs
