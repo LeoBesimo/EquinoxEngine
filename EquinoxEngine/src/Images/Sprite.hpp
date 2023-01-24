@@ -20,6 +20,7 @@ namespace eq
 		Math::Vector2 m_Scale;
 
 		friend class Renderer;
+		friend class BitmapTexture;
 
 		Math::Vector2 m_Position;
 
@@ -51,6 +52,9 @@ namespace eq
 		void setCameraDependent(bool dependent) { m_CameraDependent = dependent; }
 
 		void preprocessSprite();
+
+		Math::Vector2 getScaledSize() { return Math::Vector2(m_ScaledWidth, m_ScaledHeight); }
+		Math::Vector2 getSize() { return Math::Vector2(m_Width, m_Height); }
 
 	private:
 		Math::Vector2 getScale() { return m_Scale; }

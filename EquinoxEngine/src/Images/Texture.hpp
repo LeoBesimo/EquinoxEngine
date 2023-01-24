@@ -37,6 +37,7 @@ namespace eq
 	};
 #pragma pack(pop)
 
+	class Sprite;
 
 	class BitmapTexture
 	{
@@ -59,6 +60,8 @@ namespace eq
 
 		uint32_t getPixel(unsigned int x, unsigned int y);
 		void setPixel(unsigned int x, unsigned int y, uint32_t color);
+
+		void drawSprite(Sprite sprite, unsigned int xOffset = 0, unsigned int yOffset = 0);
 
 		void invertY();
 		void invertX();

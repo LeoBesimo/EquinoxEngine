@@ -93,6 +93,8 @@ namespace eq
 	{
 		if (!getInstance().m_WindowHandle) return;
 
+		while (!Renderer::FinishedFrame()) {}
+
 		int newWidth = GetSystemMetrics(SM_CXSCREEN);
 		int newHeight = GetSystemMetrics(SM_CYSCREEN);
 
@@ -108,6 +110,8 @@ namespace eq
 	void Application::SetWindowSize(unsigned int newWidth, unsigned int newHeight)
 	{
 		if (!getInstance().m_WindowHandle) return;
+
+		while (!Renderer::FinishedFrame()) {}
 
 		Renderer::resizeFrameBuffer(newWidth, newHeight);
 		SetWindowLong(getInstance().m_WindowHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
@@ -203,12 +207,8 @@ namespace eq
 
 				while (Application::IsRunning())
 				{
-
 					HWND m_WindowHandle = Application::GetWindowHandle();
-					HDC deviceContext = GetDC(m_WindowHandle);
-					RECT rc;
-					HDC hdcMem;
-					HBITMAP hbmMem, hbmOld;
+
 #ifdef NDEBUG
 					while (m_WindowHandle != GetForegroundWindow())
 					{
@@ -219,6 +219,15 @@ namespace eq
 					while (Renderer::WaitForSwap() && m_WindowHandle == GetForegroundWindow()) {}
 					Renderer::SetFrameFinished(false);
 
+					HDC deviceContext = GetDC(m_WindowHandle);
+					RECT rc;
+					HDC hdcMem;
+					HBITMAP hbmMem, hbmOld;
+
+					if (Renderer::BuffersSwapped() == true) {
+						//Renderer::getInstance().m_SwappedBuffers = false;
+						//Renderer::clearBuffers();
+					}
 
 					int width, height;
 					Renderer::getWindowDimenstions(&width, &height);
@@ -309,6 +318,7 @@ namespace eq
 
 				while (!Renderer::FinishedFrame()) {}
 				Renderer::swapBuffers();
+				Renderer::clearBuffers();
 			}
 
 			renderThread.join();

@@ -1,4 +1,5 @@
 #include "Texture.hpp"
+#include "Sprite.hpp"
 
 namespace eq
 {
@@ -19,6 +20,20 @@ namespace eq
 		}
 
 		m_Buffer[x + y * m_Width] = color;
+	}
+
+	void BitmapTexture::drawSprite(Sprite sprite, unsigned int xOffset, unsigned int yOffset)
+	{
+		for (unsigned int i = 0; i < sprite.getScaledSize().x; i++)
+		{
+			for (unsigned int j = 0; j < sprite.getScaledSize().y; j++)
+			{
+				int x = i + xOffset;
+				int y = j + yOffset;
+				if (x < 0 || x >= m_Width || y < 0 || y >= m_Height) continue;
+				setPixel(x, y, sprite.getTransformedPixel(i, j));
+			}
+		}
 	}
 
 	void BitmapTexture::invertY()

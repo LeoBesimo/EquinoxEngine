@@ -56,10 +56,23 @@ equinoxAppEntryPoint
 	eq::BitmapTexture wall;
 	wall.read("WorldSpriteSheet.bmp");
 	wall.invertY();
-	eq::Sprite wallPart(wall, 16, 16);
+	eq::Sprite wallPart(wall, 48,0, 16, 16);
 	wallPart.setCameraDependent(false);
-	wallPart.scale(2, 2);
+	wallPart.scale(4, 4);
 	wallPart.preprocessSprite();
+
+	eq::BitmapTexture wallTexture(1024,1024);
+	for (unsigned int i = 0; i < 1024; i += 64)
+	{
+		for (unsigned int j = 0; j < 1024; j+= 64)
+		{
+			wallTexture.drawSprite(wallPart, i, j);
+		}
+	}
+
+	eq::Sprite wallSprite(wallTexture);
+	wallSprite.setCameraDependent(false);
+	wallSprite.preprocessSprite();
 
 	eq::BitmapTexture car;
 	car.read("people.bmp");
@@ -182,14 +195,16 @@ equinoxAppEntryPoint
 	//eq::Renderer::DrawSprite(sprite);
 	//eq::Renderer::Draw(sprite);
 
-	for (unsigned int x = 0; x < eq::Application::GetWindowWidth(); x += 32)
-	{
-		for (unsigned int y = 0; y < eq::Application::GetWindowHeight(); y += 32)
-		{
-			wallPart.setPosition(eq::Math::Vector2(x, y));
-			//eq::Renderer::DrawSprite(wallPart);
-		}
-	}
+	//for (unsigned int x = 0; x < eq::Application::GetWindowWidth(); x += 64)
+	//{
+	//	for (unsigned int y = 0; y < eq::Application::GetWindowHeight(); y += 64)
+	//	{
+	//		wallPart.setPosition(eq::Math::Vector2(x, y));
+	//		//eq::Renderer::Draw(wallPart);
+	//	}
+	//}
+
+	eq::Renderer::Draw(wallSprite);
 	//eq::Renderer::draw(std::make_shared<eq::Text>(text));
 	//eq::Renderer::draw((text2));
 	eq::Renderer::Draw(bodies);

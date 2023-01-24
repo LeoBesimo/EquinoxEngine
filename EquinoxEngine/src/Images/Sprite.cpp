@@ -101,7 +101,7 @@ namespace eq
 
 	uint32_t Sprite::getTransformedPixel(unsigned int x, unsigned int y)
 	{
-		if (x < 0 || x >= m_ScaledWidth || y < 0 || y >= m_ScaledHeight)
+		if (x < 0 || x >= m_ScaledWidth || y < 0 || y >= m_ScaledHeight || m_Buffer.size() == 0)
 		{
 			return 0;
 		}

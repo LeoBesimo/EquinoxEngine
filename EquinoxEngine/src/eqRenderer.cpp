@@ -19,7 +19,7 @@ namespace eq
 		uint8_t* row = (uint8_t*)buffer.memory + x * s_BytesPerPixel + y * buffer.pitch;
 		uint32_t* pixel = (uint32_t*)row;
 
-		*pixel = BlendColor(*pixel, raw_color);//raw_color;
+		*pixel = raw_color; //BlendColor(*pixel, raw_color);//raw_color;
 
 
 	}
@@ -37,6 +37,21 @@ namespace eq
 		uint32_t* pixel = (uint32_t*)row;
 
 		*pixel = BlendColor(*pixel, color);//raw_color;
+	}
+
+	void Renderer::SetPixelNoBlending(int x, int y, const uint32_t color)
+	{
+		BitmapBuffer& buffer = getActiveBuffer();
+
+		if (x < 0 || x >= buffer.width || y < 0 || y >= buffer.height)
+		{
+			return;
+		}
+
+		uint8_t* row = (uint8_t*)buffer.memory + x * s_BytesPerPixel + y * buffer.pitch;
+		uint32_t* pixel = (uint32_t*)row;
+
+		*pixel = color;
 	}
 
 	void Renderer::FillRectangle(const Rect& rect, const Color& color)
@@ -155,8 +170,6 @@ namespace eq
 
 	void Renderer::DrawSprite(Sprite& sprite)
 	{
-		Math::Matrix2x2 rotation(0);
-
 		Math::Vector2 position = sprite.m_Position;
 		Math::Vector2 scale = sprite.m_Scale;
 		if (sprite.m_CameraDependent)
@@ -173,14 +186,14 @@ namespace eq
 			sprite.m_Changed = false;
 		}
 
-		for (unsigned int j = 0; j < sprite.m_ScaledHeight; j++)
+		unsigned int width = sprite.m_ScaledWidth < getActiveBuffer().width ? sprite.m_ScaledWidth : getActiveBuffer().width;
+		unsigned int height = sprite.m_ScaledHeight < getActiveBuffer().height ? sprite.m_ScaledHeight : getActiveBuffer().height;
+
+		for (unsigned int j = 0; j < height; j++)
 		{
-			for (unsigned int i = 0; i < sprite.m_ScaledWidth; i++)
+			for (unsigned int i = 0; i < width; i++)
 			{
-				Math::Vector2 targetPos = Math::Vector2(i, j);
-				targetPos = rotation * targetPos;
-				targetPos += position;
-				SetPixel(targetPos.x + 0.5, targetPos.y + 0.5, sprite.getTransformedPixel(i, j));
+				SetPixelNoBlending(i + position.x + 0.5, j + position.y + 0.5, sprite.getTransformedPixel(i, j));
 			}
 		}
 
@@ -315,11 +328,6 @@ namespace eq
 			SRCCOPY
 		);
 		SetBkMode(deviceContext, TRANSPARENT);
-
-		if (BuffersSwapped() == true) {
-			getInstance().m_SwappedBuffers = false;
-			clearBuffers();
-		}
 	}
 
 	void Renderer::clear()
@@ -356,10 +364,10 @@ namespace eq
 
 	void Renderer::RenderObjects()
 	{
+		RenderSprites();
 		RenderRectangles();
 		RenderLines();
 		RenderEllipses();
-		RenderSprites();
 	}
 
 	void Renderer::RenderText(HDC deviceContext)

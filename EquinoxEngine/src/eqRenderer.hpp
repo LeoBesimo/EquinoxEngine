@@ -56,6 +56,7 @@ namespace eq
 		static void SetClearColor(const Color& color) { getInstance().m_ClearColor = color; }
 		static void SetPixel(int x, int y, const Color& color);
 		static void SetPixel(int x, int y, const uint32_t color);
+		static void SetPixelNoBlending(int x, int y, const uint32_t color);
 		static void FillRectangle(const Rect& rect, const Color& color);
 		static void DrawRectangle(const Rect& rect, const Color& color);
 		static void DrawLine(int x0, int y0, int x1, int y1, const Color& color);
