@@ -20,15 +20,13 @@ namespace eq
 		uint32_t* pixel = (uint32_t*)row;
 
 		*pixel = raw_color; //BlendColor(*pixel, raw_color);//raw_color;
-
-
 	}
 
 	void Renderer::SetPixel(int x, int y, const uint32_t color)
 	{
 		BitmapBuffer& buffer = getActiveBuffer();
 
-		if (x < 0 || x >= buffer.width || y < 0 || y >= buffer.height)
+		if (x < 0 || x >= buffer.width || y < 0 || y >= buffer.height || color == 0)
 		{
 			return;
 		}
@@ -175,7 +173,7 @@ namespace eq
 		if (sprite.m_CameraDependent)
 		{
 			Math::Matrix2x2 original = sprite.m_Scale;
-			if(!sprite.m_PreTransformed || sprite.m_Changed) sprite.m_Scale = (getInstance().m_Camera->getTransform() * sprite.m_OriginalScale);
+			if (!sprite.m_PreTransformed || sprite.m_Changed) sprite.m_Scale = (getInstance().m_Camera->getTransform() * sprite.m_OriginalScale);
 			position = WorldToScreenspace(position); //+= getInstance().m_Camera.get()->getPosition();
 		}
 
@@ -193,7 +191,7 @@ namespace eq
 		{
 			for (unsigned int i = 0; i < width; i++)
 			{
-				SetPixelNoBlending(i + position.x + 0.5, j + position.y + 0.5, sprite.getTransformedPixel(i, j));
+				SetPixel(i + position.x + 0.5, j + position.y + 0.5, sprite.getTransformedPixel(i, j));
 			}
 		}
 
