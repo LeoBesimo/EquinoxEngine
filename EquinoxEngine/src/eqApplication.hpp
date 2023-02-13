@@ -27,6 +27,7 @@ namespace eq
 		HINSTANCE m_hInstance;
 		HWND m_WindowHandle;
 		bool m_Running = false;
+		bool m_Resizing = false;
 
 		std::wstring m_WindowTitle;
 		int m_WindowWidth;
@@ -70,6 +71,7 @@ namespace eq
 		inline static int GetWindowHeight() { return getInstance().m_WindowHeight; }
 		inline static HWND GetWindowHandle() { return getInstance().m_WindowHandle; }
 		inline static bool IsRunning() { return getInstance().m_Running; }
+		inline static bool IsResizing() { return getInstance().m_Resizing; }
 
 		inline static void SetFrameRate(float frameRate) { getInstance().m_SecondsPerFrame = 1 / frameRate; }
 

@@ -8,6 +8,7 @@
 #include <vector>
 #include <memory>
 #include <wchar.h>
+#include <thread>
 
 #include <eqMath.hpp>
 #include "Shapes/eqShapes.hpp"
@@ -15,6 +16,7 @@
 #include "eqCamera.hpp"
 #include "Images/eqImages.hpp"
 #include <eqPhysics.hpp>
+#include "eqThreadPool.hpp"
 
 //#include "Shapes/Drawable.h"
 
@@ -30,6 +32,7 @@ namespace eq
 		);
 
 		friend class Application;
+		friend class ThreadPool;
 
 	private:
 		static const int s_BytesPerPixel = 4;
@@ -49,8 +52,7 @@ namespace eq
 
 		std::shared_ptr<Camera> m_Camera;
 
-
-		static float alphaScaler;
+		ThreadPool m_ThreadPool;
 
 	public:
 		static void SetClearColor(const Color& color) { getInstance().m_ClearColor = color; }
@@ -61,12 +63,19 @@ namespace eq
 		static void DrawRectangle(const Rect& rect, const Color& color);
 		static void DrawLine(int x0, int y0, int x1, int y1, const Color& color);
 		static void DrawLine(Math::Vector2 a, Math::Vector2 b, const Color& color);
+	private:
+		static void DrawLineVector2(Math::Vector2 a, Math::Vector2 b, const Color& color);
+	public:
 		static void FillCircle(int originX, int originY, int radius, const Color& color);
 		static void FillEllipse(int originX, int originY, int radiusX, int radiusY, const Color& color);
 		static void DrawCircle(int originX, int originY, int radius, const Color& color);
 		static void DrawCircle(Math::Vector2 position, int radius, const Color& color);
+	private:
+		static void DrawCircleVector2(Math::Vector2 position, int radius, const Color& color);
+	public:
 		static void DrawTriangle(int x0, int y0, int x1, int y1, int x2, int y2, const Color& color);
 		static void DrawSprite(Sprite& sprite);
+		static void DrawSpriteOptimized(Sprite& sprite);
 
 		static void Draw(Ellipse ellipse);
 		static void Draw(Line line);
@@ -91,7 +100,7 @@ namespace eq
 		static bool FinishedFrame() { return getInstance().m_FrameFinished; }
 
 	private:
-		Renderer() { m_BitmapBuffer[0] = {}; m_BitmapBuffer[1] = {}; m_ClearColor = Color(255, 255, 255, 255); alphaScaler = 1 / 255; }
+		Renderer() { m_BitmapBuffer[0] = {}; m_BitmapBuffer[1] = {}; m_ClearColor = Color(255, 255, 255, 255);}
 
 		Renderer(const Renderer&) = delete;
 		Renderer& operator= (const Renderer&) = delete;
@@ -146,11 +155,16 @@ namespace eq
 		static Math::Vector2 ApplyCameraTransform(Math::Vector2 p);
 
 	private:
+
+		static void drawSpriteLeft(Sprite& sprite, BitmapBuffer& buffer);
+		static void drawSpriteRight(Sprite& sprite, BitmapBuffer& buffer);
+
 		static void plotLineLow(int x0, int y0, int x1, int y1, const Color& color);
 		static void plotLineHigh(int x0, int y0, int x1, int y1, const Color& color);
 
 		static Color ColorFromUInt(uint32_t color);
 		static uint32_t UIntFromColor(Color color);
 		static uint32_t BlendColor(uint32_t colorA, uint32_t colorB);
+		static uint32_t BlendColorOptimized(uint32_t colorA, uint32_t colorB, uint8_t& alpha, uint32_t& rb1, uint32_t& rb2, uint32_t& g1, uint32_t& g2);
 	};
 }

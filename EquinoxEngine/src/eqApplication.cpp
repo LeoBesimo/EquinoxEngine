@@ -93,6 +93,8 @@ namespace eq
 	{
 		if (!getInstance().m_WindowHandle) return;
 
+		getInstance().m_Resizing = true;
+
 		while (!Renderer::FinishedFrame()) {}
 
 		int newWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -104,12 +106,17 @@ namespace eq
 		Renderer::resizeFrameBuffer(newWidth, newHeight);
 		SetWindowLong(getInstance().m_WindowHandle, GWL_STYLE, 0);
 		SetWindowPos(getInstance().m_WindowHandle, HWND_TOP, 0, 0, newWidth, newHeight, SWP_ASYNCWINDOWPOS | SWP_SHOWWINDOW | SWP_FRAMECHANGED);
+
+		getInstance().m_Resizing = false;
+
 		return;
 	}
 
 	void Application::SetWindowSize(unsigned int newWidth, unsigned int newHeight)
 	{
 		if (!getInstance().m_WindowHandle) return;
+
+		getInstance().m_Resizing = true;
 
 		while (!Renderer::FinishedFrame()) {}
 
@@ -127,6 +134,7 @@ namespace eq
 		getInstance().m_WindowHeight = newHeight;
 
 		SetWindowPos(getInstance().m_WindowHandle, HWND_TOP, x, y, newWidth, newHeight, SWP_ASYNCWINDOWPOS | SWP_SHOWWINDOW);
+		getInstance().m_Resizing = false;
 		return;
 	}
 
@@ -216,7 +224,7 @@ namespace eq
 					}
 #endif // !debug
 
-					while (Renderer::WaitForSwap() && m_WindowHandle == GetForegroundWindow()) {}
+					while (Renderer::WaitForSwap() && m_WindowHandle == GetForegroundWindow() || getInstance().IsResizing()) {}
 					Renderer::SetFrameFinished(false);
 
 					HDC deviceContext = GetDC(m_WindowHandle);

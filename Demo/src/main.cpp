@@ -26,6 +26,7 @@ equinoxAppEntryPoint
 
 	int w = 200;
 	int h = 200;
+	float avgFrameTime = 0;
 
 	eq::BitmapTexture texture(w,h);
 	for (unsigned int i = 0; i < w; i++)
@@ -56,13 +57,13 @@ equinoxAppEntryPoint
 	eq::BitmapTexture wall;
 	wall.read("WorldSpriteSheet.bmp");
 	wall.invertY();
-	eq::Sprite wallPart(wall, 0,0, 16, 16);
+	eq::Sprite wallPart(wall, 48,0, 16, 16);
 	wallPart.setCameraDependent(false);
 	wallPart.scale(4, 4);
 	wallPart.preprocessSprite();
 
-	eq::BitmapTexture wallTexture(1024,1024);
-	for (unsigned int i = 0; i < 1024; i += 64)
+	eq::BitmapTexture wallTexture(1424,1024);
+	for (unsigned int i = 0; i < 1424; i += 64)
 	{
 		for (unsigned int j = 0; j < 1024; j += 64)
 		{
@@ -176,8 +177,8 @@ equinoxAppEntryPoint
 	frameCount++;
 	//camera->move(eq::Math::Vector2(-box->getVelocity().x, box->getVelocity().y) * delta);
 	//camera->setPosition(box->getPosition() + eq::Math::Vector2(400, 400));
-
-	swprintf(charBuffer, 128, L"Framerate: %f     FrameTime: %f ms", 1 / delta, eq::Application::GetFrameTime() * 1000);
+	avgFrameTime += eq::Application::GetFrameTime();
+	swprintf(charBuffer, 128, L"Framerate: %f     FrameTime: %f ms    AvgFrameTime: %f ms", 1 / delta, eq::Application::GetFrameTime() * 1000, avgFrameTime / frameCount * 1000);
 	std::wstring frameText(charBuffer);
 	//OutputDebugString(charBuffer);
 

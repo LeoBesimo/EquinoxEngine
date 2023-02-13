@@ -136,6 +136,7 @@
     <ClInclude Include="src\eqRenderer.hpp" />
     <ClInclude Include="src\eqRenderUtilities.hpp" />
     <ClInclude Include="src\eqInput.hpp" />
+    <ClInclude Include="src\eqThreadPool.hpp" />
     <ClInclude Include="src\Equinox.hpp" />
     <ClInclude Include="src\Images\eqImages.hpp" />
     <ClInclude Include="src\Images\Sprite.hpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="src\eqApplication.cpp" />
     <ClCompile Include="src\eqInput.cpp" />
     <ClCompile Include="src\eqRenderer.cpp" />
+    <ClCompile Include="src\eqThreadPool.cpp" />
     <ClCompile Include="src\Images\Sprite.cpp" />
     <ClCompile Include="src\Images\Texture.cpp" />
   </ItemGroup>

@@ -4,8 +4,6 @@
 
 namespace eq
 {
-	float Renderer::alphaScaler;
-
 	void Renderer::SetPixel(int x, int y, const Color& color)
 	{
 		BitmapBuffer& buffer = getActiveBuffer();
@@ -130,6 +128,11 @@ namespace eq
 		DrawLine(int(a.x + 0.5f), int(a.y + 0.5f), int(b.x + 0.5f), int(b.y + 0.5f), color);
 	}
 
+	void Renderer::DrawLineVector2(Math::Vector2 a, Math::Vector2 b, const Color& color)
+	{
+		DrawLine(int(a.x + 0.5f), int(a.y + 0.5f), int(b.x + 0.5f), int(b.y + 0.5f), color);
+	}
+
 	void Renderer::FillCircle(int originX, int originY, int radius, const Color& color)
 	{
 		for (int y = -radius; y <= radius; y++)
@@ -155,6 +158,11 @@ namespace eq
 	}
 
 	void Renderer::DrawCircle(Math::Vector2 position, int radius, const Color& color)
+	{
+		DrawCircle(int(position.x + 0.5), int(position.y + 0.5), radius, color);
+	}
+
+	void Renderer::DrawCircleVector2(Math::Vector2 position, int radius, const Color& color)
 	{
 		DrawCircle(int(position.x + 0.5), int(position.y + 0.5), radius, color);
 	}
@@ -195,6 +203,74 @@ namespace eq
 			}
 		}
 
+	}
+
+	void Renderer::DrawSpriteOptimized(Sprite& sprite)
+	{
+		BitmapBuffer& buffer = getActiveBuffer();
+
+		Math::Vector2 position = sprite.m_Position;
+		Math::Vector2 scale = sprite.m_Scale;
+		if (sprite.m_CameraDependent)
+		{
+			Math::Matrix2x2 original = sprite.m_Scale;
+			if (!sprite.m_PreTransformed || sprite.m_Changed) sprite.m_Scale = (getInstance().m_Camera->getTransform() * sprite.m_OriginalScale);
+			position = WorldToScreenspace(position); //+= getInstance().m_Camera.get()->getPosition();
+		}
+
+		if (!sprite.m_PreTransformed || sprite.m_Changed)
+		{
+			sprite.applyScaling();
+			sprite.applyRotation();
+			sprite.m_Changed = false;
+		}
+
+		if (sprite.getScaledSize().x <= 200)
+		{
+
+			int minX = std::floor(sprite.getPosition().x + 0.5f);
+			int minY = std::floor(sprite.getPosition().y + 0.5f);
+			int maxX = minX + sprite.getScaledSize().x;
+			int maxY = minY + sprite.getScaledSize().y;
+
+			if (minX < 0) minX = 0;
+			if (minY < 0) minY = 0;
+			if (maxX > buffer.width) maxX = buffer.width;
+			if (maxY > buffer.height) maxY = buffer.height;
+			uint32_t rb1, rb2, g1, g2;
+			uint8_t alpha;
+
+			//uint32_t rawColor = (color.red << 16) | (color.green << 8) | (color.blue << 0);
+
+			uint8_t* row = (uint8_t*)buffer.memory + minX * s_BytesPerPixel + minY * buffer.pitch;
+			int j = 0;
+			for (int y = minY; y < maxY; y++)
+			{
+				int i = 0;
+				uint32_t* pixel = (uint32_t*)row;
+				for (int x = minX; x < maxX; x++)
+				{
+					//Color pixelColor = ColorFromUInt(*pixel);
+					//uint32_t rawColor = BlendColor(color, *pixel);
+					*pixel++ = BlendColorOptimized(*pixel, sprite.getTransformedPixel(i, j), alpha, rb1, rb2, g1, g2);//BlendColor(*pixel, sprite.getTransformedPixel(i, j));
+					i++;
+				}
+				j++;
+				row += buffer.pitch;
+			}
+		}
+		else 
+		{
+			getInstance().m_ThreadPool.queue(Renderer::drawSpriteLeft, std::ref(sprite), std::ref(buffer));
+			getInstance().m_ThreadPool.queue(Renderer::drawSpriteRight, std::ref(sprite), std::ref(buffer));
+			//std::thread left(Renderer::drawSpriteLeft,std::ref(sprite), std::ref(buffer));
+			//std::thread right(Renderer::drawSpriteRight, std::ref(sprite), std::ref(buffer));
+
+			getInstance().m_ThreadPool.waitForTasks();
+
+			//left.join();
+			//right.join();
+		}
 	}
 
 	void Renderer::Draw(Ellipse ellipse)
@@ -363,14 +439,22 @@ namespace eq
 	void Renderer::RenderObjects()
 	{
 		RenderSprites();
+		//getInstance().m_ThreadPool.queue(RenderSprites);
+		//getInstance().m_ThreadPool.waitForTasks();
+		//getInstance().m_ThreadPool.queue(RenderRectangles);
+		//getInstance().m_ThreadPool.queue(RenderLines);
+		//getInstance().m_ThreadPool.queue(RenderEllipses);
+		//getInstance().m_ThreadPool.waitForTasks();
+		RenderEllipses();
 		RenderRectangles();
 		RenderLines();
-		RenderEllipses();
+		//getInstance().m_ThreadPool.waitForTasks();
 	}
 
 	void Renderer::RenderText(HDC deviceContext)
 	{
 		std::vector<Text> textBuffer = getInactiveText();
+		if (textBuffer.empty()) return;
 
 		for (unsigned int i = 0; i < textBuffer.size(); i++)
 		{
@@ -394,6 +478,7 @@ namespace eq
 	void Renderer::RenderRectangles()
 	{
 		std::vector<Rectangle> rectBuffer = getInactiveRectangles();
+		if (rectBuffer.empty()) return;
 
 		for (unsigned int i = 0; i < rectBuffer.size(); i++)
 		{
@@ -409,13 +494,17 @@ namespace eq
 
 			}
 			Rect r(pos.x, pos.y, dim.x, dim.y);
-			DrawRectangle(r, rect.getColor());
+			Color color = rect.getColor();
+			DrawRectangle(r, color);
+			//getInstance().m_ThreadPool.queue(DrawRectangle, std::ref(r), std::ref(color));
 		}
+		//getInstance().m_ThreadPool.waitForTasks();
 	}
 
 	void Renderer::RenderEllipses()
 	{
 		std::vector<Ellipse> ellipseBuffer = getInactiveEllipses();
+		if (ellipseBuffer.empty()) return;
 
 		for (unsigned int i = 0; i < ellipseBuffer.size(); i++)
 		{
@@ -437,14 +526,19 @@ namespace eq
 				ellipse.getRadius(r);
 				Math::Vector2 rad(r, r);
 				if (ellipse.isCameraDependent()) rad = ApplyCameraTransform(rad);
-				DrawCircle(pos, rad.x, ellipse.getColor());
+				Color color = ellipse.getColor();
+				r = rad.x; 
+				DrawCircleVector2(pos, r, color);
+				//getInstance().m_ThreadPool.queue(DrawCircleVector2, std::ref(pos), std::ref(r), std::ref(color));
 			}
 		}
+		//getInstance().m_ThreadPool.waitForTasks();
 	}
 
 	void Renderer::RenderLines()
 	{
 		std::vector<Line> lineBuffer = getInactiveLines();
+		if (lineBuffer.empty()) return;
 
 		for (unsigned int i = 0; i < lineBuffer.size(); i++)
 		{
@@ -457,17 +551,23 @@ namespace eq
 				pos1 = WorldToScreenspace(pos1);//+= getInstance().m_Camera.get()->getPosition();
 				pos2 = WorldToScreenspace(pos2);//+= getInstance().m_Camera.get()->getPosition();
 			}
-			DrawLine(pos1, pos2, line.getColor());
+			Color color = line.getColor();
+			DrawLineVector2(pos1, pos2, color);
+			//getInstance().m_ThreadPool.queue(DrawLineVector2, std::ref(pos1), std::ref(pos2), std::ref(color));
 		}
+		//getInstance().m_ThreadPool.waitForTasks();
 	}
 
 	void Renderer::RenderSprites()
 	{
 		std::vector<Sprite> sprites = getInactiveSprites();
+		if (sprites.empty()) return;
+
 		for (unsigned int i = 0; i < sprites.size(); i++)
 		{
-			DrawSprite(sprites[i]);
+			DrawSpriteOptimized(sprites[i]);
 		}
+
 	}
 
 	Math::Vector2 Renderer::WorldToScreenspace(Math::Vector2 p)
@@ -499,6 +599,76 @@ namespace eq
 	Math::Vector2 Renderer::ApplyCameraTransform(Math::Vector2 p)
 	{
 		return getInstance().m_Camera->getTransform() * p;
+	}
+
+	void Renderer::drawSpriteLeft(Sprite& sprite, BitmapBuffer& buffer)
+	{
+		int minX = std::floor(sprite.getPosition().x + 0.5f);
+		int minY = std::floor(sprite.getPosition().y + 0.5f);
+		int maxX = minX + std::floor(sprite.getScaledSize().x / 2);
+		int maxY = minY + sprite.getScaledSize().y;
+
+		if (minX < 0) minX = 0;
+		if (minY < 0) minY = 0;
+		if (maxX > buffer.width) maxX = buffer.width;
+		if (maxY > buffer.height) maxY = buffer.height;
+
+		uint32_t rb1, rb2, g1, g2;
+		uint8_t alpha;
+
+		//uint32_t rawColor = (color.red << 16) | (color.green << 8) | (color.blue << 0);
+
+		uint8_t* row = (uint8_t*)buffer.memory + minX * s_BytesPerPixel + minY * buffer.pitch;
+		int j = 0;
+		for (int y = minY; y < maxY; y++)
+		{
+			int i = 0;
+			uint32_t* pixel = (uint32_t*)row;
+			for (int x = minX; x < maxX; x++)
+			{
+				//Color pixelColor = ColorFromUInt(*pixel);
+				//uint32_t rawColor = BlendColor(color, *pixel);
+				*pixel++ = BlendColorOptimized(*pixel, sprite.getTransformedPixel(i, j), alpha, rb1, rb2, g1, g2);//BlendColor(*pixel, sprite.getTransformedPixel(i, j));
+				i++;
+			}
+			j++;
+			row += buffer.pitch;
+		}
+	}
+
+	void Renderer::drawSpriteRight(Sprite& sprite, BitmapBuffer& buffer)
+	{
+		int minX = std::floor(sprite.getPosition().x + 0.5f) + std::floor(sprite.getScaledSize().x / 2);
+		int minY = std::floor(sprite.getPosition().y + 0.5f);
+		int maxX = minX + std::floor(sprite.getScaledSize().x / 2);
+		int maxY = minY + sprite.getScaledSize().y;
+
+		if (minX < 0) minX = 0;
+		if (minY < 0) minY = 0;
+		if (maxX > buffer.width) maxX = buffer.width;
+		if (maxY > buffer.height) maxY = buffer.height;
+
+		uint32_t rb1, rb2, g1, g2;
+		uint8_t alpha;
+
+		//uint32_t rawColor = (color.red << 16) | (color.green << 8) | (color.blue << 0);
+
+		uint8_t* row = (uint8_t*)buffer.memory + minX * s_BytesPerPixel + minY * buffer.pitch;
+		int j = 0;
+		for (int y = minY; y < maxY; y++)
+		{
+			int i = 0;
+			uint32_t* pixel = (uint32_t*)row;
+			for (int x = minX; x < maxX; x++)
+			{
+				//Color pixelColor = ColorFromUInt(*pixel);
+				//uint32_t rawColor = BlendColor(color, *pixel);
+				*pixel++ = BlendColorOptimized(*pixel, sprite.getTransformedPixel(i, j), alpha, rb1, rb2, g1, g2);//BlendColor(*pixel, sprite.getTransformedPixel(i, j));//
+				i++;
+			}
+			j++;
+			row += buffer.pitch;
+		}
 	}
 
 	void Renderer::plotLineLow(int x0, int y0, int x1, int y1, const Color& color)
@@ -579,5 +749,16 @@ namespace eq
 		uint32_t g1 = ((0x100 - alpha) * (colorA & 0x00FF00)) >> 8;
 		uint32_t g2 = (alpha * (colorB & 0x00FF00)) >> 8;
 		return ((rb1 | rb2) & 0xFF00FF) + ((g1 | g2) & 0x00FF00);
+	}
+
+	uint32_t Renderer::BlendColorOptimized(uint32_t colorA, uint32_t colorB, uint8_t& alpha, uint32_t& rb1, uint32_t& rb2, uint32_t& g1, uint32_t& g2)
+	{
+		alpha = colorB >> 24;
+		rb1 = ((0x100 - alpha) * (colorA & 0xFF00FF)) >> 8;
+		rb2 = (alpha * (colorB & 0xFF00FF)) >> 8;
+		g1 = ((0x100 - alpha) * (colorA & 0x00FF00)) >> 8;
+		g2 = (alpha * (colorB & 0x00FF00)) >> 8;
+		return ((rb1 | rb2) & 0xFF00FF) + ((g1 | g2) & 0x00FF00);
+
 	}
 }
