@@ -27,6 +27,7 @@ equinoxAppEntryPoint
 	int w = 200;
 	int h = 200;
 	float avgFrameTime = 0;
+	int avgCounter = 0;
 
 	eq::BitmapTexture texture(w,h);
 	for (unsigned int i = 0; i < w; i++)
@@ -41,7 +42,7 @@ equinoxAppEntryPoint
 		}
 	}
 
-	float frameCount = 0;
+	long frameCount = 0;
 
 	eq::Physics::PhysicsWorld world(eq::Math::Vector2(4000, 4000));
 	world.addCircle(eq::Math::Vector2(-100, 0), 0, 40, eq::Physics::Materials::DEFAULT);
@@ -177,10 +178,20 @@ equinoxAppEntryPoint
 	frameCount++;
 	//camera->move(eq::Math::Vector2(-box->getVelocity().x, box->getVelocity().y) * delta);
 	//camera->setPosition(box->getPosition() + eq::Math::Vector2(400, 400));
+
+
+
 	avgFrameTime += eq::Application::GetFrameTime();
-	swprintf(charBuffer, 128, L"Framerate: %f     FrameTime: %f ms    AvgFrameTime: %f ms", 1 / delta, eq::Application::GetFrameTime() * 1000, avgFrameTime / frameCount * 1000);
+	avgCounter++;
+	swprintf(charBuffer, 128, L"Framerate: %f     FrameTime: %f ms    AvgFrameTime: %f ms", 1 / delta, eq::Application::GetFrameTime() * 1000, avgFrameTime / avgCounter * 1000);
 	std::wstring frameText(charBuffer);
 	//OutputDebugString(charBuffer);
+
+	if (frameCount % 60 == 0)
+	{
+		avgCounter = 0;
+		avgFrameTime = 0;
+	}
 
 	swprintf(charBuffer, 128, L"Bodies: %zd\n", world.getBodies().size());
 	std::wstring bodyCount(charBuffer);
@@ -196,16 +207,16 @@ equinoxAppEntryPoint
 	//eq::Renderer::DrawSprite(sprite);
 	//eq::Renderer::Draw(sprite);
 
-	//for (unsigned int x = 0; x < eq::Application::GetWindowWidth(); x += 64)
-	//{
-	//	for (unsigned int y = 0; y < eq::Application::GetWindowHeight(); y += 64)
-	//	{
-	//		wallPart.setPosition(eq::Math::Vector2(x, y));
-	//		//eq::Renderer::Draw(wallPart);
-	//	}
-	//}
+	for (unsigned int x = 0; x < eq::Application::GetWindowWidth(); x += 64)
+	{
+		for (unsigned int y = 0; y < eq::Application::GetWindowHeight(); y += 64)
+		{
+			wallPart.setPosition(eq::Math::Vector2(x, y));
+			eq::Renderer::Draw(wallPart);
+		}
+	}
 
-	eq::Renderer::Draw(wallSprite);
+	//eq::Renderer::Draw(wallSprite);
 	//eq::Renderer::draw(std::make_shared<eq::Text>(text));
 	//eq::Renderer::draw((text2));
 	eq::Renderer::Draw(bodies);

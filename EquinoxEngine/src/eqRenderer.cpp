@@ -259,7 +259,7 @@ namespace eq
 				row += buffer.pitch;
 			}
 		}
-		else 
+		else
 		{
 			getInstance().m_ThreadPool.queue(Renderer::drawSpriteLeft, std::ref(sprite), std::ref(buffer));
 			getInstance().m_ThreadPool.queue(Renderer::drawSpriteRight, std::ref(sprite), std::ref(buffer));
@@ -527,7 +527,7 @@ namespace eq
 				Math::Vector2 rad(r, r);
 				if (ellipse.isCameraDependent()) rad = ApplyCameraTransform(rad);
 				Color color = ellipse.getColor();
-				r = rad.x; 
+				r = rad.x;
 				DrawCircleVector2(pos, r, color);
 				//getInstance().m_ThreadPool.queue(DrawCircleVector2, std::ref(pos), std::ref(r), std::ref(color));
 			}
