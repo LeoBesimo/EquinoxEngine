@@ -32,6 +32,8 @@ namespace eq
 		std::wstring m_WindowTitle;
 		int m_WindowWidth;
 		int m_WindowHeight;
+		int m_ResolutionX;
+		int m_ResolutionY;
 
 		std::function<void(float delta)> m_Update;
 		float m_SecondsPerFrame = 1.f / 120.f;
@@ -77,6 +79,7 @@ namespace eq
 
 		static void SetFullscreen();
 		static void SetWindowSize(unsigned int width, unsigned int height);
+		static void SetResolution(unsigned int width, unsigned int height);
 
 		inline static void SetFrameTime(float frameTime) { getInstance().m_FrameTime = frameTime; }
 		inline static float GetFrameTime() { return getInstance().m_FrameTime; }

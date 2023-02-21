@@ -134,8 +134,17 @@ equinoxAppEntryPoint
 	if (eq::Input::IsKeyPressed(EQ_K))
 		box->applyForce(eq::Math::Vector2(0, -300) * box->getMass());
 
-	if (eq::Input::WasKeyHit(EQ_P)) eq::Application::SetFullscreen();
-	if (eq::Input::WasKeyHit(EQ_O)) eq::Application::SetWindowSize(800, 600);
+	if (eq::Input::WasKeyHit(EQ_P))
+	{
+		eq::Application::SetFullscreen();
+		//eq::Application::SetResolution(1000, 800);
+
+	}
+	if (eq::Input::WasKeyHit(EQ_O))
+	{
+		eq::Application::SetWindowSize(800, 600);
+		//eq::Application::SetResolution(1000, 800);
+	}
 	if (eq::Input::WasKeyHit(EQ_K)) OutputDebugString(L"Test\n");
 
 	//sprite.move(eq::Math::Vector2(0,-speed) * delta);
@@ -207,9 +216,9 @@ equinoxAppEntryPoint
 	//eq::Renderer::DrawSprite(sprite);
 	//eq::Renderer::Draw(sprite);
 
-	for (unsigned int x = 0; x < eq::Application::GetWindowWidth(); x += 64)
+	for (unsigned int x = 0; x < 1000; x += 64)
 	{
-		for (unsigned int y = 0; y < eq::Application::GetWindowHeight(); y += 64)
+		for (unsigned int y = 0; y < 800; y += 64)
 		{
 			wallPart.setPosition(eq::Math::Vector2(x, y));
 			eq::Renderer::Draw(wallPart);

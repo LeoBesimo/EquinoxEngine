@@ -138,6 +138,16 @@ namespace eq
 		return;
 	}
 
+	void Application::SetResolution(unsigned int width, unsigned int height)
+	{
+		if (!getInstance().m_WindowHandle) return;
+
+		getInstance().m_Resizing = true;
+		while (!Renderer::FinishedFrame()) {}
+		Renderer::resizeFrameBuffer(width, height);
+		getInstance().m_Resizing = false;
+	}
+
 	void Application::startWindow()
 	{
 		const wchar_t* className = L"Equinox Window";
