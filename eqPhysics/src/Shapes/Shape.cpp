@@ -12,12 +12,20 @@ namespace eq
 			m_Force = Math::Vector2();
 			m_Omega = 0;
 			m_Torque = 0;
+			m_IsTrigger = false;
+			m_Trigger = [&]() {};
 		}
 
 		void Shape::update(float delta)
 		{
 			integrateForces(delta);
 			integrateVelocities(delta);
+		}
+
+		void Shape::update(float delta, int timeSteps)
+		{
+			integrateForces(delta);
+			integrateVelocities(delta, timeSteps);
 		}
 
 		void Shape::applyForce(Math::Vector2 force)
@@ -66,6 +74,11 @@ namespace eq
 		{
 			m_Position += m_Velocity * delta;
 			m_Angle += m_Omega * delta;
+		}
+		void Shape::integrateVelocities(float delta, int timeSteps)
+		{
+			m_Position += m_Velocity * delta / timeSteps;
+			m_Angle += m_Omega * delta / timeSteps;
 		}
 	}
 }

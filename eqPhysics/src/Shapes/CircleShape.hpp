@@ -16,6 +16,7 @@ namespace eq
 			CircleShape(Math::Vector2 position, float angle, float radius, Material material);
 
 			void update(float delta);
+			void update(float delta, int timeSteps);
 
 		public:
 			float getRadius() { return this->m_Radius; }
@@ -23,6 +24,8 @@ namespace eq
 
 		private:
 			void applyGravity();
+			void applyGravity(int timeSteps);
+
 			void calculateBoundingBox();
 			void calculateUnits();
 		};

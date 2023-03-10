@@ -18,6 +18,7 @@ namespace eq
 			PolygonShape(Math::Vector2 position, float angle, float sides, Material material, Math::Matrix2x2 scale);
 
 			void update(float delta);
+			void update(float delta, int timeSteps);
 
 			std::vector<Math::Vector2> getCorners() { return this->m_Transformed; }
 
@@ -25,6 +26,8 @@ namespace eq
 
 		private:
 			void applyGravity();
+			void applyGravity(int timeSteps);
+
 			void calculateBoundingBox();
 			void transformPoints();
 			void calculateUnits();

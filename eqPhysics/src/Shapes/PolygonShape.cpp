@@ -29,6 +29,13 @@ namespace eq
 			transformPoints();
 		}
 
+		void PolygonShape::update(float delta, int timeSteps)
+		{
+			applyGravity(timeSteps);
+			Shape::update(delta, timeSteps);
+			transformPoints();
+		}
+
 		void PolygonShape::transformPoints()
 		{
 			Math::Matrix2x2 rotation = Math::Matrix2x2(getAngle());
@@ -55,6 +62,19 @@ namespace eq
 			{
 				Math::Vector2 radius = m_Transformed[i] - getPosition();
 				applyForce(getGravit() * getInertia() * factor, radius);
+			}
+		}
+
+		void PolygonShape::applyGravity(int timeSteps)
+		{
+			applyForce(getGravit() * getMass() / timeSteps);
+
+			float factor = 1 / m_Transformed.size();
+
+			for (unsigned int i = 0; i < m_Transformed.size(); i++)
+			{
+				Math::Vector2 radius = m_Transformed[i] - getPosition();
+				applyForce(getGravit() * getInertia() * factor / timeSteps, radius);
 			}
 		}
 

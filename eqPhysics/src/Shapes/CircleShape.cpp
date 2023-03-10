@@ -20,9 +20,20 @@ namespace eq
 			Shape::update(delta);
 		}
 
+		void CircleShape::update(float delta, int timeSteps)
+		{
+			applyGravity(timeSteps);
+			Shape::update(delta, timeSteps);
+		}
+
 		void CircleShape::applyGravity()
 		{
 			setForce(getForce() + (getGravit() * getMass()));
+		}
+
+		void CircleShape::applyGravity(int timeSteps)
+		{
+			setForce(getForce() + (getGravit() * getMass() / timeSteps));
 		}
 
 		void CircleShape::calculateBoundingBox()

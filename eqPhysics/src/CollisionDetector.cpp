@@ -726,6 +726,11 @@ namespace eq
 				if (Math::dot(ab, normal) < 0) normal *= -1;
 
 				m.penetration = minDepth / normal.len();
+
+				//Math::Vector2 penetration = normal.normalize() * minDepth;
+
+				//m.penetration = penetration.len();
+
 				m.normal = normal.normalize();
 				m.contact = getContactBoxPolygon(bodyA, bodyB);
 			}

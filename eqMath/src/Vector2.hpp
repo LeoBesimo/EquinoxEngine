@@ -134,6 +134,15 @@ namespace eq
 				return *this;
 			}
 
+			Vector2 getNormalized(void)
+			{
+				float l = len();
+				if (l == 0) return Vector2(0, 0);
+				float invLen = 1 / l;
+
+				return Vector2(x * invLen, y * invLen);
+			}
+
 			float dot(const Vector2& a)
 			{
 				return x * a.x + y * a.y;

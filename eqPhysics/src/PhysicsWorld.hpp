@@ -2,6 +2,7 @@
 
 #include "CollisionDetector.hpp"
 #include "CollisionSolver.hpp"
+#include "TriggerSolver.hpp"
 #include "Shapes/eqShapes.hpp"
 
 namespace eq
@@ -28,11 +29,14 @@ namespace eq
 			std::vector<Shape*> m_Bodies;
 			CollisionDetector m_Detector;
 			CollisionSolver m_Solver;
+			TriggerSolver m_TriggerSolver;
 
 			std::vector<ContactPair> m_ContactPairs;
 
 			Math::Vector2 m_WorldSize;
 			float m_WorldBorder;
+
+			uint_fast8_t m_TimeSteps = 1;
 
 			Math::Vector2 M_GRAVITY;
 

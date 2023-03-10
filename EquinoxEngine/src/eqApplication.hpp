@@ -36,6 +36,8 @@ namespace eq
 		int m_ResolutionY;
 
 		std::function<void(float delta)> m_Update;
+		std::function<void()> m_Init;
+
 		float m_SecondsPerFrame = 1.f / 120.f;
 
 		float m_FrameTime;
@@ -64,13 +66,20 @@ namespace eq
 			getInstance().m_WindowTitle = title;
 			getInstance().m_WindowWidth = width + 1;
 			getInstance().m_WindowHeight = height + 1;
+			getInstance().m_ResolutionX = width + 1;
+			getInstance().m_ResolutionY = height + 1;
+			getInstance().m_Init = [&](){};
+			getInstance().m_Update = [&](float delta) {};
 		}
 
 		inline static void SetApplicationUpdate(const std::function<void(float delta)>& update) { getInstance().m_Update = update; }
+		inline static void SetApplicationInit(const std::function<void()>& init) { getInstance().m_Init = init; }
 
 		inline static std::wstring GetWindowTitle() { return getInstance().m_WindowTitle; }
 		inline static int GetWindowWidth() { return getInstance().m_WindowWidth; }
 		inline static int GetWindowHeight() { return getInstance().m_WindowHeight; }
+		inline static int GetResolutionWidth() { return getInstance().m_ResolutionX; }
+		inline static int GetResolutionHeight() { return getInstance().m_ResolutionY; }
 		inline static HWND GetWindowHandle() { return getInstance().m_WindowHandle; }
 		inline static bool IsRunning() { return getInstance().m_Running; }
 		inline static bool IsResizing() { return getInstance().m_Resizing; }

@@ -86,10 +86,59 @@ namespace eq
 				manifold = m_Detector.detectCollision(bodyA, bodyB);
 				if (manifold.colliding)
 				{
-					m_Solver.resolveDynamicWithFriction(manifold);
-					m_Solver.resolveStatic(manifold);
+					if (!bodyA->isTrigger() && !bodyB->isTrigger())
+					{
+						m_Solver.resolveDynamicWithFriction(manifold);
+						m_Solver.resolveStatic(manifold);
+					}
+					else
+					{
+						m_TriggerSolver.resolveTrigger(manifold);
+					}
 				}
 			}
+
+			/*for (unsigned int i = 0; i < m_TimeSteps; i++)
+			{
+				for (unsigned int i = 0; i < m_Bodies.size(); i++)
+				{
+					m_Bodies[i]->update(delta, m_TimeSteps);
+				}
+
+				for (unsigned int i = 0; i < m_Bodies.size(); i++)
+				{
+					Shape* body = m_Bodies[i];
+					for (unsigned int j = i + 1; j < m_Bodies.size(); j++)
+					{
+						Shape* bodyB = m_Bodies[j];
+						if (body->isStatic() && bodyB->isStatic()) continue;
+						if (m_Detector.boundingBoxCollision(body, bodyB))
+						{
+							ContactPair pair(body, bodyB);
+							m_ContactPairs.push_back(pair);
+						}
+					}
+				}
+
+				for (unsigned int i = 0; i < m_ContactPairs.size(); i++)
+				{
+					Shape* bodyA = m_ContactPairs[i].bodyA;
+					Shape* bodyB = m_ContactPairs[i].bodyB;
+					manifold = m_Detector.detectCollision(bodyA, bodyB);
+					if (manifold.colliding)
+					{
+						if (!bodyA->isTrigger() && !bodyB->isTrigger())
+						{
+							m_Solver.resolveDynamicWithFriction(manifold);
+							m_Solver.resolveStatic(manifold);
+						}
+						else
+						{
+							m_TriggerSolver.resolveTrigger(manifold);
+						}
+					}
+				}
+			}*/
 		}
 
 		void PhysicsWorld::clearNonStatic()

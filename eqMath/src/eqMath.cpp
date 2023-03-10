@@ -79,6 +79,11 @@ namespace eq
 			);
 		}
 
+		float map(float val, float oldMin, float oldMax, float newMin, float newMax)
+		{
+			return newMin + (newMax - newMin) * ((val - oldMin) / (oldMax - oldMin));
+		}
+
 		float square(float n)
 		{
 			return n * n;

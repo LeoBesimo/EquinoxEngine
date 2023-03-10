@@ -4,6 +4,7 @@
 
 #include <eqMath.hpp>
 #include "Materials.hpp"
+#include <functional>
 
 
 namespace eq
@@ -41,12 +42,17 @@ namespace eq
 			float m_InvMass;
 			float m_InvInertia;
 
-			uint32_t color;
+			uint32_t m_Color;
+
+			uint32_t m_IsTrigger;
+
+			std::function<void()> m_Trigger;
 
 		public:
 			Shape(Math::Vector2 position, float angle, ShapeType type, Material material, Math::Matrix2x2 scale);
 
 			virtual void update(float delta);
+			virtual void update(float delta, int timeSteps);
 
 			void applyForce(Math::Vector2 force);
 			void applyForce(Math::Vector2 force, Math::Vector2 radius);
@@ -100,17 +106,25 @@ namespace eq
 
 			void setStatic();
 
+			void setTrigger(bool isTrigger) { this->m_IsTrigger = isTrigger; }
+			void setTriggerFunction(std::function<void()>& func) { this->m_Trigger = func; }
+
+			void trigger() { this->m_Trigger(); }
+
 			bool canRotate() { return m_InvInertia != 0; }
 			bool canMove() { return m_InvMass != 0; }
 			bool isStatic() { return !canMove() && !canRotate(); }
+			bool isTrigger() { return m_IsTrigger; }
 
 			virtual void move(Math::Vector2 distance);
 
 		private:
 			virtual void applyGravity() = 0;
+			virtual void applyGravity(int timeSteps) = 0;
 			virtual void calculateBoundingBox() = 0;
 			void integrateForces(float delta);
 			void integrateVelocities(float delta);
+			void integrateVelocities(float delta, int timeSteps);
 
 			virtual void calculateUnits() = 0;
 		};

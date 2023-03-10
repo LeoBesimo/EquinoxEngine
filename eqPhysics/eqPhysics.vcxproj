@@ -138,6 +138,7 @@
     <ClCompile Include="src\Shapes\CircleShape.cpp" />
     <ClCompile Include="src\Shapes\PolygonShape.cpp" />
     <ClCompile Include="src\Shapes\Shape.cpp" />
+    <ClCompile Include="src\TriggerSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CollisionSolver.hpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="src\Shapes\Materials.hpp" />
     <ClInclude Include="src\Shapes\PolygonShape.hpp" />
     <ClInclude Include="src\Shapes\Shape.hpp" />
+    <ClInclude Include="src\TriggerSolver.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

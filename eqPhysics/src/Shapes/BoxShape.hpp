@@ -17,6 +17,7 @@ namespace eq
 			BoxShape(Math::Vector2 position, float angle, Material material, Math::Matrix2x2 scale);
 
 			void update(float delta);
+			void update(float delta, int timeSteps);
 
 		public:
 			std::vector<Math::Vector2> getCorners() { return m_Transformed; };
@@ -25,6 +26,8 @@ namespace eq
 
 		private:
 			void applyGravity();
+			void applyGravity(int timeSteps);
+
 			void calculateBoundingBox();
 			void transformPoints();
 			void calculateUnits();

@@ -32,6 +32,8 @@ namespace eq
 		extern float cross(Vector2 a, Vector2 b);
 		extern Vector3 cross(Vector3 a, Vector3 b);
 
+		extern float map(float val, float oldMin, float oldMax, float newMin, float newMax);
+
 		extern float square(float n);
 
 		extern bool nearlyEqual(float a, float b);

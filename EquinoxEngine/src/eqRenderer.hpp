@@ -133,7 +133,7 @@ namespace eq
 		static std::vector<Sprite>& getInactiveSprites() { return getInstance().m_SpriteBuffer[!getInstance().m_Buffer2]; }
 
 		inline static void setWindowHandle(HWND m_WindowHandle) { getInstance().m_WindowHandle = m_WindowHandle; }
-		static void getWindowDimenstions(int* outWidth, int* outHeight);
+		static void getWindowDimensions(int* outWidth, int* outHeight);
 		static void resizeFrameBuffer(int width, int height);
 		static void copyBufferToWindow(HDC deviceContext, int m_WindowWidth, int m_WindowHeight);
 

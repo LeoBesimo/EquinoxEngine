@@ -28,6 +28,13 @@ namespace eq
 			transformPoints();
 		}
 
+		void BoxShape::update(float delta, int timeSteps)
+		{
+			applyGravity(timeSteps);
+			Shape::update(delta, timeSteps);
+			transformPoints();
+		}
+
 		void BoxShape::transformPoints()
 		{
 			Math::Matrix2x2 rotation(getAngle());
@@ -53,6 +60,17 @@ namespace eq
 			{
 				Math::Vector2 radius = m_Transformed[i] - getPosition();
 				applyForce(getGravit() * getInertia() * 0.25, radius);
+			}
+		}
+
+		void BoxShape::applyGravity(int timeSteps)
+		{
+			applyForce(getGravit() * getMass() / timeSteps);
+
+			for (uint8_t i = 0; i < 4; i++)
+			{
+				Math::Vector2 radius = m_Transformed[i] - getPosition();
+				applyForce(getGravit() * getInertia() * 0.25 / timeSteps, radius);
 			}
 		}
 

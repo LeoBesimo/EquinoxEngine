@@ -348,7 +348,7 @@ namespace eq
 		}
 	}
 
-	void Renderer::getWindowDimenstions(int* outWidth, int* outHeight)
+	void Renderer::getWindowDimensions(int* outWidth, int* outHeight)
 	{
 		RECT clientRect;
 		GetClientRect(getInstance().m_WindowHandle, &clientRect);
@@ -581,6 +581,17 @@ namespace eq
 	Math::Vector2 Renderer::ScreenToWorldspace(Math::Vector2 p)
 	{
 		//p.y = -p.y;
+
+		int bufferWidth = 0;
+		int bufferHeight = 0;
+
+		wchar_t buffer[256];
+		
+
+		getWindowDimensions(&bufferWidth, &bufferHeight);
+
+		//swprintf(buffer, 256, L"x:%f, y: %f, bw: %d, bh: %d, w: %d, h:%d\n", p.x, p.y ,bufferWidth, bufferHeight, getActiveBuffer().width, getActiveBuffer().height);
+		//OutputDebugString(buffer);
 		p -= getInstance().m_Camera->getPosition();
 
 		Math::Matrix2x2 transform = getInstance().m_Camera->getTransform();

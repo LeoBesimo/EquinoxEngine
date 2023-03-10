@@ -1,4 +1,5 @@
 #include "CollisionSolver.hpp"
+#include <Windows.h>
 
 namespace eq
 {
@@ -6,9 +7,13 @@ namespace eq
 	{
 		void CollisionSolver::resolveStatic(Manifold m)
 		{
-			Math::Vector2 normal = m.normal.normalize();
+			Math::Vector2 normal = m.normal;
 			m.bodyA->move(-normal * m.penetration / 2);
 			m.bodyB->move(normal * m.penetration / 2);
+
+			wchar_t buffer[128];
+			swprintf(buffer, 128, L"Penetration: %f\n", m.penetration);
+			OutputDebugString(buffer);
 			//m.bodyA->setPosition(m.bodyA->getPosition() - m.normal * m.penetration * m.bodyA->getInvMass());
 			//m.bodyB->setPosition(m.bodyB->getPosition() + m.normal * m.penetration * m.bodyB->getInvMass());
 		}
@@ -32,7 +37,7 @@ namespace eq
 			if (contactVelMag > 0)
 				return;
 
-			float e = std::min(bodyA->getMaterial().restitution, bodyB->getMaterial().restitution);
+			float e = min(bodyA->getMaterial().restitution, bodyB->getMaterial().restitution);
 
 			float denom1 = bodyA->getInvMass() + bodyB->getInvMass();
 			float denom2 = Math::square(Math::dot(raPerp, normal)) * bodyA->getInvInertia();
@@ -73,7 +78,7 @@ namespace eq
 			if (contactVelMag > 0)
 				return;
 
-			float e = std::min(bodyA->getMaterial().restitution, bodyB->getMaterial().restitution);
+			float e = min(bodyA->getMaterial().restitution, bodyB->getMaterial().restitution);
 
 			float denom1 = bodyA->getInvMass() + bodyB->getInvMass();
 			float denom2 = Math::square(Math::dot(raPerp, normal)) * bodyA->getInvInertia();

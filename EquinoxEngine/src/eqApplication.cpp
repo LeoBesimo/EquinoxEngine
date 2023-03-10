@@ -7,6 +7,8 @@ namespace eq
 		m_WindowTitle = L"Equinox Application";
 		m_WindowWidth = 1921;
 		m_WindowHeight = 1081;
+		m_ResolutionX = 1921;
+		m_ResolutionY = 1081;
 	}
 
 	Application::~Application()
@@ -75,7 +77,7 @@ namespace eq
 			HDC deviceContext = BeginPaint(m_WindowHandle, &paint);
 
 			int width, height;
-			Renderer::getWindowDimenstions(&width, &height);
+			Renderer::getWindowDimensions(&width, &height);
 
 			Renderer::copyBufferToWindow(deviceContext, width, height);
 
@@ -102,6 +104,9 @@ namespace eq
 
 		getInstance().m_WindowWidth = newWidth;
 		getInstance().m_WindowHeight = newHeight;
+
+		getInstance().m_ResolutionX = newWidth;
+		getInstance().m_ResolutionY = newHeight;
 
 		Renderer::resizeFrameBuffer(newWidth, newHeight);
 		SetWindowLong(getInstance().m_WindowHandle, GWL_STYLE, 0);
@@ -133,6 +138,9 @@ namespace eq
 		getInstance().m_WindowWidth = newWidth;
 		getInstance().m_WindowHeight = newHeight;
 
+		getInstance().m_ResolutionX = newWidth;
+		getInstance().m_ResolutionY = newHeight;
+
 		SetWindowPos(getInstance().m_WindowHandle, HWND_TOP, x, y, newWidth, newHeight, SWP_ASYNCWINDOWPOS | SWP_SHOWWINDOW);
 		getInstance().m_Resizing = false;
 		return;
@@ -141,6 +149,9 @@ namespace eq
 	void Application::SetResolution(unsigned int width, unsigned int height)
 	{
 		if (!getInstance().m_WindowHandle) return;
+
+		getInstance().m_ResolutionX = width;
+		getInstance().m_ResolutionY = height;
 
 		getInstance().m_Resizing = true;
 		while (!Renderer::FinishedFrame()) {}
@@ -204,7 +215,7 @@ namespace eq
 
 			int bufferWidth = 0;
 			int bufferHeight = 0;
-			Renderer::getWindowDimenstions(&bufferWidth, &bufferHeight);
+			Renderer::getWindowDimensions(&bufferWidth, &bufferHeight);
 			Renderer::resizeFrameBuffer(bufferWidth, bufferHeight);
 
 			LARGE_INTEGER cpuFrequency;
@@ -222,6 +233,9 @@ namespace eq
 				QueryPerformanceCounter(&last);
 
 				LARGE_INTEGER current;
+
+				getInstance().m_Init();
+
 
 				while (Application::IsRunning())
 				{
@@ -248,7 +262,7 @@ namespace eq
 					}
 
 					int width, height;
-					Renderer::getWindowDimenstions(&width, &height);
+					Renderer::getWindowDimensions(&width, &height);
 
 					//HBRUSH hbrBkGnd;
 					//HFONT hfntOld;
