@@ -67,8 +67,10 @@ namespace eq
 			for (unsigned int i = 0; i < m_Bodies.size(); i++)
 			{
 				Shape* body = m_Bodies[i];
-				for (unsigned int j = i + 1; j < m_Bodies.size(); j++)
+				for (unsigned int j = 0; j < m_Bodies.size(); j++)
 				{
+					if (i == j) continue;
+
 					Shape* bodyB = m_Bodies[j];
 					if (body->isStatic() && bodyB->isStatic()) continue;
 					if (m_Detector.boundingBoxCollision(body, bodyB))
@@ -86,6 +88,8 @@ namespace eq
 				manifold = m_Detector.detectCollision(bodyA, bodyB);
 				if (manifold.colliding)
 				{
+					bodyA->getOnCollision()(manifold);
+					bodyB->getOnCollision()(manifold);
 					if (!bodyA->isTrigger() && !bodyB->isTrigger())
 					{
 						m_Solver.resolveDynamicWithFriction(manifold);

@@ -16,9 +16,12 @@ namespace eq
 			Box, Polygon, Circle
 		};
 
+		struct Manifold;
+
 		class Shape
 		{
 		private:
+
 			ShapeType m_Type;
 			Material m_Material;
 
@@ -47,6 +50,7 @@ namespace eq
 			uint32_t m_IsTrigger;
 
 			std::function<void()> m_Trigger;
+			std::function<void(Manifold m)> m_OnCollision;
 
 		public:
 			Shape(Math::Vector2 position, float angle, ShapeType type, Material material, Math::Matrix2x2 scale);
@@ -106,10 +110,16 @@ namespace eq
 
 			void setStatic();
 
+			void setColor(const uint32_t& color) { m_Color = color; }
+			uint32_t& getColor() { return m_Color; }
+
 			void setTrigger(bool isTrigger) { this->m_IsTrigger = isTrigger; }
-			void setTriggerFunction(std::function<void()>& func) { this->m_Trigger = func; }
+			void setTriggerFunction(const std::function<void()>& func) { this->m_Trigger = func; }
+			void setOnCollisionFunction(const std::function<void(Manifold m)>& func) { this->m_OnCollision = func; }
 
 			void trigger() { this->m_Trigger(); }
+			std::function<void()>& getTrigger() { return this->m_Trigger; }
+			std::function<void(Manifold m)>& getOnCollision() { return this->m_OnCollision; }
 
 			bool canRotate() { return m_InvInertia != 0; }
 			bool canMove() { return m_InvMass != 0; }
@@ -127,6 +137,16 @@ namespace eq
 			void integrateVelocities(float delta, int timeSteps);
 
 			virtual void calculateUnits() = 0;
+		};
+
+		struct Manifold
+		{
+			bool colliding;
+			Shape* bodyA;
+			Shape* bodyB;
+			Math::Vector2 normal;
+			float penetration;
+			Math::Vector2 contact;
 		};
 	}
 }

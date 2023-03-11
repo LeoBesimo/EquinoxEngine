@@ -58,6 +58,7 @@ namespace eq
 		static void SetClearColor(const Color& color) { getInstance().m_ClearColor = color; }
 		static void SetPixel(int x, int y, const Color& color);
 		static void SetPixel(int x, int y, const uint32_t color);
+		static void SetPixelNoBlending(int x, int y, const Color& color);
 		static void SetPixelNoBlending(int x, int y, const uint32_t color);
 		static void FillRectangle(const Rect& rect, const Color& color);
 		static void DrawRectangle(const Rect& rect, const Color& color);
@@ -100,7 +101,7 @@ namespace eq
 		static bool FinishedFrame() { return getInstance().m_FrameFinished; }
 
 	private:
-		Renderer() { m_BitmapBuffer[0] = {}; m_BitmapBuffer[1] = {}; m_ClearColor = Color(255, 255, 255, 255);}
+		Renderer() { m_BitmapBuffer[0] = {}; m_BitmapBuffer[1] = {}; m_ClearColor = Color(255, 255, 255, 255); }
 
 		Renderer(const Renderer&) = delete;
 		Renderer& operator= (const Renderer&) = delete;

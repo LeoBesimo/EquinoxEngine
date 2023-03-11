@@ -21,7 +21,7 @@ namespace eq
 
 	public:
 		Drawable() :
-			m_Position(), m_Type(DrawableType::NONE), m_Color()
+			m_Position(), m_Type(DrawableType::NONE), m_Color(0xFF000000)
 		{}
 
 		Drawable(Math::Vector2 position, DrawableType type) :
@@ -36,6 +36,7 @@ namespace eq
 		Math::Vector2 getPosition() { return m_Position; }
 
 		void setColor(Color& color) { m_Color = color; }
+		void setColor(uint32_t& color) { m_Color = Color(color); }
 		Color getColor() { return m_Color; }
 
 		DrawableType getType() { return m_Type; }

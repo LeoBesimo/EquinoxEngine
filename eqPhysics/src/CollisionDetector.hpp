@@ -7,16 +7,6 @@ namespace eq
 {
 	namespace Physics
 	{
-		struct Manifold
-		{
-			bool colliding;
-			Shape* bodyA;
-			Shape* bodyB;
-			Math::Vector2 normal;
-			float penetration;
-			Math::Vector2 contact;
-		};
-
 		class CollisionDetector
 		{
 		private:

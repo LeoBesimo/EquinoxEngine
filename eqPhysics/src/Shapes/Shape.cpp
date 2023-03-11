@@ -6,7 +6,7 @@ namespace eq
 	namespace Physics
 	{
 		Shape::Shape(Math::Vector2 position, float angle, ShapeType type, Material material, Math::Matrix2x2 scale) :
-			m_Position(position), m_Angle(angle), m_Type(type), m_Material(material), m_Scale(scale)
+			m_Position(position), m_Angle(angle), m_Type(type), m_Material(material), m_Scale(scale), m_Color(0xFF000000)
 		{
 			m_Velocity = Math::Vector2();
 			m_Force = Math::Vector2();
@@ -14,6 +14,7 @@ namespace eq
 			m_Torque = 0;
 			m_IsTrigger = false;
 			m_Trigger = [&]() {};
+			m_OnCollision = [&](Manifold m) {};
 		}
 
 		void Shape::update(float delta)

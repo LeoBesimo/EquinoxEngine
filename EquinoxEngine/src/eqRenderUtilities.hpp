@@ -16,6 +16,10 @@ namespace eq
 		Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) :
 			red(red), green(green), blue(blue), alpha(alpha)
 		{}
+
+		Color(uint32_t color) :
+			red(color >> 16), green(color >> 8), blue(color), alpha(color >> 24)
+		{}
 	};
 
 	struct Rect

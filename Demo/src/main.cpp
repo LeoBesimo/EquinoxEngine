@@ -47,7 +47,13 @@ equinoxAppEntryPoint
 	eq::Physics::PhysicsWorld world(eq::Math::Vector2(4000, 4000));
 	//world.addCircle(eq::Math::Vector2(-100, 0), 0, 40, eq::Physics::Materials::DEFAULT);
 	world.addBox(eq::Math::Vector2(0, -200), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(600,20));
-	world.addBox(eq::Math::Vector2(100, -100), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(250, 20));
+	eq::Physics::BoxShape* floor1 = world.addBox(eq::Math::Vector2(100, -100), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(250, 20));
+	floor1->setColor(0xFF00FF00);
+	/*floor1->setOnCollisionFunction([&](eq::Physics::Manifold m) {
+		wchar_t buffer[128];
+		swprintf(buffer, 128, L"Penetration: %f, contactX: %f, contactY: %f\n", m.penetration, m.contact.x, m.contact.y);
+		OutputDebugString(buffer);
+	});*/
 	//world.addBox(eq::Math::Vector2(800, 100), eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
 	//world.addBox(eq::Math::Vector2(-800, 100), -eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
 	world.setWorldGravity(eq::Math::Vector2(0, -100));
@@ -176,14 +182,16 @@ equinoxAppEntryPoint
 	eq::Math::Vector2 mouseTransformed = eq::Renderer::ScreenToWorldspace(mouse);
 
 	if (eq::Input::WasMouseButtonHit(EQ_MOUSE_LEFT))
-		world.addPolygon(mouseTransformed, eq::Math::QUARTER_PI, 6, eq::Physics::Materials::SUPERBALL, eq::Math::Matrix2x2(20, 0, 0, 20));
+		world.addPolygon(mouseTransformed, eq::Math::QUARTER_PI, 6, eq::Physics::Materials::SUPERBALL, eq::Math::Matrix2x2(20, 0, 0, 20))->setColor(0x660000FF);
 
 	if (eq::Input::IsKeyPressed(EQ_T))
 		world.addPolygon(mouseTransformed, 0, rand() % 7 + 3, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(40, 0, 0, 40));
 	if (eq::Input::IsKeyPressed(EQ_R))
 		world.addBox(mouseTransformed, eq::Math::QUARTER_PI / 2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(40, 40));
 	if (eq::Input::IsKeyPressed(EQ_G))
-		for (int i = 0; i < 3; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT);
+		for (int i = 0; i < 1; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT)->setOnCollisionFunction([&](eq::Physics::Manifold m) {
+			m.bodyA->setColor(0xFFFF0000);
+		});
 	if (eq::Input::WasKeyHit(EQ_Y))
 		world.clearNonStatic();
 

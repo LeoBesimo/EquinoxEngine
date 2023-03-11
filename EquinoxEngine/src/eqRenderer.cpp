@@ -17,7 +17,7 @@ namespace eq
 		uint8_t* row = (uint8_t*)buffer.memory + x * s_BytesPerPixel + y * buffer.pitch;
 		uint32_t* pixel = (uint32_t*)row;
 
-		*pixel = raw_color; //BlendColor(*pixel, raw_color);//raw_color;
+		*pixel = BlendColor(*pixel, raw_color);//raw_color;
 	}
 
 	void Renderer::SetPixel(int x, int y, const uint32_t color)
@@ -33,6 +33,23 @@ namespace eq
 		uint32_t* pixel = (uint32_t*)row;
 
 		*pixel = BlendColor(*pixel, color);//raw_color;
+	}
+
+	void Renderer::SetPixelNoBlending(int x, int y, const Color& color)
+	{
+		BitmapBuffer& buffer = getActiveBuffer();
+
+		if (x < 0 || x >= buffer.width || y < 0 || y >= buffer.height)
+		{
+			return;
+		}
+
+		uint32_t raw_color = (color.alpha << 24) | (color.red << 16) | (color.green << 8) | (color.blue << 0);
+
+		uint8_t* row = (uint8_t*)buffer.memory + x * s_BytesPerPixel + y * buffer.pitch;
+		uint32_t* pixel = (uint32_t*)row;
+
+		*pixel = raw_color;//BlendColor(*pixel, raw_color);//raw_color;
 	}
 
 	void Renderer::SetPixelNoBlending(int x, int y, const uint32_t color)
@@ -154,7 +171,7 @@ namespace eq
 		for (int y = -radius; y <= radius; y++)
 			for (int x = -radius; x <= radius; x++)
 				if (x * x + y * y > radius * radius - radius && x * x + y * y < radius * radius + radius)
-					SetPixel(originX + x, originY + y, color);
+					SetPixelNoBlending(originX + x, originY + y, color);
 	}
 
 	void Renderer::DrawCircle(Math::Vector2 position, int radius, const Color& color)
@@ -316,7 +333,7 @@ namespace eq
 				for (unsigned int i = 0; i < points.size(); i++)
 				{
 					unsigned int index = (i + 1) % points.size();
-					Line line(points[i], points[index]);
+					Line line(points[i], points[index], box->getColor());
 					Draw(line);
 				}
 
@@ -326,8 +343,9 @@ namespace eq
 			{
 				Physics::CircleShape* circle = static_cast<Physics::CircleShape*>(body);
 				Ellipse shape(circle->getPosition(), circle->getRadius());
+				shape.setColor(circle->getColor());
 				Math::Vector2 p2(circle->getRadius() * cos(circle->getAngle()), circle->getRadius() * sin(circle->getAngle()));
-				Line line(circle->getPosition(), p2 + circle->getPosition());
+				Line line(circle->getPosition(), p2 + circle->getPosition(), circle->getColor());
 				Draw(line);
 				Draw(shape);
 				break;
@@ -339,7 +357,7 @@ namespace eq
 				for (unsigned int i = 0; i < points.size(); i++)
 				{
 					unsigned int index = (i + 1) % points.size();
-					Line line(points[i], points[index]);
+					Line line(points[i], points[index], polygon->getColor());
 					Draw(line);
 				}
 				break;
@@ -586,7 +604,7 @@ namespace eq
 		int bufferHeight = 0;
 
 		wchar_t buffer[256];
-		
+
 
 		getWindowDimensions(&bufferWidth, &bufferHeight);
 
