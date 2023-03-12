@@ -56,6 +56,7 @@ equinoxAppEntryPoint
 	eq::Physics::PhysicsWorld world(eq::Math::Vector2(4000, 4000));
 	//world.addCircle(eq::Math::Vector2(-100, 0), 0, 40, eq::Physics::Materials::DEFAULT);
 	world.addBox(eq::Math::Vector2(0, -200), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(600,20));
+	world.addBox(eq::Math::Vector2(0, 400), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(600,20));
 	eq::Physics::BoxShape* floor1 = world.addBox(eq::Math::Vector2(100, -100), 0, eq::Physics::Materials::STATIC, eq::Math::Vector2(250, 20));
 	floor1->setColor(0xFF00FF00);
 	/*floor1->setOnCollisionFunction([&](eq::Physics::Manifold m) {
@@ -203,7 +204,7 @@ equinoxAppEntryPoint
 		for (int i = 0; i < 1; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT)->setOnCollisionFunction([&](eq::Physics::Manifold m, eq::Physics::Shape* self) {
 
 			if (m.bodyA == self && m.bodyB->getShapeType() == eq::Physics::ShapeType::Box)
-				self->setColor(0xFFFF00FF);
+			self->setGravity(self->getGravit() * -1);
 			if (m.bodyB == self && m.bodyB->getShapeType() == eq::Physics::ShapeType::Circle)
 				self->setColor(0xFF00FFFF);
 		});
