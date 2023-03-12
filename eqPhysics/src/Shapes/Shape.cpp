@@ -14,7 +14,7 @@ namespace eq
 			m_Torque = 0;
 			m_IsTrigger = false;
 			m_Trigger = [&]() {};
-			m_OnCollision = [&](Manifold m) {};
+			m_OnCollision = [&](Manifold m, Shape* self) {};
 		}
 
 		void Shape::update(float delta)

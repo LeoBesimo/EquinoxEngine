@@ -1,5 +1,6 @@
 #include "Equinox.hpp"
 #include "Testgame.hpp"
+#include "Audio/Sound.hpp"
 
 #include <stdio.h>
 #include <io.h>
@@ -28,6 +29,14 @@ equinoxAppEntryPoint
 	int h = 200;
 	float avgFrameTime = 0;
 	int avgCounter = 0;
+
+	/*eq::Audio::Sound sound;
+	if (sound.loadSound("testSound.wav"))
+		sound.play(0.5, 1.5);
+
+	eq::Audio::Sound bonk;
+	bonk.loadSound("bonk.wav");*/
+
 
 	eq::BitmapTexture texture(w,h);
 	for (unsigned int i = 0; i < w; i++)
@@ -142,6 +151,8 @@ equinoxAppEntryPoint
 	if (eq::Input::IsKeyPressed(EQ_D))
 		camera.get()->move(eq::Math::Vector2(-speed, 0) * delta);
 
+	//if (eq::Input::WasKeyHit(EQ_SPACE)) bonk.play(0.25, 1);
+
 	//if (eq::Input::IsKeyPressed(EQ_I)) box->applyForce(eq::Math::Vector2(0, 300) * box->getMass());
 	//sprite.move(eq::Math::Vector2(0,speed) * delta);
 	//if (eq::Input::IsKeyPressed(EQ_K)) box->applyForce(eq::Math::Vector2(0, -300) * box->getMass());
@@ -189,8 +200,12 @@ equinoxAppEntryPoint
 	if (eq::Input::IsKeyPressed(EQ_R))
 		world.addBox(mouseTransformed, eq::Math::QUARTER_PI / 2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(40, 40));
 	if (eq::Input::IsKeyPressed(EQ_G))
-		for (int i = 0; i < 1; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT)->setOnCollisionFunction([&](eq::Physics::Manifold m) {
-			m.bodyA->setColor(0xFFFF0000);
+		for (int i = 0; i < 1; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT)->setOnCollisionFunction([&](eq::Physics::Manifold m, eq::Physics::Shape* self) {
+
+			if (m.bodyA == self && m.bodyB->getShapeType() == eq::Physics::ShapeType::Box)
+				self->setColor(0xFFFF00FF);
+			if (m.bodyB == self && m.bodyB->getShapeType() == eq::Physics::ShapeType::Circle)
+				self->setColor(0xFF00FFFF);
 		});
 	if (eq::Input::WasKeyHit(EQ_Y))
 		world.clearNonStatic();
@@ -240,7 +255,7 @@ equinoxAppEntryPoint
 		for (unsigned int y = 0; y < eq::Application::GetResolutionHeight(); y += 64)
 		{
 			wallPart.setPosition(eq::Math::Vector2(x, y));
-			eq::Renderer::Draw(wallPart);
+			//eq::Renderer::Draw(wallPart);
 		}
 	}
 

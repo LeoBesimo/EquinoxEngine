@@ -50,7 +50,7 @@ namespace eq
 			uint32_t m_IsTrigger;
 
 			std::function<void()> m_Trigger;
-			std::function<void(Manifold m)> m_OnCollision;
+			std::function<void(Manifold m, Shape* self)> m_OnCollision;
 
 		public:
 			Shape(Math::Vector2 position, float angle, ShapeType type, Material material, Math::Matrix2x2 scale);
@@ -115,11 +115,11 @@ namespace eq
 
 			void setTrigger(bool isTrigger) { this->m_IsTrigger = isTrigger; }
 			void setTriggerFunction(const std::function<void()>& func) { this->m_Trigger = func; }
-			void setOnCollisionFunction(const std::function<void(Manifold m)>& func) { this->m_OnCollision = func; }
+			void setOnCollisionFunction(const std::function<void(Manifold m, Shape* self)>& func) { this->m_OnCollision = func; }
 
 			void trigger() { this->m_Trigger(); }
 			std::function<void()>& getTrigger() { return this->m_Trigger; }
-			std::function<void(Manifold m)>& getOnCollision() { return this->m_OnCollision; }
+			std::function<void(Manifold m, Shape* self)>& getOnCollision() { return this->m_OnCollision; }
 
 			bool canRotate() { return m_InvInertia != 0; }
 			bool canMove() { return m_InvMass != 0; }

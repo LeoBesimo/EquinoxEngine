@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Audio\Sound.hpp" />
     <ClInclude Include="src\eqApplication.hpp" />
     <ClInclude Include="src\eqCamera.hpp" />
     <ClInclude Include="src\eqRenderer.hpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="src\Shapes\Text.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Audio\Sound.cpp" />
     <ClCompile Include="src\eqApplication.cpp" />
     <ClCompile Include="src\eqInput.cpp" />
     <ClCompile Include="src\eqRenderer.cpp" />
