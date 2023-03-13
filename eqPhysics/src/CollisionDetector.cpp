@@ -676,7 +676,11 @@ namespace eq
 
 			bool separated = false;
 
+			Math::Vector2 normalA;
+			Math::Vector2 normalB;
 			Math::Vector2 normal;
+			float minDepthA = FLT_MAX;
+			float minDepthB = FLT_MAX;
 			float minDepth = FLT_MAX;
 
 			for (unsigned int i = 0; i < normalsPoly1.size(); i++)
@@ -689,10 +693,10 @@ namespace eq
 
 				float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
 
-				if (depth < minDepth)
+				if (depth < minDepthA)
 				{
-					minDepth = depth;
-					normal = normalsPoly1[i];
+					minDepthA = depth;
+					normalA = normalsPoly1[i];
 				}
 			}
 
@@ -709,10 +713,10 @@ namespace eq
 
 					float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
 
-					if (depth < minDepth)
+					if (depth < minDepthB)
 					{
-						minDepth = depth;
-						normal = normalsPoly2[i];
+						minDepthB = depth;
+						normalB = normalsPoly2[i];
 					}
 				}
 			}
@@ -721,11 +725,25 @@ namespace eq
 
 			if (!separated)
 			{
+				float penetrationA = minDepthA / normalA.len();
+				float penetrationB = minDepthB / normalB.len();
+
+				if (penetrationA < penetrationB)
+				{
+					m.penetration = penetrationA;
+					normal = normalA;
+				}
+				else
+				{
+					m.penetration = penetrationB;
+					normal = normalB;
+				}
+
 				Math::Vector2 ab = bodyB->getPosition() - bodyA->getPosition();
 
 				if (Math::dot(ab, normal) < 0) normal *= -1;
 
-				m.penetration = minDepth / normal.len();
+				//m.penetration = minDepth / normal.len();
 
 				//Math::Vector2 penetration = normal.normalize() * minDepth;
 
@@ -741,7 +759,7 @@ namespace eq
 		CollisionDetector::CollisionDetector()
 		{}
 
-		bool CollisionDetector::boundingBoxCollision(Shape * bodyA, Shape * bodyB)
+		bool CollisionDetector::boundingBoxCollision(Shape* bodyA, Shape* bodyB)
 		{
 			Math::Vector2 bodyAMin = bodyA->getPosition() + bodyA->getBoundingMin();
 			Math::Vector2 bodyAMax = bodyA->getPosition() + bodyA->getBoundingMax();

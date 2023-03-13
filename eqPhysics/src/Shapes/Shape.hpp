@@ -13,7 +13,7 @@ namespace eq
 	{
 		enum class ShapeType
 		{
-			Box, Polygon, Circle
+			Box, Polygon, Circle, Line
 		};
 
 		struct Manifold;

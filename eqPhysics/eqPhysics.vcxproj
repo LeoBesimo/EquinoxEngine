@@ -136,6 +136,7 @@
     <ClCompile Include="src\PhysicsWorld.cpp" />
     <ClCompile Include="src\Shapes\BoxShape.cpp" />
     <ClCompile Include="src\Shapes\CircleShape.cpp" />
+    <ClCompile Include="src\Shapes\LineShape.cpp" />
     <ClCompile Include="src\Shapes\PolygonShape.cpp" />
     <ClCompile Include="src\Shapes\Shape.cpp" />
     <ClCompile Include="src\TriggerSolver.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="src\Shapes\CircleShape.hpp" />
     <ClInclude Include="src\CollisionDetector.hpp" />
     <ClInclude Include="src\Shapes\eqShapes.hpp" />
+    <ClInclude Include="src\Shapes\LineShape.hpp" />
     <ClInclude Include="src\Shapes\Materials.hpp" />
     <ClInclude Include="src\Shapes\PolygonShape.hpp" />
     <ClInclude Include="src\Shapes\Shape.hpp" />

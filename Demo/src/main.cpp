@@ -203,8 +203,8 @@ equinoxAppEntryPoint
 	if (eq::Input::IsKeyPressed(EQ_G))
 		for (int i = 0; i < 1; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT)->setOnCollisionFunction([&](eq::Physics::Manifold m, eq::Physics::Shape* self) {
 
-			if (m.bodyA == self && m.bodyB->getShapeType() == eq::Physics::ShapeType::Box)
-			self->setGravity(self->getGravit() * -1);
+			//if (m.bodyA == self && m.bodyB->getShapeType() == eq::Physics::ShapeType::Box)
+				self->setGravity(self->getGravit() * -1);
 			if (m.bodyB == self && m.bodyB->getShapeType() == eq::Physics::ShapeType::Circle)
 				self->setColor(0xFF00FFFF);
 		});
