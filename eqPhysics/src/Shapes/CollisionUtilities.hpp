@@ -24,5 +24,8 @@ namespace eq
 		Math::Vector2 getMinMaxCircle(Math::Vector2 center, float radius, Math::Vector2 normal);
 
 		Math::Vector2 getClosestPoint(Math::Vector2 center, std::vector<Math::Vector2> points);
+
+		bool boundingBoxCollision(Shape* bodyA, Shape* bodyB);
+
 	}
 }

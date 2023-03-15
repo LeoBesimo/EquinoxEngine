@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CollisionDetector.hpp"
 #include "CollisionSolver.hpp"
 #include "TriggerSolver.hpp"
 #include "Shapes/eqShapes.hpp"
@@ -27,7 +26,6 @@ namespace eq
 
 		private:
 			std::vector<Shape*> m_Bodies;
-			CollisionDetector m_Detector;
 			CollisionSolver m_Solver;
 			TriggerSolver m_TriggerSolver;
 
@@ -91,7 +89,7 @@ namespace eq
 				float omega = 0,
 				Math::Vector2 gravity = Math::Vector2()
 			);
-			
+
 			LineShape* addLine(
 				Math::Vector2 startPosition,
 				Math::Vector2 endPosition,

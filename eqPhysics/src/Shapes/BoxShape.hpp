@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Shape.hpp"
+#include "CollisionUtilities.hpp"
+
 
 namespace eq
 {

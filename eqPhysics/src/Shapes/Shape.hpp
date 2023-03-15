@@ -4,8 +4,6 @@
 
 #include <eqMath.hpp>
 #include "Materials.hpp"
-#include "CollisionUtilities.hpp"
-
 
 namespace eq
 {

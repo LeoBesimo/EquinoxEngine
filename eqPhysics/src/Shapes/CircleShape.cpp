@@ -3,6 +3,8 @@
 #include "PolygonShape.hpp"
 #include "BoxShape.hpp"
 #include "LineShape.hpp"
+#include "CollisionUtilities.hpp"
+
 
 namespace eq
 {
@@ -128,7 +130,7 @@ namespace eq
 
 				m.penetration = minDepth / normal.len();
 				m.normal = normal.normalize();
-				m.contact = getContactCirclePolygon(this, bodyB);
+				m.contact = getContactCirclePolygon(this, other);
 			}
 
 			return m;
@@ -136,7 +138,72 @@ namespace eq
 
 		Manifold CircleShape::collideBox(Shape* other)
 		{
-			return Manifold();
+			BoxShape* bodyB = static_cast<BoxShape*>(other);
+			Manifold m;
+
+			m.bodyA = this;
+			m.bodyB = bodyB;
+
+			std::vector<Math::Vector2> normalsPoly = getNormals(bodyB->getCorners());
+
+			bool separated = false;
+
+			Math::Vector2 normal;
+			float minDepth = FLT_MAX;
+
+			for (unsigned int i = 0; i < normalsPoly.size(); i++)
+			{
+				Math::Vector2 projectionA = getMinMaxCircle(getPosition(), getRadius(), normalsPoly[i]);
+				Math::Vector2 projectionB = getMinMax(bodyB->getCorners(), normalsPoly[i]);
+
+				separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+				if (separated) break;
+
+				float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+				if (depth < minDepth)
+				{
+					minDepth = depth;
+					normal = normalsPoly[i];
+				}
+			}
+
+			Math::Vector2 closestPoint = getClosestPoint(getPosition(), bodyB->getCorners());
+			Math::Vector2 axis = closestPoint - getPosition();
+
+			Math::Vector2 projectionA = getMinMaxCircle(getPosition(), getRadius(), axis);
+			Math::Vector2 projectionB = getMinMax(bodyB->getCorners(), axis);
+
+			separated = (projectionA.x >= projectionB.y || projectionB.x >= projectionA.y);
+
+			if (separated)
+			{
+				m.colliding = false;
+				return m;
+			}
+
+			float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+			if (depth < minDepth)
+			{
+				minDepth = depth;
+				normal = axis;
+			}
+
+			m.colliding = !separated;
+			if (!separated)
+			{
+				Math::Vector2 ab = bodyB->getPosition() - getPosition();
+
+				if (Math::dot(ab, normal) < 0) normal *= -1;
+
+				m.penetration = minDepth / normal.len();
+				m.normal = normal.normalize();
+				m.contact = getContactCircleBox(this, bodyB);
+				//OutputDebugString(L"Colliding");
+			}
+
+			return m;
 		}
 
 		void CircleShape::applyGravity()

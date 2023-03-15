@@ -1,9 +1,18 @@
 #include "PolygonShape.hpp"
 
+#include "BoxShape.hpp"
+#include "CircleShape.hpp"
+#include "LineShape.hpp"
+
 namespace eq
 {
 	namespace Physics
 	{
+
+		class LineShape;
+		class BoxShape;
+		class CircleShape;
+
 		PolygonShape::PolygonShape(Math::Vector2 position, float angle, float sides, Material material, Math::Matrix2x2 scale) :
 			Shape(position, angle, ShapeType::Polygon, material, scale), m_Sides(sides)
 		{
@@ -55,6 +64,240 @@ namespace eq
 		Manifold PolygonShape::detectCollision(Shape* other)
 		{
 			return other->collidePolygon(this);
+		}
+
+		Manifold PolygonShape::collideLine(Shape* other)
+		{
+			return Manifold();
+		}
+
+		Manifold PolygonShape::collideCircle(Shape* other)
+		{
+			CircleShape* bodyA = static_cast<CircleShape*>(other);
+
+			Manifold m;
+
+			m.bodyA = bodyA;
+			m.bodyB = this;
+
+			std::vector<Math::Vector2> normalsPoly = getNormals(getCorners());
+
+			bool separated = false;
+
+			Math::Vector2 normal;
+			float minDepth = FLT_MAX;
+
+			for (unsigned int i = 0; i < normalsPoly.size(); i++)
+			{
+				Math::Vector2 projectionA = getMinMaxCircle(bodyA->getPosition(), bodyA->getRadius(), normalsPoly[i]);
+				Math::Vector2 projectionB = getMinMax(getCorners(), normalsPoly[i]);
+
+				separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+				if (separated) break;
+
+				float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+				if (depth < minDepth)
+				{
+					minDepth = depth;
+					normal = normalsPoly[i];
+				}
+			}
+
+			Math::Vector2 closestPoint = getClosestPoint(bodyA->getPosition(), getCorners());
+			Math::Vector2 axis = closestPoint - bodyA->getPosition();
+
+			Math::Vector2 projectionA = getMinMaxCircle(bodyA->getPosition(), bodyA->getRadius(), axis);
+			Math::Vector2 projectionB = getMinMax(getCorners(), axis);
+
+			separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+
+			float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+			if (depth < minDepth)
+			{
+				minDepth = depth;
+				normal = axis;
+			}
+
+			m.colliding = !separated;
+			if (!separated)
+			{
+				Math::Vector2 ab = getPosition() - bodyA->getPosition();
+
+				if (Math::dot(ab, normal) < 0) normal *= -1;
+
+				m.penetration = minDepth / normal.len();
+				m.normal = normal.normalize();
+				m.contact = getContactCirclePolygon(bodyA, this);
+			}
+
+			return m;
+		}
+
+		Manifold PolygonShape::collidePolygon(Shape* other)
+		{
+			PolygonShape* bodyB = static_cast<PolygonShape*>(other);
+
+			Manifold m;
+
+			m.bodyA = this;
+			m.bodyB = bodyB;
+
+			std::vector<Math::Vector2> normalsPoly1 = getNormals(getCorners());
+			std::vector<Math::Vector2> normalsPoly2 = getNormals(bodyB->getCorners());
+
+			bool separated = false;
+
+			Math::Vector2 normal;
+			float minDepth = FLT_MAX;
+
+			for (unsigned int i = 0; i < normalsPoly1.size(); i++)
+			{
+				Math::Vector2 projectionA = getMinMax(getCorners(), normalsPoly1[i]);
+				Math::Vector2 projectionB = getMinMax(bodyB->getCorners(), normalsPoly1[i]);
+
+				separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+				if (separated) break;
+
+				float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+				if (depth < minDepth)
+				{
+					minDepth = depth;
+					normal = normalsPoly1[i];
+				}
+			}
+
+			if (!separated)
+			{
+				for (unsigned int i = 0; i < normalsPoly2.size(); i++)
+				{
+					Math::Vector2 projectionA = getMinMax(getCorners(), normalsPoly2[i]);
+					Math::Vector2 projectionB = getMinMax(bodyB->getCorners(), normalsPoly2[i]);
+
+
+					separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+					if (separated) break;
+
+					float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+					if (depth < minDepth)
+					{
+						minDepth = depth;
+						normal = normalsPoly2[i];
+					}
+				}
+			}
+
+			m.colliding = !separated;
+
+			if (!separated)
+			{
+				Math::Vector2 ab = bodyB->getPosition() - getPosition();
+
+				if (Math::dot(ab, normal) < 0) normal *= -1;
+
+				m.penetration = minDepth / normal.len();
+				m.normal = normal.normalize();
+				m.contact = getContactPolygonPolygon(this, bodyB);
+			}
+
+			return m;
+		}
+
+		Manifold PolygonShape::collideBox(Shape* other)
+		{
+			BoxShape* bodyA = static_cast<BoxShape*>(other);
+
+			Manifold m;
+
+			m.bodyA = bodyA;
+			m.bodyB = this;
+
+			std::vector<Math::Vector2> normalsPoly1 = getNormals(bodyA->getCorners());
+			std::vector<Math::Vector2> normalsPoly2 = getNormals(getCorners());
+
+			bool separated = false;
+
+			Math::Vector2 normalA;
+			Math::Vector2 normalB;
+			Math::Vector2 normal;
+			float minDepthA = FLT_MAX;
+			float minDepthB = FLT_MAX;
+			float minDepth = FLT_MAX;
+
+			for (unsigned int i = 0; i < normalsPoly1.size(); i++)
+			{
+				Math::Vector2 projectionA = getMinMax(bodyA->getCorners(), normalsPoly1[i]);
+				Math::Vector2 projectionB = getMinMax(getCorners(), normalsPoly1[i]);
+
+				separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+				if (separated) break;
+
+				float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+				if (depth < minDepthA)
+				{
+					minDepthA = depth;
+					normalA = normalsPoly1[i];
+				}
+			}
+
+			if (!separated)
+			{
+				for (unsigned int i = 0; i < normalsPoly2.size(); i++)
+				{
+					Math::Vector2 projectionA = getMinMax(bodyA->getCorners(), normalsPoly2[i]);
+					Math::Vector2 projectionB = getMinMax(getCorners(), normalsPoly2[i]);
+
+
+					separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+					if (separated) break;
+
+					float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+					if (depth < minDepthB)
+					{
+						minDepthB = depth;
+						normalB = normalsPoly2[i];
+					}
+				}
+			}
+
+			m.colliding = !separated;
+
+			if (!separated)
+			{
+				float penetrationA = minDepthA / normalA.len();
+				float penetrationB = minDepthB / normalB.len();
+
+				if (penetrationA < penetrationB)
+				{
+					m.penetration = penetrationA;
+					normal = normalA;
+				}
+				else
+				{
+					m.penetration = penetrationB;
+					normal = normalB;
+				}
+
+				Math::Vector2 ab = getPosition() - bodyA->getPosition();
+
+				if (Math::dot(ab, normal) < 0) normal *= -1;
+
+				//m.penetration = minDepth / normal.len();
+
+				//Math::Vector2 penetration = normal.normalize() * minDepth;
+
+				//m.penetration = penetration.len();
+
+				m.normal = normal.normalize();
+				m.contact = getContactBoxPolygon(bodyA, this);
+			}
+
+			return m;
 		}
 
 		void PolygonShape::applyGravity()

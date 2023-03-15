@@ -93,7 +93,7 @@ namespace eq
 
 					Shape* bodyB = m_Bodies[j];
 					if (body->isStatic() && bodyB->isStatic()) continue;
-					if (m_Detector.boundingBoxCollision(body, bodyB))
+					if (boundingBoxCollision(body, bodyB))
 					{
 						ContactPair pair(body, bodyB);
 						m_ContactPairs.push_back(pair);
@@ -105,7 +105,7 @@ namespace eq
 			{
 				Shape* bodyA = m_ContactPairs[i].bodyA;
 				Shape* bodyB = m_ContactPairs[i].bodyB;
-				manifold = m_Detector.detectCollision(bodyA, bodyB);
+				manifold = bodyA->detectCollision(bodyB);//m_Detector.detectCollision(bodyA, bodyB);
 				if (manifold.colliding)
 				{
 					bodyA->getOnCollision()(manifold, bodyA);
