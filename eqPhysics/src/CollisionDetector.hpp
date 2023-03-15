@@ -14,7 +14,11 @@ namespace eq
 			Math::Vector2 getContactPolygonPolygon(PolygonShape* bodyA, PolygonShape* bodyB);
 			Math::Vector2 getContactBoxPolygon(BoxShape* bodyA, PolygonShape* bodyB);
 			Math::Vector2 getContactCircleBox(CircleShape* bodyA, BoxShape* bodyB);
-			Math::Vector2 getcontactCirclePolygon(CircleShape* bodyA, PolygonShape* bodyB);
+			Math::Vector2 getContactCirclePolygon(CircleShape* bodyA, PolygonShape* bodyB);
+
+			Math::Vector2 getContactLineCircle(LineShape* bodyA, CircleShape* bodyB);
+			Math::Vector2 getContactLinePolygon(LineShape* bodyA, PolygonShape* bodyB);
+			Math::Vector2 getContactLineBox(LineShape* bodyA, BoxShape* bodyB);
 
 			std::vector<Math::Vector2> getNormals(std::vector<Math::Vector2> corners);
 
@@ -30,6 +34,11 @@ namespace eq
 			Manifold CircleBoxCollison(CircleShape* bodyA, BoxShape* bodyB);
 			Manifold CirclePolygonCollison(CircleShape* bodyA, PolygonShape* bodyB);
 			Manifold BoxPolygonCollision(BoxShape* bodyA, PolygonShape* bodyB);
+
+			Manifold LineCircleCollision(LineShape* bodyA, CircleShape* bodyB);
+			Manifold LinePolygonCollision(LineShape* bodyA, PolygonShape* bodyB);
+			Manifold LineBoxCollision(LineShape* bodyA, BoxShape* bodyB);
+			Manifold LineLineCollision(LineShape* bodyA, LineShape* bodyB);
 
 		public:
 			CollisionDetector();

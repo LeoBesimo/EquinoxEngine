@@ -267,7 +267,7 @@ namespace eq
 			return cp;
 		}
 
-		Math::Vector2 CollisionDetector::getcontactCirclePolygon(CircleShape* bodyA, PolygonShape* bodyB)
+		Math::Vector2 CollisionDetector::getContactCirclePolygon(CircleShape* bodyA, PolygonShape* bodyB)
 		{
 			std::vector<Math::Vector2> corners = bodyB->getCorners();
 			Math::Vector2 pCenter = bodyB->getPosition();
@@ -293,6 +293,21 @@ namespace eq
 			}
 
 			return cp;
+		}
+
+		Math::Vector2 CollisionDetector::getContactLineCircle(LineShape* bodyA, CircleShape* bodyB)
+		{
+			return Math::Vector2();
+		}
+
+		Math::Vector2 CollisionDetector::getContactLinePolygon(LineShape* bodyA, PolygonShape* bodyB)
+		{
+			return Math::Vector2();
+		}
+
+		Math::Vector2 CollisionDetector::getContactLineBox(LineShape* bodyA, BoxShape* bodyB)
+		{
+			return Math::Vector2();
 		}
 
 		std::vector<Math::Vector2> CollisionDetector::getNormals(std::vector<Math::Vector2> corners)
@@ -658,7 +673,7 @@ namespace eq
 
 				m.penetration = minDepth / normal.len();
 				m.normal = normal.normalize();
-				m.contact = getcontactCirclePolygon(bodyA, bodyB);
+				m.contact = getContactCirclePolygon(bodyA, bodyB);
 			}
 
 			return m;
@@ -756,6 +771,35 @@ namespace eq
 			return m;
 		}
 
+		Manifold CollisionDetector::LineCircleCollision(LineShape* bodyA, CircleShape* bodyB)
+		{
+			Manifold m;
+			m.bodyA = bodyA;
+			m.bodyB = bodyB;
+			return m;
+		}
+
+		Manifold CollisionDetector::LinePolygonCollision(LineShape* bodyA, PolygonShape* bodyB)
+		{
+			Manifold m;
+			m.bodyA = bodyA;
+			m.bodyB = bodyB;
+			return m;
+		}
+
+		Manifold CollisionDetector::LineBoxCollision(LineShape* bodyA, BoxShape* bodyB)
+		{
+			Manifold m;
+			m.bodyA = bodyA;
+			m.bodyB = bodyB;
+			return m;
+		}
+
+		Manifold CollisionDetector::LineLineCollision(LineShape* bodyA, LineShape* bodyB)
+		{
+			return Manifold();
+		}
+
 		CollisionDetector::CollisionDetector()
 		{}
 
@@ -790,6 +834,11 @@ namespace eq
 				{
 					return BoxPolygonCollision(static_cast<BoxShape*>(bodyA), static_cast<PolygonShape*>(bodyB));
 				}break;
+
+				case ShapeType::Line:
+				{
+					return LineBoxCollision(static_cast<LineShape*>(bodyB), static_cast<BoxShape*>(bodyA));
+				}break;
 				}
 			}break;
 
@@ -810,6 +859,11 @@ namespace eq
 				case ShapeType::Polygon:
 				{
 					return CirclePolygonCollison(static_cast<CircleShape*>(bodyA), static_cast<PolygonShape*>(bodyB));
+				}break;
+
+				case ShapeType::Line:
+				{
+					return LineCircleCollision(static_cast<LineShape*>(bodyB), static_cast<CircleShape*>(bodyA));
 				}break;
 				}
 			}break;
@@ -832,9 +886,43 @@ namespace eq
 				{
 					return PolygonPolygonCollision(static_cast<PolygonShape*>(bodyA), static_cast<PolygonShape*>(bodyB));
 				}break;
+
+				case ShapeType::Line:
+				{
+					return LinePolygonCollision(static_cast<LineShape*>(bodyB), static_cast<PolygonShape*>(bodyA));
+				}break;
 				}
 			}break;
+			case ShapeType::Line:
+			{
+				switch (bodyB->getShapeType())
+				{
+				case ShapeType::Box:
+				{
+					return LineBoxCollision(static_cast<LineShape*>(bodyA), static_cast<BoxShape*>(bodyB));
+				}break;
+
+				case ShapeType::Circle:
+				{
+					return LineCircleCollision(static_cast<LineShape*>(bodyA), static_cast<CircleShape*>(bodyB));
+				}break;
+
+				case ShapeType::Polygon:
+				{
+					return LinePolygonCollision(static_cast<LineShape*>(bodyA), static_cast<PolygonShape*>(bodyB));
+				}break;
+
+				case ShapeType::Line:
+				{
+					return LineLineCollision(static_cast<LineShape*>(bodyA), static_cast<LineShape*>(bodyB));
+				}break;
+
+				}break;
 			}
+			}
+			Manifold m;
+			m.colliding = false;
+			return m;
 		}
 	}
 }

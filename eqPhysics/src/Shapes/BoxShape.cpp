@@ -52,6 +52,11 @@ namespace eq
 			transformPoints();
 		}
 
+		Manifold BoxShape::detectCollision(Shape* other)
+		{
+			return other->collideBox(this);
+		}
+
 		void BoxShape::applyGravity()
 		{
 			applyForce(getGravit() * getMass());

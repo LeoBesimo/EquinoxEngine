@@ -143,6 +143,21 @@ namespace eq
 				return Vector2(x * invLen, y * invLen);
 			}
 
+			static Vector2 fromAngle(float angle)
+			{
+				return Vector2(cos(angle), sin(angle));
+			}
+
+			static Vector2 unitX()
+			{
+				return Vector2(1, 0);
+			}
+
+			static Vector2 unitY()
+			{
+				return Vector2(0, 1);
+			}
+
 			float dot(const Vector2& a)
 			{
 				return x * a.x + y * a.y;

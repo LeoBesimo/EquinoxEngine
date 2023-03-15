@@ -1,9 +1,17 @@
 #include "CircleShape.hpp"
 
+#include "PolygonShape.hpp"
+#include "BoxShape.hpp"
+#include "LineShape.hpp"
+
 namespace eq
 {
 	namespace Physics
 	{
+		class LineShape;
+		class BoxShape;
+		class PolygonShape;
+
 		CircleShape::CircleShape(Math::Vector2 position, float angle, float radius, Material material) :
 			Shape(position, angle, ShapeType::Circle, material, Math::Matrix2x2()), m_Radius(radius)
 		{
@@ -24,6 +32,111 @@ namespace eq
 		{
 			applyGravity(timeSteps);
 			Shape::update(delta, timeSteps);
+		}
+
+		Manifold CircleShape::detectCollision(Shape* other)
+		{
+			return other->collideCircle(this);
+		}
+
+		Manifold CircleShape::collideLine(Shape* other)
+		{
+			return Manifold();
+		}
+
+		Manifold CircleShape::collideCircle(Shape* other)
+		{
+			Manifold manifold;
+
+			CircleShape* bodyB = static_cast<CircleShape*>(other);
+
+			Math::Vector2 distanceVector = (bodyB->getPosition() - getPosition());
+			float distance = distanceVector.lenSqr();
+			float radii = getRadius() + bodyB->getRadius();
+
+			if (distance >= (radii * radii))
+			{
+				manifold.colliding = false;
+				return manifold;
+			}
+
+			manifold.colliding = true;
+			manifold.bodyA = this;
+			manifold.bodyB = bodyB;
+			manifold.penetration = radii - distanceVector.len();
+			manifold.normal = distanceVector.normalize();
+			manifold.contact = getPosition() + (manifold.normal * (getRadius() - manifold.penetration));
+
+			return manifold;
+		}
+
+		Manifold CircleShape::collidePolygon(Shape* other)
+		{
+			Manifold m;
+
+			PolygonShape* bodyB = static_cast<PolygonShape*>(other);
+
+			m.bodyA = this;
+			m.bodyB = bodyB;
+
+			std::vector<Math::Vector2> normalsPoly = getNormals(bodyB->getCorners());
+
+			bool separated = false;
+
+			Math::Vector2 normal;
+			float minDepth = FLT_MAX;
+
+			for (unsigned int i = 0; i < normalsPoly.size(); i++)
+			{
+				Math::Vector2 projectionA = getMinMaxCircle(getPosition(), getRadius(), normalsPoly[i]);
+				Math::Vector2 projectionB = getMinMax(bodyB->getCorners(), normalsPoly[i]);
+
+				separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+				if (separated) break;
+
+				float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+				if (depth < minDepth)
+				{
+					minDepth = depth;
+					normal = normalsPoly[i];
+				}
+			}
+
+			Math::Vector2 closestPoint = getClosestPoint(getPosition(), bodyB->getCorners());
+			Math::Vector2 axis = closestPoint - getPosition();
+
+			Math::Vector2 projectionA = getMinMaxCircle(getPosition(), getRadius(), axis);
+			Math::Vector2 projectionB = getMinMax(bodyB->getCorners(), axis);
+
+			separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+
+			float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+			if (depth < minDepth)
+			{
+				minDepth = depth;
+				normal = axis;
+			}
+
+			m.colliding = !separated;
+			if (!separated)
+			{
+				Math::Vector2 ab = bodyB->getPosition() - getPosition();
+
+				if (Math::dot(ab, normal) < 0) normal *= -1;
+
+				m.penetration = minDepth / normal.len();
+				m.normal = normal.normalize();
+				m.contact = getContactCirclePolygon(this, bodyB);
+			}
+
+			return m;
+		}
+
+		Manifold CircleShape::collideBox(Shape* other)
+		{
+			return Manifold();
 		}
 
 		void CircleShape::applyGravity()

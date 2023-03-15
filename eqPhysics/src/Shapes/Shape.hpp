@@ -1,10 +1,10 @@
 #pragma once
 #include <vector>
-
+#include <functional>
 
 #include <eqMath.hpp>
 #include "Materials.hpp"
-#include <functional>
+#include "CollisionUtilities.hpp"
 
 
 namespace eq
@@ -127,6 +127,12 @@ namespace eq
 			bool isTrigger() { return m_IsTrigger; }
 
 			virtual void move(Math::Vector2 distance);
+
+			virtual Manifold detectCollision(Shape* other) = 0;
+			virtual Manifold collideLine(Shape* other) = 0;
+			virtual Manifold collideCircle(Shape* other) = 0;
+			virtual Manifold collidePolygon(Shape* other) = 0;
+			virtual Manifold collideBox(Shape* other) = 0;
 
 		private:
 			virtual void applyGravity() = 0;

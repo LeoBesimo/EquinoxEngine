@@ -52,6 +52,11 @@ namespace eq
 			transformPoints();
 		}
 
+		Manifold PolygonShape::detectCollision(Shape* other)
+		{
+			return other->collidePolygon(this);
+		}
+
 		void PolygonShape::applyGravity()
 		{
 			applyForce(getGravit() * getMass());

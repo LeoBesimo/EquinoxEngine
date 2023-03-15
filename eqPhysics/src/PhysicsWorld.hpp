@@ -82,6 +82,25 @@ namespace eq
 				Math::Vector2 gravity = Math::Vector2()
 			);
 
+			LineShape* addLine(
+				Math::Vector2 position,
+				float angle,
+				float length,
+				Material material,
+				Math::Vector2 velocity = Math::Vector2(),
+				float omega = 0,
+				Math::Vector2 gravity = Math::Vector2()
+			);
+			
+			LineShape* addLine(
+				Math::Vector2 startPosition,
+				Math::Vector2 endPosition,
+				Material material,
+				Math::Vector2 velocity = Math::Vector2(),
+				float omega = 0,
+				Math::Vector2 gravity = Math::Vector2()
+			);
+
 			void setWorldGravity(Math::Vector2 gravity);
 
 			std::vector<Shape*> getBodies() { return m_Bodies; }

@@ -37,6 +37,26 @@ namespace eq
 			return polygon;
 		}
 
+		LineShape* PhysicsWorld::addLine(Math::Vector2 position, float angle, float length, Material material, Math::Vector2 velocity, float omega, Math::Vector2 gravity)
+		{
+			LineShape* line = new LineShape(position, angle, length, material);
+			line->setVelocity(velocity);
+			line->setOmega(omega);
+			if (!Math::nearlyEqual(gravity, Math::Vector2())) line->setGravity(gravity);
+			m_Bodies.push_back(line);
+			return line;
+		}
+
+		LineShape* PhysicsWorld::addLine(Math::Vector2 startPosition, Math::Vector2 endPosition, Material material, Math::Vector2 velocity, float omega, Math::Vector2 gravity)
+		{
+			LineShape* line = new LineShape(startPosition, endPosition, material);
+			line->setVelocity(velocity);
+			line->setOmega(omega);
+			if (!Math::nearlyEqual(gravity, Math::Vector2())) line->setGravity(gravity);
+			m_Bodies.push_back(line);
+			return line;
+		}
+
 		void PhysicsWorld::setWorldGravity(Math::Vector2 gravity)
 		{
 			this->M_GRAVITY = gravity;

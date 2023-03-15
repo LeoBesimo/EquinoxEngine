@@ -362,6 +362,14 @@ namespace eq
 				}
 				break;
 			}
+
+			case Physics::ShapeType::Line:
+			{
+				Physics::LineShape* line = static_cast<Physics::LineShape*>(body);
+				Line l(line->getStartPosition(), line->getEndPosition(), line->getColor());
+				Draw(l);
+				break;
+			}
 			}
 		}
 	}

@@ -80,6 +80,11 @@ namespace eq
 				return Matrix2x2(b.y, -a.y, -b.x, a.x) * invDet;
 			}
 
+			static Matrix2x2 unit()
+			{
+				return Matrix2x2(1, 0, 0, 1);
+			}
+
 		};
 	}
 }

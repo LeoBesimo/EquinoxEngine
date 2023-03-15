@@ -7,6 +7,8 @@ eq::Physics::LineShape::LineShape(Math::Vector2 startPos, Math::Vector2 endPos, 
 	m_EndPos = endPos;
 	setAngle((atan((endPos.y - startPos.y) / (endPos.x - startPos.x))));
 	m_Length = (endPos - startPos).len();
+	calculateUnits();
+	calculateBoundingBox();
 }
 
 eq::Physics::LineShape::LineShape(Math::Vector2 pos, float angle, float length, Material material) :
@@ -16,28 +18,47 @@ eq::Physics::LineShape::LineShape(Math::Vector2 pos, float angle, float length, 
 	Math::Vector2 offset = Math::Vector2(cos(angle), sin(angle));
 	m_StartPos = pos - offset * length / 2;
 	m_EndPos = pos + offset * length / 2;
+	calculateUnits();
+	calculateBoundingBox();
 }
 
 void eq::Physics::LineShape::update(float delta)
 {
+	applyGravity();
+	Shape::update(delta);
+	m_StartPos = getPosition() - Math::Vector2::fromAngle(getAngle()) * m_Length / 2;
+	m_EndPos = getPosition() + Math::Vector2::fromAngle(getAngle()) * m_Length / 2;
 }
 
 void eq::Physics::LineShape::update(float delta, int timeSteps)
 {
+	applyGravity(timeSteps);
+	Shape::update(delta, timeSteps);
+}
+
+eq::Physics::Manifold eq::Physics::LineShape::detectCollision(Shape* other)
+{
+	return other->collideLine(this);
 }
 
 void eq::Physics::LineShape::applyGravity()
 {
+	applyForce(getGravit() * getMass());
 }
 
 void eq::Physics::LineShape::applyGravity(int timeSteps)
 {
+
 }
 
 void eq::Physics::LineShape::calculateBoundingBox()
 {
+	setBoundingMin(eq::Math::Vector2(-m_Length / 2, -m_Length / 2));
+	setBoundingMax(eq::Math::Vector2(m_Length / 2, m_Length / 2));
 }
 
 void eq::Physics::LineShape::calculateUnits()
 {
+	setMass(m_Length * getMaterial().density);
+	setInertia(getMass() * m_Length / 12);
 }
