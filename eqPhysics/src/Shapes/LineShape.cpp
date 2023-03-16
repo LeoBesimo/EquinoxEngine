@@ -1,9 +1,17 @@
 #include "LineShape.hpp"
 
+#include "BoxShape.hpp"
+#include "CircleShape.hpp"
+#include "PolygonShape.hpp"
+
 namespace eq
 {
 	namespace Physics
 	{
+		class BoxShape;
+		class CircleShape;
+		class PolygonShape;
+
 		eq::Physics::LineShape::LineShape(Math::Vector2 startPos, Math::Vector2 endPos, Material material) :
 			Shape(startPos + endPos / 2, 0, ShapeType::Line, material, Math::Matrix2x2(1, 0, 0, 1))
 		{
@@ -57,7 +65,72 @@ namespace eq
 
 		Manifold eq::Physics::LineShape::collidePolygon(Shape* other)
 		{
-			return Manifold();
+			PolygonShape* bodyB = static_cast<PolygonShape*>(other);
+
+			Manifold m;
+			m.bodyA = this;
+			m.bodyB = bodyB;
+
+			std::vector<Math::Vector2> normalsPoly = getNormals(bodyB->getCorners());
+			Math::Vector2 lineVector = getEndPosition() - getStartPosition();
+			Math::Vector2 normalLine = Math::Vector2(-lineVector.y, lineVector.x);
+
+			bool separated = false;
+
+			Math::Vector2 normal;
+			float minDepth = FLT_MAX;
+
+			for (unsigned int i = 0; i < normalsPoly.size(); i++)
+			{
+				Math::Vector2 projectionA = getMinMax(bodyB->getCorners(), normalsPoly[i]);
+				float dotLineA = Math::dot(getStartPosition(), normalsPoly[i]);
+				float dotLineB = Math::dot(getEndPosition(), normalsPoly[i]);
+				Math::Vector2 projectionB = Math::Vector2(std::min(dotLineA, dotLineB), std::max(dotLineA, dotLineB));//getMinMax(bodyB->getCorners(), normalsPoly1[i]);
+
+				separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+				if (separated) break;
+
+				float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+				if (depth < minDepth)
+				{
+					minDepth = depth;
+					normal = normalsPoly[i];
+				}
+			}
+
+			if (!separated)
+			{
+				Math::Vector2 projectionA = getMinMax(bodyB->getCorners(), normalLine);
+				float dotLineA = Math::dot(getStartPosition(), normalLine);
+				float dotLineB = Math::dot(getEndPosition(), normalLine);
+				Math::Vector2 projectionB = Math::Vector2(std::min(dotLineA, dotLineB), std::max(dotLineA, dotLineB));//getMinMax(bodyB->getCorners(), normalsPoly1[i]);
+
+				separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+
+				float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+				if (depth < minDepth)
+				{
+					minDepth = depth;
+					normal = normalLine;
+				}
+			}
+
+			m.colliding = !separated;
+
+			if (!separated)
+			{
+				Math::Vector2 ab = bodyB->getPosition() - getPosition();
+
+				if (Math::dot(ab, normal) < 0) normal *= -1;
+
+				m.penetration = minDepth / normal.len();
+				m.normal = normal.normalize();
+				m.contact = getContactLinePolygon(this, bodyB);
+			}
+
+			return m;
 		}
 
 		Manifold eq::Physics::LineShape::collideBox(Shape* other)
