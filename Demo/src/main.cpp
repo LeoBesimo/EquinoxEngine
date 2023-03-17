@@ -70,7 +70,8 @@ equinoxAppEntryPoint
 	//eq::Physics::BoxShape* box = world.addBox(eq::Math::Vector2(0, 100), eq::Math::QUARTER_PI/2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(32, 32));
 	//texture.read("test.bmp");
 
-	world.addLine(eq::Math::Vector2(100, 0), eq::Math::QUARTER_PI, 100, eq::Physics::Materials::STATIC);
+	world.addLine(eq::Math::Vector2(0, 0), eq::Math::Vector2(100,100), eq::Physics::Materials::STATIC);
+	world.addLine(eq::Math::Vector2(100, 100),eq::Math::Vector2(200,0), eq::Physics::Materials::STATIC);
 
 	//texture.save("test.bmp");
 
@@ -258,7 +259,7 @@ equinoxAppEntryPoint
 		for (unsigned int y = 0; y < eq::Application::GetResolutionHeight(); y += 64)
 		{
 			wallPart.setPosition(eq::Math::Vector2(x, y));
-			//eq::Renderer::Draw(wallPart);
+			eq::Renderer::Draw(wallPart);
 		}
 	}
 

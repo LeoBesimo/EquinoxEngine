@@ -13,7 +13,7 @@ namespace eq
 		class PolygonShape;
 
 		eq::Physics::LineShape::LineShape(Math::Vector2 startPos, Math::Vector2 endPos, Material material) :
-			Shape(startPos + endPos / 2, 0, ShapeType::Line, material, Math::Matrix2x2(1, 0, 0, 1))
+			Shape((startPos + endPos) / 2, 0, ShapeType::Line, material, Math::Matrix2x2(1, 0, 0, 1))
 		{
 			m_StartPos = startPos;
 			m_EndPos = endPos;

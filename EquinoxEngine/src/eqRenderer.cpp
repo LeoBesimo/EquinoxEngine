@@ -8,7 +8,7 @@ namespace eq
 	{
 		BitmapBuffer& buffer = getActiveBuffer();
 
-		if (x < 0 || x >= buffer.width || y < 0 || y >= buffer.height)
+		if (x < 0 || x >= buffer.width || y < 0 || y >= buffer.height || color.alpha == 0)
 		{
 			return;
 		}

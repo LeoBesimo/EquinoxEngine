@@ -6,11 +6,10 @@
 
 namespace eq
 {
-
-	class eq::Physics::BoxShape;
-	class eq::Physics::CircleShape;
-	class eq::Physics::PolygonShape;
-	class eq::Physics::LineShape;
+	class Physics::BoxShape;
+	class Physics::CircleShape;
+	class Physics::PolygonShape;
+	class Physics::LineShape;
 
 	std::vector<eq::Math::Vector2> eq::Physics::getNormals(std::vector<Math::Vector2> corners)
 	{
@@ -409,8 +408,8 @@ namespace eq
 	{
 		LineShape* line = static_cast<LineShape*>(bodyA);
 		PolygonShape* poly = static_cast<PolygonShape*>(bodyB);
-		
-		
+
+
 		std::vector<Math::Vector2> pointsA;// = bodyA->getCorners();
 		pointsA.push_back(line->getStartPosition());
 		pointsA.push_back(line->getEndPosition());
