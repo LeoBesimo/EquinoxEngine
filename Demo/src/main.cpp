@@ -199,6 +199,10 @@ equinoxAppEntryPoint
 	if (eq::Input::WasMouseButtonHit(EQ_MOUSE_LEFT))
 		world.addPolygon(mouseTransformed, eq::Math::QUARTER_PI, 6, eq::Physics::Materials::SUPERBALL, eq::Math::Matrix2x2(20, 0, 0, 20))->setColor(0x660000FF);
 
+	if (eq::Input::WasMouseButtonHit(EQ_MOUSE_RIGHT))
+		world.addBox(mouseTransformed, eq::Math::QUARTER_PI, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(20, 40));
+
+
 	if (eq::Input::IsKeyPressed(EQ_T))
 		world.addPolygon(mouseTransformed, 0, rand() % 7 + 3, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(40, 0, 0, 40));
 	if (eq::Input::IsKeyPressed(EQ_R))
@@ -259,7 +263,7 @@ equinoxAppEntryPoint
 		for (unsigned int y = 0; y < eq::Application::GetResolutionHeight(); y += 64)
 		{
 			wallPart.setPosition(eq::Math::Vector2(x, y));
-			eq::Renderer::Draw(wallPart);
+			//eq::Renderer::Draw(wallPart);
 		}
 	}
 
