@@ -490,7 +490,85 @@ namespace eq
 
 	Math::Vector2 eq::Physics::getContactLineBox(Shape* bodyA, Shape* bodyB)
 	{
-		return Math::Vector2();
-	}
+		LineShape* line = static_cast<LineShape*>(bodyA);
+		BoxShape* poly = static_cast<BoxShape*>(bodyB);
 
+
+		std::vector<Math::Vector2> pointsA;// = bodyA->getCorners();
+		pointsA.push_back(line->getStartPosition());
+		pointsA.push_back(line->getEndPosition());
+		std::vector<Math::Vector2> pointsB = poly->getCorners();
+		unsigned int contactCount = 0;
+
+		Math::Vector2 contact1;
+		Math::Vector2 contact2;
+
+		float minDistSqr = FLT_MAX;
+
+		Math::Vector2 closest;
+
+		for (unsigned int i = 0; i < pointsA.size(); i++)
+		{
+
+			Math::Vector2 p = pointsA[i];
+
+			for (unsigned int j = 0; j < pointsB.size(); j++)
+			{
+				Math::Vector2 a = pointsB[j];
+				Math::Vector2 b = pointsB[(j + 1) % pointsB.size()];
+
+				float distSqr = Math::distPointToLine(p, a, b, &closest);
+
+				if (Math::nearlyEqual(distSqr, minDistSqr))
+				{
+					if (!nearlyEqual(closest, contact1))
+					{
+						contactCount = 2;
+						contact2 = closest;
+					}
+				}
+				else if (distSqr < minDistSqr)
+				{
+					minDistSqr = distSqr;
+					contactCount = 1;
+					contact1 = closest;
+				}
+			}
+
+		}
+
+		for (unsigned int i = 0; i < pointsB.size(); i++)
+		{
+
+			Math::Vector2 p = pointsB[i];
+
+			for (unsigned int j = 0; j < pointsA.size(); j++)
+			{
+				Math::Vector2 a = pointsA[j];
+				Math::Vector2 b = pointsA[(j + 1) % pointsA.size()];
+
+				float distSqr = Math::distPointToLine(p, a, b, &closest);
+
+				if (Math::nearlyEqual(distSqr, minDistSqr))
+				{
+					if (!nearlyEqual(closest, contact1))
+					{
+						contactCount = 2;
+						contact2 = closest;
+					}
+				}
+				else if (distSqr < minDistSqr)
+				{
+					minDistSqr = distSqr;
+					contactCount = 1;
+					contact1 = closest;
+				}
+			}
+		}
+
+		Math::Vector2 contact = contact1;
+		if (contactCount == 2) contact = (contact1 + contact2) / 2;
+
+		return contact;
+	}
 }

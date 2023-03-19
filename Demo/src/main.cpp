@@ -71,7 +71,7 @@ equinoxAppEntryPoint
 	//texture.read("test.bmp");
 
 	world.addLine(eq::Math::Vector2(0, 0), eq::Math::Vector2(100,100), eq::Physics::Materials::STATIC);
-	world.addLine(eq::Math::Vector2(100, 100),eq::Math::Vector2(200,0), eq::Physics::Materials::STATIC);
+	world.addLine(eq::Math::Vector2(100, 100),eq::Math::Vector2(200,0), eq::Physics::Materials::DEFAULT);
 
 	//texture.save("test.bmp");
 
@@ -197,10 +197,10 @@ equinoxAppEntryPoint
 	eq::Math::Vector2 mouseTransformed = eq::Renderer::ScreenToWorldspace(mouse);
 
 	if (eq::Input::WasMouseButtonHit(EQ_MOUSE_LEFT))
-		world.addPolygon(mouseTransformed, eq::Math::QUARTER_PI, 6, eq::Physics::Materials::SUPERBALL, eq::Math::Matrix2x2(20, 0, 0, 20))->setColor(0x660000FF);
+		world.addPolygon(mouseTransformed, 0, 6, eq::Physics::Materials::SUPERBALL, eq::Math::Matrix2x2(20, 0, 0, 20))->setColor(0x660000FF);
 
 	if (eq::Input::WasMouseButtonHit(EQ_MOUSE_RIGHT))
-		world.addBox(mouseTransformed, eq::Math::QUARTER_PI, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(20, 40));
+		world.addBox(mouseTransformed, 0, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(20, 40));
 
 
 	if (eq::Input::IsKeyPressed(EQ_T))

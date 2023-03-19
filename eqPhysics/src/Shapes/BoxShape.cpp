@@ -130,7 +130,7 @@ namespace eq
 
 				m.penetration = minDepth / normal.len();
 				m.normal = normal.normalize();
-				m.contact = getContactLinePolygon(line, this);
+				m.contact = getContactLineBox(line, this);
 			}
 
 			return m;
