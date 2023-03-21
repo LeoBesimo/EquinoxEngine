@@ -122,6 +122,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)eqMath/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,31 +132,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\CollisionDetector.cpp" />
-    <ClCompile Include="src\CollisionSolver.cpp" />
-    <ClCompile Include="src\PhysicsWorld.cpp" />
-    <ClCompile Include="src\Shapes\BoxShape.cpp" />
-    <ClCompile Include="src\Shapes\CircleShape.cpp" />
-    <ClCompile Include="src\Shapes\CollisionUtilities.cpp" />
-    <ClCompile Include="src\Shapes\LineShape.cpp" />
-    <ClCompile Include="src\Shapes\PolygonShape.cpp" />
-    <ClCompile Include="src\Shapes\Shape.cpp" />
-    <ClCompile Include="src\TriggerSolver.cpp" />
+    <ClCompile Include="src\cpp\CollisionDetector.cpp" />
+    <ClCompile Include="src\cpp\CollisionSolver.cpp" />
+    <ClCompile Include="src\cpp\PhysicsWorld.cpp" />
+    <ClCompile Include="src\cpp\Shapes\BoxShape.cpp" />
+    <ClCompile Include="src\cpp\Shapes\CircleShape.cpp" />
+    <ClCompile Include="src\cpp\Shapes\CollisionUtilities.cpp" />
+    <ClCompile Include="src\cpp\Shapes\LineShape.cpp" />
+    <ClCompile Include="src\cpp\Shapes\PolygonShape.cpp" />
+    <ClCompile Include="src\cpp\Shapes\Shape.cpp" />
+    <ClCompile Include="src\cpp\TriggerSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\CollisionSolver.hpp" />
-    <ClInclude Include="src\eqPhysics.hpp" />
-    <ClInclude Include="src\PhysicsWorld.hpp" />
-    <ClInclude Include="src\Shapes\BoxShape.hpp" />
-    <ClInclude Include="src\Shapes\CircleShape.hpp" />
-    <ClInclude Include="src\CollisionDetector.hpp" />
-    <ClInclude Include="src\Shapes\CollisionUtilities.hpp" />
-    <ClInclude Include="src\Shapes\eqShapes.hpp" />
-    <ClInclude Include="src\Shapes\LineShape.hpp" />
-    <ClInclude Include="src\Shapes\Materials.hpp" />
-    <ClInclude Include="src\Shapes\PolygonShape.hpp" />
-    <ClInclude Include="src\Shapes\Shape.hpp" />
-    <ClInclude Include="src\TriggerSolver.hpp" />
+    <ClInclude Include="src\Equinox\Physics\CollisionSolver.hpp" />
+    <ClInclude Include="src\Equinox\Physics\eqPhysics.hpp" />
+    <ClInclude Include="src\Equinox\Physics\PhysicsWorld.hpp" />
+    <ClInclude Include="src\Equinox\Physics\Shapes\BoxShape.hpp" />
+    <ClInclude Include="src\Equinox\Physics\Shapes\CircleShape.hpp" />
+    <ClInclude Include="src\Equinox\Physics\CollisionDetector.hpp" />
+    <ClInclude Include="src\Equinox\Physics\Shapes\CollisionUtilities.hpp" />
+    <ClInclude Include="src\Equinox\Physics\Shapes\eqShapes.hpp" />
+    <ClInclude Include="src\Equinox\Physics\Shapes\LineShape.hpp" />
+    <ClInclude Include="src\Equinox\Physics\Shapes\Materials.hpp" />
+    <ClInclude Include="src\Equinox\Physics\Shapes\PolygonShape.hpp" />
+    <ClInclude Include="src\Equinox\Physics\Shapes\Shape.hpp" />
+    <ClInclude Include="src\Equinox\Physics\TriggerSolver.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

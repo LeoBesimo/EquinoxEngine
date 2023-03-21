@@ -15,75 +15,75 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Shapes\Shape.cpp">
+    <ClCompile Include="src\cpp\Shapes\Shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shapes\BoxShape.cpp">
+    <ClCompile Include="src\cpp\Shapes\BoxShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shapes\PolygonShape.cpp">
+    <ClCompile Include="src\cpp\Shapes\PolygonShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shapes\CircleShape.cpp">
+    <ClCompile Include="src\cpp\Shapes\CircleShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\PhysicsWorld.cpp">
+    <ClCompile Include="src\cpp\PhysicsWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CollisionDetector.cpp">
+    <ClCompile Include="src\cpp\CollisionDetector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CollisionSolver.cpp">
+    <ClCompile Include="src\cpp\CollisionSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\TriggerSolver.cpp">
+    <ClCompile Include="src\cpp\TriggerSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shapes\LineShape.cpp">
+    <ClCompile Include="src\cpp\Shapes\LineShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Shapes\CollisionUtilities.cpp">
+    <ClCompile Include="src\cpp\Shapes\CollisionUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Shapes\Shape.hpp">
+    <ClInclude Include="src\Equinox\Physics\Shapes\Shape.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\eqShapes.hpp">
+    <ClInclude Include="src\Equinox\Physics\Shapes\eqShapes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\eqPhysics.hpp">
+    <ClInclude Include="src\Equinox\Physics\eqPhysics.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\Materials.hpp">
+    <ClInclude Include="src\Equinox\Physics\Shapes\Materials.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\BoxShape.hpp">
+    <ClInclude Include="src\Equinox\Physics\Shapes\BoxShape.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\PolygonShape.hpp">
+    <ClInclude Include="src\Equinox\Physics\Shapes\PolygonShape.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\CircleShape.hpp">
+    <ClInclude Include="src\Equinox\Physics\Shapes\CircleShape.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\PhysicsWorld.hpp">
+    <ClInclude Include="src\Equinox\Physics\PhysicsWorld.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CollisionDetector.hpp">
+    <ClInclude Include="src\Equinox\Physics\CollisionDetector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CollisionSolver.hpp">
+    <ClInclude Include="src\Equinox\Physics\CollisionSolver.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\TriggerSolver.hpp">
+    <ClInclude Include="src\Equinox\Physics\TriggerSolver.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\LineShape.hpp">
+    <ClInclude Include="src\Equinox\Physics\Shapes\LineShape.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\CollisionUtilities.hpp">
+    <ClInclude Include="src\Equinox\Physics\Shapes\CollisionUtilities.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

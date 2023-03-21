@@ -122,6 +122,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)eqPhysics/src;$(SolutionDir)eqMath/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,32 +132,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Audio\Sound.hpp" />
-    <ClInclude Include="src\eqApplication.hpp" />
-    <ClInclude Include="src\eqCamera.hpp" />
-    <ClInclude Include="src\eqRenderer.hpp" />
-    <ClInclude Include="src\eqRenderUtilities.hpp" />
-    <ClInclude Include="src\eqInput.hpp" />
-    <ClInclude Include="src\eqThreadPool.hpp" />
-    <ClInclude Include="src\Equinox.hpp" />
-    <ClInclude Include="src\Images\eqImages.hpp" />
-    <ClInclude Include="src\Images\Sprite.hpp" />
-    <ClInclude Include="src\Images\Texture.hpp" />
-    <ClInclude Include="src\Shapes\Ellipse.hpp" />
-    <ClInclude Include="src\Shapes\Drawable.hpp" />
-    <ClInclude Include="src\Shapes\eqShapes.hpp" />
-    <ClInclude Include="src\Shapes\Line.hpp" />
-    <ClInclude Include="src\Shapes\Rectangle.hpp" />
-    <ClInclude Include="src\Shapes\Text.hpp" />
+    <ClInclude Include="src\Equinox\Application\Audio\Sound.hpp" />
+    <ClInclude Include="src\Equinox\Application\eqApplication.hpp" />
+    <ClInclude Include="src\Equinox\Application\eqCamera.hpp" />
+    <ClInclude Include="src\Equinox\Application\eqRenderer.hpp" />
+    <ClInclude Include="src\Equinox\Application\eqRenderUtilities.hpp" />
+    <ClInclude Include="src\Equinox\Application\eqInput.hpp" />
+    <ClInclude Include="src\Equinox\Application\eqThreadPool.hpp" />
+    <ClInclude Include="src\Equinox\Equinox.hpp" />
+    <ClInclude Include="src\Equinox\Application\Images\eqImages.hpp" />
+    <ClInclude Include="src\Equinox\Application\Images\Sprite.hpp" />
+    <ClInclude Include="src\Equinox\Application\Images\Texture.hpp" />
+    <ClInclude Include="src\Equinox\Application\Shapes\Ellipse.hpp" />
+    <ClInclude Include="src\Equinox\Application\Shapes\Drawable.hpp" />
+    <ClInclude Include="src\Equinox\Application\Shapes\eqShapes.hpp" />
+    <ClInclude Include="src\Equinox\Application\Shapes\Line.hpp" />
+    <ClInclude Include="src\Equinox\Application\Shapes\Rectangle.hpp" />
+    <ClInclude Include="src\Equinox\Application\Shapes\Text.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Audio\Sound.cpp" />
-    <ClCompile Include="src\eqApplication.cpp" />
-    <ClCompile Include="src\eqInput.cpp" />
-    <ClCompile Include="src\eqRenderer.cpp" />
-    <ClCompile Include="src\eqThreadPool.cpp" />
-    <ClCompile Include="src\Images\Sprite.cpp" />
-    <ClCompile Include="src\Images\Texture.cpp" />
+    <ClCompile Include="src\cpp\Audio\Sound.cpp" />
+    <ClCompile Include="src\cpp\eqApplication.cpp" />
+    <ClCompile Include="src\cpp\eqInput.cpp" />
+    <ClCompile Include="src\cpp\eqRenderer.cpp" />
+    <ClCompile Include="src\cpp\eqThreadPool.cpp" />
+    <ClCompile Include="src\cpp\Images\Sprite.cpp" />
+    <ClCompile Include="src\cpp\Images\Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

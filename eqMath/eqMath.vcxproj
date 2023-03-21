@@ -118,6 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,16 +128,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\eqMath.hpp" />
-    <ClInclude Include="src\Matrix2x2.hpp" />
-    <ClInclude Include="src\Vector2.hpp" />
-    <ClInclude Include="src\Vector3.hpp" />
+    <ClInclude Include="src\Equinox\Math\eqMath.hpp" />
+    <ClInclude Include="src\Equinox\Math\Matrix2x2.hpp" />
+    <ClInclude Include="src\Equinox\Math\Vector2.hpp" />
+    <ClInclude Include="src\Equinox\Math\Vector3.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Vector4.hpp" />
+    <None Include="src\Equinox\Math\Vector4.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\eqMath.cpp" />
+    <ClCompile Include="src\cpp\eqMath.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

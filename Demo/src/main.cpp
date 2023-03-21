@@ -1,5 +1,5 @@
-#include "Equinox.hpp"
-#include "Audio/Sound.hpp"
+#include <Equinox/Equinox.hpp>
+#include <Equinox/Application/Audio/Sound.hpp>
 
 #include <stdio.h>
 #include <io.h>
@@ -61,7 +61,7 @@ equinoxAppEntryPoint
 		swprintf(buffer, 128, L"Penetration: %f, contactX: %f, contactY: %f\n", m.penetration, m.contact.x, m.contact.y);
 		OutputDebugString(buffer);
 	});*/
-	
+
 	//world.addBox(eq::Math::Vector2(800, 100), eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
 	//world.addBox(eq::Math::Vector2(-800, 100), -eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
 	eq::Physics::BoxShape* box = world.addBox(eq::Math::Vector2(0, 100), 0, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(32, 32));
@@ -71,6 +71,10 @@ equinoxAppEntryPoint
 	world.addLine(eq::Math::Vector2(100, 100),eq::Math::Vector2(200,0), eq::Physics::Materials::STATIC);
 
 	world.setWorldGravity(eq::Math::Vector2(0, -100));
+
+	eq::Physics::BoxShape* bob = new eq::Physics::BoxShape(eq::Math::Vector2(-100, 200), 0, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(30, 0, 0, 30));
+	bob->setGravity(eq::Math::Vector2(0, 100));
+	world.addBody(bob);
 
 	//texture.save("test.bmp");
 
@@ -234,7 +238,7 @@ equinoxAppEntryPoint
 
 	avgFrameTime += eq::Application::GetFrameTime();
 	avgCounter++;
-	swprintf(charBuffer, 128, L"Framerate: %f     FrameTime: %f ms    AvgFrameTime: %f ms", 1 / delta, eq::Application::GetFrameTime() * 1000, avgFrameTime / avgCounter * 1000);
+	swprintf(charBuffer, 128, L"Framerate: %0.2f     FrameTime: %0.2f ms    AvgFrameTime: %0.2f ms", 1 / delta, eq::Application::GetFrameTime() * 1000, avgFrameTime / avgCounter * 1000);
 	std::wstring frameText(charBuffer);
 	//OutputDebugString(charBuffer);
 
@@ -261,7 +265,7 @@ equinoxAppEntryPoint
 		for (unsigned int y = 0; y < eq::Application::GetResolutionHeight(); y += 64)
 		{
 			wallPart.setPosition(eq::Math::Vector2(x, y));
-			//eq::Renderer::Draw(wallPart);
+			eq::Renderer::Draw(wallPart);
 		}
 	}
 
@@ -272,7 +276,7 @@ equinoxAppEntryPoint
 	eq::Renderer::Draw(cameraHighlight);
 	//eq::Renderer::draw((rect));
 	//eq::Renderer::draw((circle));
-	sprite.setPosition(box->getPosition() +	eq::Math::Vector2(-box->getScale().a.x, box->getScale().b.y) / 2);
+	sprite.setPosition(box->getPosition() + eq::Math::Vector2(-box->getScale().a.x, box->getScale().b.y) / 2);
 	eq::Renderer::Draw((sprite));
 	eq::Renderer::Draw((frameRate));
 	eq::Renderer::Draw(world);

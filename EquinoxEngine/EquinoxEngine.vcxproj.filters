@@ -15,78 +15,78 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\eqRenderer.hpp">
+    <ClInclude Include="src\Equinox\Application\eqRenderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\eqApplication.hpp">
+    <ClInclude Include="src\Equinox\Application\eqApplication.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\eqInput.hpp">
+    <ClInclude Include="src\Equinox\Application\eqInput.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\eqRenderUtilities.hpp">
+    <ClInclude Include="src\Equinox\Application\eqRenderUtilities.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Equinox.hpp">
+    <ClInclude Include="src\Equinox\Equinox.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\Drawable.hpp">
+    <ClInclude Include="src\Equinox\Application\Shapes\Drawable.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\eqCamera.hpp">
+    <ClInclude Include="src\Equinox\Application\eqCamera.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\eqShapes.hpp">
+    <ClInclude Include="src\Equinox\Application\Shapes\eqShapes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\Ellipse.hpp">
+    <ClInclude Include="src\Equinox\Application\Shapes\Ellipse.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\Rectangle.hpp">
+    <ClInclude Include="src\Equinox\Application\Shapes\Rectangle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\Line.hpp">
+    <ClInclude Include="src\Equinox\Application\Shapes\Line.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shapes\Text.hpp">
+    <ClInclude Include="src\Equinox\Application\Shapes\Text.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Images\eqImages.hpp">
+    <ClInclude Include="src\Equinox\Application\Images\eqImages.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Images\Sprite.hpp">
+    <ClInclude Include="src\Equinox\Application\Images\Sprite.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Images\Texture.hpp">
+    <ClInclude Include="src\Equinox\Application\Images\Texture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\eqThreadPool.hpp">
+    <ClInclude Include="src\Equinox\Application\eqThreadPool.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Audio\Sound.hpp">
+    <ClInclude Include="src\Equinox\Application\Audio\Sound.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\eqApplication.cpp">
+    <ClCompile Include="src\cpp\eqApplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\eqInput.cpp">
+    <ClCompile Include="src\cpp\eqInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\eqRenderer.cpp">
+    <ClCompile Include="src\cpp\eqRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Images\Texture.cpp">
+    <ClCompile Include="src\cpp\Images\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Images\Sprite.cpp">
+    <ClCompile Include="src\cpp\Images\Sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\eqThreadPool.cpp">
+    <ClCompile Include="src\cpp\eqThreadPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Audio\Sound.cpp">
+    <ClCompile Include="src\cpp\Audio\Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
