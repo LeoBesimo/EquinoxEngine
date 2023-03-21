@@ -1,5 +1,4 @@
 #include "Equinox.hpp"
-#include "Testgame.hpp"
 #include "Audio/Sound.hpp"
 
 #include <stdio.h>
@@ -9,8 +8,6 @@
 equinoxAppEntryPoint
 {
 	srand(time(NULL));
-
-	Testgame game;
 
 	std::wstring t(L"Test");
 
@@ -64,14 +61,16 @@ equinoxAppEntryPoint
 		swprintf(buffer, 128, L"Penetration: %f, contactX: %f, contactY: %f\n", m.penetration, m.contact.x, m.contact.y);
 		OutputDebugString(buffer);
 	});*/
+	
 	//world.addBox(eq::Math::Vector2(800, 100), eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
 	//world.addBox(eq::Math::Vector2(-800, 100), -eq::Math::QUARTER_PI, eq::Physics::Materials::STATIC, eq::Math::Vector2(400, 20));
-	world.setWorldGravity(eq::Math::Vector2(0, -100));
-	//eq::Physics::BoxShape* box = world.addBox(eq::Math::Vector2(0, 100), eq::Math::QUARTER_PI/2, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(32, 32));
+	eq::Physics::BoxShape* box = world.addBox(eq::Math::Vector2(0, 100), 0, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(32, 32));
 	//texture.read("test.bmp");
 
 	world.addLine(eq::Math::Vector2(0, 0), eq::Math::Vector2(100,100), eq::Physics::Materials::STATIC);
-	world.addLine(eq::Math::Vector2(100, 100),eq::Math::Vector2(200,0), eq::Physics::Materials::DEFAULT);
+	world.addLine(eq::Math::Vector2(100, 100),eq::Math::Vector2(200,0), eq::Physics::Materials::STATIC);
+
+	world.setWorldGravity(eq::Math::Vector2(0, -100));
 
 	//texture.save("test.bmp");
 
@@ -81,7 +80,7 @@ equinoxAppEntryPoint
 	eq::Sprite wallPart(wall, 48,0, 16, 16);
 	wallPart.setCameraDependent(false);
 	wallPart.scale(4, 4);
-	wallPart.preprocessSprite();
+	//wallPart.preprocessSprite();
 
 	eq::BitmapTexture wallTexture(1424,1024);
 	for (unsigned int i = 0; i < 1424; i += 64)
@@ -104,8 +103,9 @@ equinoxAppEntryPoint
 	//car.invertX();
 	//car.save("Ume.bmp");
 
-	eq::Sprite sprite(car);// , 16, 0, 16, 16);
+	eq::Sprite sprite(car,0,0,16,16);// , 16, 0, 16, 16);
 	sprite.scale(4,4);
+	sprite.setPosition(eq::Math::Vector2(0, 0));
 	//sprite.preprocessSprite();
 	//sprite.rotate(eq::Math::QUARTER_PI / 2);
 
@@ -211,7 +211,7 @@ equinoxAppEntryPoint
 		for (int i = 0; i < 1; i++) world.addCircle(mouseTransformed, 0, 20, eq::Physics::Materials::DEFAULT)->setOnCollisionFunction([&](eq::Physics::Manifold m, eq::Physics::Shape* self) {
 
 			//if (m.bodyA == self && m.bodyB->getShapeType() == eq::Physics::ShapeType::Box)
-				self->setGravity(self->getGravit() * -1);
+				//self->setGravity(self->getGravit() * -1);
 			if (m.bodyB == self && m.bodyB->getShapeType() == eq::Physics::ShapeType::Circle)
 				self->setColor(0xFF00FFFF);
 		});
@@ -250,9 +250,7 @@ equinoxAppEntryPoint
 
 	frameRate.setText(frameText);
 
-	game.update(delta);
 	world.update(delta);
-	game.render();
 
 	//eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(255, 0, 0, 160));
 	//eq::Renderer::DrawSprite(sprite);
@@ -274,7 +272,8 @@ equinoxAppEntryPoint
 	eq::Renderer::Draw(cameraHighlight);
 	//eq::Renderer::draw((rect));
 	//eq::Renderer::draw((circle));
-	//eq::Renderer::draw((sprite));
+	sprite.setPosition(box->getPosition() +	eq::Math::Vector2(-box->getScale().a.x, box->getScale().b.y) / 2);
+	eq::Renderer::Draw((sprite));
 	eq::Renderer::Draw((frameRate));
 	eq::Renderer::Draw(world);
 	});

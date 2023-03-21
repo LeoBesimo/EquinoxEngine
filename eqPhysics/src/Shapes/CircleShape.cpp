@@ -43,7 +43,72 @@ namespace eq
 
 		Manifold CircleShape::collideLine(Shape* other)
 		{
-			return Manifold();
+			Manifold m;
+
+			LineShape* line = static_cast<LineShape*>(other);
+
+			m.bodyA = this;
+			m.bodyB = line;
+
+			Math::Vector2 lineVector = line->getEndPosition() - line->getStartPosition();
+			Math::Vector2 lineNormal = Math::Vector2(-lineVector.y, lineVector.x);
+
+			bool separated = false;
+
+			Math::Vector2 normal;
+			float minDepth = FLT_MAX;
+
+
+			Math::Vector2 projectionA = getMinMaxCircle(getPosition(), getRadius(), lineVector);
+			float dotLineA = Math::dot(line->getStartPosition(), lineNormal);
+			float dotLineB = Math::dot(line->getEndPosition(), lineNormal);
+			Math::Vector2 projectionB = Math::Vector2(std::min(dotLineA, dotLineB), std::max(dotLineA, dotLineB));
+			separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+			//if (separated) break;
+
+			float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+			if (depth < minDepth)
+			{
+				minDepth = depth;
+				normal = lineNormal;
+			}
+
+			std::vector<Math::Vector2> corners;
+			corners.push_back(line->getStartPosition());
+			corners.push_back(line->getEndPosition());
+
+			Math::Vector2 closestPoint = getClosestPoint(getPosition(), corners);
+			Math::Vector2 axis = closestPoint - getPosition();
+
+			projectionA = getMinMaxCircle(getPosition(), getRadius(), axis);
+			dotLineA = Math::dot(line->getStartPosition(), axis);
+			dotLineB = Math::dot(line->getEndPosition(), axis);
+			projectionB = Math::Vector2(std::min(dotLineA, dotLineB), std::max(dotLineA, dotLineB));
+
+			separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+
+			depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+			if (depth < minDepth)
+			{
+				minDepth = depth;
+				normal = axis;
+			}
+
+			m.colliding = !separated;
+			if (!separated)
+			{
+				Math::Vector2 ab = getPosition() - line->getPosition();
+
+				if (Math::dot(ab, normal) < 0) normal *= -1;
+
+				m.penetration = minDepth / normal.len();
+				m.normal = normal.normalize();
+				m.contact = getContactLineCircle(line, this);
+			}
+
+			return m;
 		}
 
 		Manifold CircleShape::collideCircle(Shape* other)

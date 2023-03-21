@@ -60,7 +60,72 @@ namespace eq
 
 		Manifold eq::Physics::LineShape::collideCircle(Shape* other)
 		{
-			return Manifold();
+			Manifold m;
+
+			CircleShape* circle = static_cast<CircleShape*>(other);
+
+			m.bodyA = this;
+			m.bodyB = circle;
+
+			Math::Vector2 lineVector = getEndPosition() - getStartPosition();
+			Math::Vector2 lineNormal = Math::Vector2(-lineVector.y, lineVector.x);
+
+			bool separated = false;
+
+			Math::Vector2 normal;
+			float minDepth = FLT_MAX;
+
+
+			Math::Vector2 projectionA = getMinMaxCircle(circle->getPosition(), circle->getRadius(), lineVector);
+			float dotLineA = Math::dot(getStartPosition(), lineNormal);
+			float dotLineB = Math::dot(getEndPosition(), lineNormal);
+			Math::Vector2 projectionB = Math::Vector2(std::min(dotLineA, dotLineB), std::max(dotLineA, dotLineB));
+			separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+			//if (separated) break;
+
+			float depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+			if (depth < minDepth)
+			{
+				minDepth = depth;
+				normal = lineNormal;
+			}
+
+			std::vector<Math::Vector2> corners;
+			corners.push_back(getStartPosition());
+			corners.push_back(getEndPosition());
+
+			Math::Vector2 closestPoint = getClosestPoint(circle->getPosition(), corners);
+			Math::Vector2 axis = closestPoint - circle->getPosition();
+
+			projectionA = getMinMaxCircle(circle->getPosition(), circle->getRadius(), axis);
+			dotLineA = Math::dot(getStartPosition(), axis);
+			dotLineB = Math::dot(getEndPosition(), axis);
+			projectionB = Math::Vector2(std::min(dotLineA, dotLineB), std::max(dotLineA, dotLineB));
+
+			separated = projectionA.x >= projectionB.y || projectionB.x >= projectionA.y;
+
+			depth = std::min(projectionB.y - projectionA.x, projectionA.y - projectionB.x);
+
+			if (depth < minDepth)
+			{
+				minDepth = depth;
+				normal = axis;
+			}
+
+			m.colliding = !separated;
+			if (!separated)
+			{
+				Math::Vector2 ab = getPosition() - circle->getPosition();
+
+				if (Math::dot(ab, normal) < 0) normal *= -1;
+
+				m.penetration = minDepth / normal.len();
+				m.normal = normal.normalize();
+				m.contact = getContactLineCircle(this, other);
+			}
+
+			return m;
 		}
 
 		Manifold eq::Physics::LineShape::collidePolygon(Shape* other)
@@ -206,6 +271,9 @@ namespace eq
 		void eq::Physics::LineShape::applyGravity()
 		{
 			applyForce(getGravit() * getMass());
+
+			applyForce(getGravit() * getInertia() * 0.5, m_StartPos - getPosition());
+			applyForce(getGravit() * getInertia() * 0.5, m_EndPos - getPosition());
 		}
 
 		void eq::Physics::LineShape::applyGravity(int timeSteps)

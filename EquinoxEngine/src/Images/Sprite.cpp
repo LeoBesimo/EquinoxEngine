@@ -73,6 +73,8 @@ namespace eq
 		m_Scale.x = scaleX;
 		m_Scale.y = scaleY;
 		m_OriginalScale = m_Scale;
+		m_ScaledWidth = m_Width * scaleX;
+		m_ScaledHeight = m_Height * scaleY;
 		m_Changed = true;
 	}
 

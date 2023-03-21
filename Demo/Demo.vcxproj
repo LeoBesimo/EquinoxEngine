@@ -141,10 +141,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Testgame.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Testgame.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

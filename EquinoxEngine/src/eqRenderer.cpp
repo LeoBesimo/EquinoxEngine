@@ -245,8 +245,8 @@ namespace eq
 		if (sprite.getScaledSize().x <= 200)
 		{
 
-			int minX = std::floor(sprite.getPosition().x + 0.5f);
-			int minY = std::floor(sprite.getPosition().y + 0.5f);
+			int minX = std::floor(position.x + 0.5f);
+			int minY = std::floor(position.y + 0.5f);
 			int maxX = minX + sprite.getScaledSize().x;
 			int maxY = minY + sprite.getScaledSize().y;
 

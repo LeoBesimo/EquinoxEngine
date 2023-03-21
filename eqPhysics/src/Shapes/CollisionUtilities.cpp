@@ -401,7 +401,30 @@ namespace eq
 
 	Math::Vector2 eq::Physics::getContactLineCircle(Shape* bodyA, Shape* bodyB)
 	{
-		return Math::Vector2();
+		LineShape* line = static_cast<LineShape*>(bodyA);
+		CircleShape* circle = static_cast<CircleShape*>(bodyB);
+
+		//std::vector<Math::Vector2> corners = bodyB->getCorners();
+		Math::Vector2 pCenter = line->getPosition();
+		Math::Vector2 cCenter = circle->getPosition();
+		float radius = circle->getRadius();
+		Math::Vector2 cp;
+
+		float minDistSqr = FLT_MAX;
+
+
+			Math::Vector2 va = line->getStartPosition();
+			Math::Vector2 vb = line->getEndPosition();
+
+			Math::Vector2 contact;
+			float distSqr = Math::distPointToLine(cCenter, va, vb, &contact);
+			if (distSqr < minDistSqr)
+			{
+				cp = contact;
+				minDistSqr = distSqr;
+			}
+
+		return cp;
 	}
 
 	Math::Vector2 eq::Physics::getContactLinePolygon(Shape* bodyA, Shape* bodyB)
@@ -458,28 +481,27 @@ namespace eq
 
 			Math::Vector2 p = pointsB[i];
 
-			for (unsigned int j = 0; j < pointsA.size(); j++)
+
+			Math::Vector2 a = pointsA[0];
+			Math::Vector2 b = pointsA[1];
+
+			float distSqr = Math::distPointToLine(p, a, b, &closest);
+
+			if (Math::nearlyEqual(distSqr, minDistSqr))
 			{
-				Math::Vector2 a = pointsA[j];
-				Math::Vector2 b = pointsA[(j + 1) % pointsA.size()];
-
-				float distSqr = Math::distPointToLine(p, a, b, &closest);
-
-				if (Math::nearlyEqual(distSqr, minDistSqr))
+				if (!nearlyEqual(closest, contact1))
 				{
-					if (!nearlyEqual(closest, contact1))
-					{
-						contactCount = 2;
-						contact2 = closest;
-					}
-				}
-				else if (distSqr < minDistSqr)
-				{
-					minDistSqr = distSqr;
-					contactCount = 1;
-					contact1 = closest;
+					contactCount = 2;
+					contact2 = closest;
 				}
 			}
+			else if (distSqr < minDistSqr)
+			{
+				minDistSqr = distSqr;
+				contactCount = 1;
+				contact1 = closest;
+			}
+
 		}
 
 		Math::Vector2 contact = contact1;
@@ -542,28 +564,27 @@ namespace eq
 
 			Math::Vector2 p = pointsB[i];
 
-			for (unsigned int j = 0; j < pointsA.size(); j++)
+
+			Math::Vector2 a = pointsA[0];
+			Math::Vector2 b = pointsA[1];
+
+			float distSqr = Math::distPointToLine(p, a, b, &closest);
+
+			if (Math::nearlyEqual(distSqr, minDistSqr))
 			{
-				Math::Vector2 a = pointsA[j];
-				Math::Vector2 b = pointsA[(j + 1) % pointsA.size()];
-
-				float distSqr = Math::distPointToLine(p, a, b, &closest);
-
-				if (Math::nearlyEqual(distSqr, minDistSqr))
+				if (!nearlyEqual(closest, contact1))
 				{
-					if (!nearlyEqual(closest, contact1))
-					{
-						contactCount = 2;
-						contact2 = closest;
-					}
-				}
-				else if (distSqr < minDistSqr)
-				{
-					minDistSqr = distSqr;
-					contactCount = 1;
-					contact1 = closest;
+					contactCount = 2;
+					contact2 = closest;
 				}
 			}
+			else if (distSqr < minDistSqr)
+			{
+				minDistSqr = distSqr;
+				contactCount = 1;
+				contact1 = closest;
+			}
+
 		}
 
 		Math::Vector2 contact = contact1;
