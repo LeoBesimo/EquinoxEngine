@@ -265,7 +265,7 @@ equinoxAppEntryPoint
 		for (unsigned int y = 0; y < eq::Application::GetResolutionHeight(); y += 64)
 		{
 			wallPart.setPosition(eq::Math::Vector2(x, y));
-			eq::Renderer::Draw(wallPart);
+			//eq::Renderer::Draw(wallPart);
 		}
 	}
 

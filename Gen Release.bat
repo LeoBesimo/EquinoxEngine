@@ -1,5 +1,6 @@
 echo off
 set /p VERSIONNUMBER="Version Number: " || set "VERSIONNUMBER="
+mkdir "Release Build"
 cd "Release Build"
 mkdir "EquinoxEngine %VERSIONNUMBER%"
 cd "EquinoxEngine %VERSIONNUMBER%"

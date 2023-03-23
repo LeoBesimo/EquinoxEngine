@@ -15,7 +15,7 @@ namespace eq
 
 		BoxShape* PhysicsWorld::addBox(Math::Vector2 position, float angle, Material material, Math::Vector2 scale, Math::Vector2 velocity, float omega, Math::Vector2 gravity)
 		{
-			BoxShape* box = new BoxShape(position, angle, material, Math::Matrix2x2(scale.x, 0, 0, scale.y));
+			BoxShape* box = new BoxShape(position, angle, material, Math::Matrix2x2(scale.x / 2, 0, 0, scale.y / 2));
 			box->setVelocity(velocity);
 			box->setOmega(omega);
 			box->setGravity(M_GRAVITY);
@@ -37,7 +37,7 @@ namespace eq
 
 		PolygonShape* PhysicsWorld::addPolygon(Math::Vector2 position, float angle, int sides, Material material, Math::Matrix2x2 scale, Math::Vector2 velocity, float omega, Math::Vector2 gravity)
 		{
-			PolygonShape* polygon = new PolygonShape(position, angle, sides, material, scale);
+			PolygonShape* polygon = new PolygonShape(position, angle, sides, material, scale * 0.5);
 			polygon->setVelocity(velocity);
 			polygon->setOmega(omega);
 			polygon->setGravity(M_GRAVITY);
