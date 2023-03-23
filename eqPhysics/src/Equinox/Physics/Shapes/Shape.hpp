@@ -60,6 +60,8 @@ namespace eq
 
 			Tag m_Tag;
 
+			bool m_IsColliding;
+
 			std::function<void()> m_Trigger;
 			std::function<void(Manifold m, Shape* self)> m_OnCollision;
 
@@ -104,6 +106,8 @@ namespace eq
 
 			Tag getTag() { return m_Tag; }
 
+			bool isColliding() { return m_IsColliding; }
+
 			//Set
 			void setShapeType(ShapeType type) { this->m_Type = type; }
 			void setMaterial(Material material) { this->m_Material = material; }
@@ -135,6 +139,8 @@ namespace eq
 			void setOnCollisionFunction(const std::function<void(Manifold m, Shape* self)>& func) { this->m_OnCollision = func; }
 
 			void setTag(Tag tag) { m_Tag = tag; }
+
+			void setColliding(bool colliding) { m_IsColliding = colliding; }
 
 			void trigger() { this->m_Trigger(); }
 

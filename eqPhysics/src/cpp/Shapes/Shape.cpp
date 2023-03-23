@@ -19,6 +19,7 @@ namespace eq
 
 		void Shape::update(float delta)
 		{
+			m_IsColliding = false;
 			integrateForces(delta);
 			integrateVelocities(delta);
 		}

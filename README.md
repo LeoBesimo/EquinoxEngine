@@ -21,6 +21,7 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
     - Circles
     - Boxes
     - Polygons
+    - Lines
 - [x] Support for 32 Bit Bitmap Textures
     - Loading from Disk
     - Saving to Disk
@@ -38,7 +39,7 @@ A small Game Framework written in C++ using the Win32 api. Written for Learning 
 ## main.cpp
 **Link the Libraries and Include the Header files**
 ```cpp
-#include <Equinox.hpp>
+#include <Equinox/Equinox.hpp>
 
 equinoxAppEntryPoint
 {
@@ -59,8 +60,8 @@ equinoxAppEntryPoint
  - There is currently no option to draw ellipse outlines
  - Precomputed sprites don't get Scaled with the bound Camera matrix
  - There is no default Camera bound to the Renderer, a Camera object has to be assigned to the Renderer before the first draw call
- - The Renderer begins to flicker at high Framerates due to async update and render threads
- - Can Crash due to Async update and render threads
+ - When drawing directly on the main Thread the image flickers, doesn't happen when passing Drawables to the Renderer
+
 
 ## Important TODOs
  - [ ] Fix penetration distance calculation for Polygon and box shapes

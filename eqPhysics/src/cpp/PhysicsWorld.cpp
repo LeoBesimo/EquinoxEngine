@@ -119,6 +119,8 @@ namespace eq
 				{
 					bodyA->getOnCollision()(manifold, bodyA);
 					bodyB->getOnCollision()(manifold, bodyB);
+					bodyA->setColliding(true);
+					bodyB->setColliding(true);
 					if (!bodyA->isTrigger() && !bodyB->isTrigger())
 					{
 						m_Solver.resolveDynamicWithFriction(manifold);

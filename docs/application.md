@@ -34,14 +34,25 @@ equinoxAppEntryPoint
     // Starts the Application and creates the Window
     ```
 ### Optional Functions
+
 - ```cpp
-  void eq::Application::SetWindowSize(unsigned int width, unsigned int height);
-  // Resizes the Window to the passed width and height and centers it on the Screen
+    void eq::Application::SetApplicationInit(const std::function<void()>& init);
+    // Sets a Initialization function which runs once after the window creation
   ```
 
 - ```cpp
-  void eq::Application::SetFullscreen();
-  //  Resiizes the Window and removes the Border to make the Window Fullscreen
+    void eq::Application::SetWindowSize(unsigned int width, unsigned int height);
+    // Resizes the Window to the passed width and height and centers it on the Screen
+  ```
+
+- ```cpp
+    void eq::Application::SetFullscreen();
+    //  Resiizes the Window and removes the Border to make the Window Fullscreen
+  ```
+
+- ```cpp
+    void eq::Application::SetResolution(unsigned int width, unsigned int height);
+    // Sets the Resolution of the Window
   ```
 
 - ```cpp
@@ -52,6 +63,12 @@ equinoxAppEntryPoint
     bool eq::Application::IsRunning();
     // Returns True if the Application is Running
     ```
+
+- ```cpp
+    bool eq::Application::IsResizing();
+    // Returns True if the Window is in the Process of Resizing
+  ```
+
 - ```cpp
     std::wstring eq::Application::GetWindowTitle();
     // Returns the window title
@@ -64,6 +81,15 @@ equinoxAppEntryPoint
     int eq::Application::GetWindowHeight();
     // Returns the window height in Pixels
     ```
+- ```cpp
+    void eq::Application::GetResolutionWidth();
+    // Gets the Width of the current Window Resolution
+  ```
+- ```cpp
+    void eq::Application::GetResolutionHeight();
+    // Gets the Height of the current Window Resolution
+  ```
+
 - ```cpp
     HWND eq::Application::GetWindowHandle();
     // Returns the Handle of the Application window
