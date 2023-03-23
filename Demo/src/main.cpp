@@ -72,9 +72,9 @@ equinoxAppEntryPoint
 
 	world.setWorldGravity(eq::Math::Vector2(0, -100));
 
-	eq::Physics::BoxShape* bob = new eq::Physics::BoxShape(eq::Math::Vector2(-100, 200), 0, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(30, 0, 0, 30));
+	/*eq::Physics::BoxShape* bob = new eq::Physics::BoxShape(eq::Math::Vector2(-100, 200), 0, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(30, 0, 0, 30));
 	bob->setGravity(eq::Math::Vector2(0, 100));
-	world.addBody(bob);
+	world.addBody(bob);*/
 
 	//texture.save("test.bmp");
 
@@ -255,6 +255,11 @@ equinoxAppEntryPoint
 	frameRate.setText(frameText);
 
 	world.update(delta);
+
+	wallPart.setCameraDependent(true);
+	wallPart.setPosition(mouseTransformed - wallPart.getScaledSize() * eq::Math::Vector2(1,-1) / 2);
+	eq::Renderer::Draw(wallPart);
+
 
 	//eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(255, 0, 0, 160));
 	//eq::Renderer::DrawSprite(sprite);

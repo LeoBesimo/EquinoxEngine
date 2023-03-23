@@ -1,4 +1,8 @@
 echo off
+
+devenv EquinoxEngine.sln /Build Debug
+devenv EquinoxEngine.sln /Build Release
+
 set /p VERSIONNUMBER="Version Number: " || set "VERSIONNUMBER="
 mkdir "Release Build"
 cd "Release Build"

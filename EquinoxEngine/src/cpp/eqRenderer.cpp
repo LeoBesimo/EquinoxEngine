@@ -245,25 +245,44 @@ namespace eq
 		if (sprite.getScaledSize().x <= 200)
 		{
 
+
 			int minX = std::floor(position.x + 0.5f);
 			int minY = std::floor(position.y + 0.5f);
 			int maxX = minX + sprite.getScaledSize().x;
 			int maxY = minY + sprite.getScaledSize().y;
 
-			if (minX < 0) minX = 0;
-			if (minY < 0) minY = 0;
+			int xOff = 0;
+			int yOff = 0;
+
+			if (minX < 0)
+			{
+				minX = 0;
+				xOff = sprite.getScaledSize().x - maxX;
+			}
+			if (minY < 0)
+			{
+				minY = 0;
+				yOff = sprite.getScaledSize().y - maxY;
+			}
 			if (maxX > buffer.width) maxX = buffer.width;
 			if (maxY > buffer.height) maxY = buffer.height;
+
+			//wchar_t output[256];
+			//swprintf(output, 256, L"minX: %d,  minY: %d,  maxX: %d,  maxY: %d,  diffX %d,  diffY: %d\n", minX, minY, maxX, maxY, maxX - minX, maxY - minY);
+			//OutputDebugString(output);
+
 			uint32_t rb1, rb2, g1, g2;
 			uint8_t alpha;
 
 			//uint32_t rawColor = (color.red << 16) | (color.green << 8) | (color.blue << 0);
 
+
+
 			uint8_t* row = (uint8_t*)buffer.memory + minX * s_BytesPerPixel + minY * buffer.pitch;
-			int j = 0;
+			int j = yOff;
 			for (int y = minY; y < maxY; y++)
 			{
-				int i = 0;
+				int i = xOff;
 				uint32_t* pixel = (uint32_t*)row;
 				for (int x = minX; x < maxX; x++)
 				{
@@ -613,6 +632,8 @@ namespace eq
 
 		wchar_t buffer[256];
 
+		//bufferWidth = getActiveBuffer().width;
+		//bufferHeight = getActiveBuffer().height;
 
 		getWindowDimensions(&bufferWidth, &bufferHeight);
 
