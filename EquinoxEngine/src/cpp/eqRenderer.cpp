@@ -242,7 +242,7 @@ namespace eq
 			sprite.m_Changed = false;
 		}
 
-		if (sprite.getScaledSize().x <= 200)
+		if (true)
 		{
 
 

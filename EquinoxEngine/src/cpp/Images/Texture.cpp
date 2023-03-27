@@ -113,7 +113,7 @@ namespace eq
 		// You can now access the pixel data stored in the vector using the [] operator,
 		// e.g. pixels[0] is the first pixel in the image, pixels[1] is the second pixel, etc.
 
-		return 0;
+		return true;
 	}
 
 	bool BitmapTexture::save(const char* path) const
