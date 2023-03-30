@@ -96,9 +96,10 @@ namespace eq
 
 
 			//Friction
-			Math::Vector2 tangent = rv - normal * contactVelMag;
+			Math::Vector2 tangent = rv - (normal * contactVelMag);
 
 			if (Math::nearlyEqual(tangent, Math::Vector2())) return;
+			
 			tangent.normalize();
 
 			float den1 = bodyA->getInvMass() + bodyB->getInvMass();
@@ -113,7 +114,7 @@ namespace eq
 			float sf = (bodyA->getMaterial().staticFriction + bodyB->getMaterial().staticFriction) / 2;//sqrt(bodyA->getMaterial().staticFriction * bodyB->getMaterial().staticFriction);
 			float df = (bodyA->getMaterial().dynamicFriction + bodyB->getMaterial().dynamicFriction) / 2;//sqrt(bodyA->getMaterial().dynamicFriction * bodyB->getMaterial().dynamicFriction);
 
-			if (abs(jt) < j * sf)
+			if (abs(jt) <= j * sf)
 				frictionImpulse = tangent * jt;
 			else
 				frictionImpulse = tangent * -j * df;

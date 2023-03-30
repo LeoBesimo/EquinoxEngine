@@ -84,6 +84,11 @@ namespace eq
 			return newMin + (newMax - newMin) * ((val - oldMin) / (oldMax - oldMin));
 		}
 
+		float clamp(float val, float min, float max)
+		{
+			return fmax(fmin(val,max),min);
+		}
+
 		float square(float n)
 		{
 			return n * n;

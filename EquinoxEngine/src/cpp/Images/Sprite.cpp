@@ -78,6 +78,38 @@ namespace eq
 		m_Changed = true;
 	}
 
+	void Sprite::invertX()
+	{
+		std::vector<uint32_t> temp(m_OriginalBuffer.size());
+		for (unsigned int j = 0; j < m_Height; j++)
+		{
+			for (unsigned int i = 0; i < m_Width; i++)
+			{
+				unsigned int index = i + j * m_Width;
+				unsigned int indexReversed = (m_Width - 1 - i) + j * m_Width;
+				temp[indexReversed] = m_OriginalBuffer[index];
+			}
+		}
+
+		m_OriginalBuffer = std::vector<uint32_t>(temp);
+	}
+
+	void Sprite::invertY()
+	{
+		std::vector<uint32_t> temp(m_OriginalBuffer.size());
+		for (unsigned int j = 0; j < m_Height; j++)
+		{
+			for (unsigned int i = 0; i < m_Width; i++)
+			{
+				unsigned int index = i + j * m_Width;
+				unsigned int indexReversed = i + (m_Height - 1 - j) * m_Width;
+				temp[indexReversed] = m_OriginalBuffer[index];
+			}
+		}
+
+		m_OriginalBuffer = temp;
+	}
+
 	uint32_t Sprite::getPixel(unsigned int x, unsigned int y)
 	{
 		if (x < 0 || x >= m_Width || y < 0 || y >= m_Height)

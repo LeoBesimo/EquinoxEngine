@@ -110,7 +110,9 @@ equinoxAppEntryPoint
 	eq::Sprite sprite(car,0,0,16,16);// , 16, 0, 16, 16);
 	sprite.scale(4,4);
 	sprite.setPosition(eq::Math::Vector2(0, 0));
-	//sprite.preprocessSprite();
+	sprite.invertY();
+	sprite.preprocessSprite();
+	//sprite.invertX();
 	//sprite.rotate(eq::Math::QUARTER_PI / 2);
 
 
@@ -204,8 +206,11 @@ equinoxAppEntryPoint
 		world.addPolygon(mouseTransformed, 0, 6, eq::Physics::Materials::SUPERBALL, eq::Math::Matrix2x2(20, 0, 0, 20))->setColor(0x660000FF);
 
 	if (eq::Input::WasMouseButtonHit(EQ_MOUSE_RIGHT))
-		world.addBox(mouseTransformed, 0, eq::Physics::Materials::DEFAULT, eq::Math::Vector2(20, 40));
-
+	{
+		eq::Physics::BoxShape* blob = world.addBox(mouseTransformed, 0, eq::Physics::Material(1,0,0.4,0.6), eq::Math::Vector2(20, 40));
+		blob->setInertia(0);
+		blob->setVelocity(eq::Math::Vector2(10,0));
+	}
 
 	if (eq::Input::IsKeyPressed(EQ_T))
 		world.addPolygon(mouseTransformed, 0, rand() % 7 + 3, eq::Physics::Materials::DEFAULT, eq::Math::Matrix2x2(40, 0, 0, 40));
@@ -258,7 +263,7 @@ equinoxAppEntryPoint
 
 	wallPart.setCameraDependent(true);
 	wallPart.setPosition(mouseTransformed - wallPart.getScaledSize() * eq::Math::Vector2(1,-1) / 2);
-	eq::Renderer::Draw(wallPart);
+	//eq::Renderer::Draw(wallPart);
 
 
 	//eq::Renderer::FillCircle(mouse.x, mouse.y, 30, eq::Color(255, 0, 0, 160));
@@ -281,7 +286,8 @@ equinoxAppEntryPoint
 	eq::Renderer::Draw(cameraHighlight);
 	//eq::Renderer::draw((rect));
 	//eq::Renderer::draw((circle));
-	sprite.setPosition(box->getPosition() + eq::Math::Vector2(-box->getScale().a.x, box->getScale().b.y) / 2);
+	//sprite.setPosition(box->getPosition() + eq::Math::Vector2(-box->getScale().a.x, box->getScale().b.y) / 2);
+	sprite.setPosition(eq::Math::Vector2());
 	eq::Renderer::Draw((sprite));
 	eq::Renderer::Draw((frameRate));
 	eq::Renderer::Draw(world);
