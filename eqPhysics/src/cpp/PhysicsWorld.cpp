@@ -215,5 +215,21 @@ namespace eq
 			m_Bodies[index] = nullptr;
 			m_Bodies.erase(m_Bodies.begin() + index);
 		}
+		void PhysicsWorld::removeBodyByTagID(int id)
+		{
+			for (int i = m_Bodies.size() - 1; i >= 0; i--)
+			{
+				if (m_Bodies[i]->getTag().tagId == id)
+					removeBody(i);
+			}
+		}
+		void PhysicsWorld::removeBodyByTagName(std::wstring name)
+		{
+			for (int i = m_Bodies.size() - 1; i >= 0; i--)
+			{
+				if (m_Bodies[i]->getTag().tagName == name)
+					removeBody(i);
+			}
+		}
 	}
 }
