@@ -45,6 +45,9 @@
     <ClCompile Include="src\cpp\Shapes\CollisionUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\cpp\Shapes\CollisionDetectionAlgorithms.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Equinox\Physics\Shapes\Shape.hpp">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Equinox\Physics\Shapes\CollisionUtilities.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Equinox\Physics\Shapes\CollisionDetectionAlgorithms.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -137,6 +137,7 @@
     <ClCompile Include="src\cpp\PhysicsWorld.cpp" />
     <ClCompile Include="src\cpp\Shapes\BoxShape.cpp" />
     <ClCompile Include="src\cpp\Shapes\CircleShape.cpp" />
+    <ClCompile Include="src\cpp\Shapes\CollisionDetectionAlgorithms.cpp" />
     <ClCompile Include="src\cpp\Shapes\CollisionUtilities.cpp" />
     <ClCompile Include="src\cpp\Shapes\LineShape.cpp" />
     <ClCompile Include="src\cpp\Shapes\PolygonShape.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="src\Equinox\Physics\Shapes\BoxShape.hpp" />
     <ClInclude Include="src\Equinox\Physics\Shapes\CircleShape.hpp" />
     <ClInclude Include="src\Equinox\Physics\CollisionDetector.hpp" />
+    <ClInclude Include="src\Equinox\Physics\Shapes\CollisionDetectionAlgorithms.hpp" />
     <ClInclude Include="src\Equinox\Physics\Shapes\CollisionUtilities.hpp" />
     <ClInclude Include="src\Equinox\Physics\Shapes\eqShapes.hpp" />
     <ClInclude Include="src\Equinox\Physics\Shapes\LineShape.hpp" />

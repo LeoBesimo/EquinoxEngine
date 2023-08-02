@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Equinox\Application\Animation\Animation.hpp" />
     <ClInclude Include="src\Equinox\Application\Audio\Sound.hpp" />
     <ClInclude Include="src\Equinox\Application\eqApplication.hpp" />
     <ClInclude Include="src\Equinox\Application\eqCamera.hpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="src\cpp\eqThreadPool.cpp" />
     <ClCompile Include="src\cpp\Images\Sprite.cpp" />
     <ClCompile Include="src\cpp\Images\Texture.cpp" />
+    <ClCompile Include="src\cpp\Animation\Animation.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -82,9 +82,9 @@ equinoxAppEntryPoint
 	wall.read("WorldSpriteSheet.bmp");
 	wall.invertY();
 	eq::Sprite wallPart(wall, 48,0, 16, 16);
-	wallPart.setCameraDependent(false);
+	wallPart.setCameraDependent(true);
 	wallPart.scale(4, 4);
-	//wallPart.preprocessSprite();
+	wallPart.preprocessSprite();
 
 	eq::BitmapTexture wallTexture(1424,1024);
 	for (unsigned int i = 0; i < 1424; i += 64)
@@ -96,7 +96,7 @@ equinoxAppEntryPoint
 	}
 
 	eq::Sprite wallSprite(wallTexture);
-	wallSprite.setCameraDependent(false);
+	wallSprite.setCameraDependent(true);
 	wallSprite.preprocessSprite();
 
 	eq::BitmapTexture car;
@@ -110,7 +110,7 @@ equinoxAppEntryPoint
 	eq::Sprite sprite(car,0,0,16,16);// , 16, 0, 16, 16);
 	sprite.scale(4,4);
 	sprite.setPosition(eq::Math::Vector2(0, 0));
-	sprite.invertY();
+	//sprite.invertY();
 	sprite.preprocessSprite();
 	//sprite.invertX();
 	//sprite.rotate(eq::Math::QUARTER_PI / 2);
@@ -208,8 +208,8 @@ equinoxAppEntryPoint
 	if (eq::Input::WasMouseButtonHit(EQ_MOUSE_RIGHT))
 	{
 		eq::Physics::BoxShape* blob = world.addBox(mouseTransformed, 0, eq::Physics::Material(1,0,0.4,0.6), eq::Math::Vector2(20, 40));
-		blob->setInertia(0);
-		blob->setVelocity(eq::Math::Vector2(10,0));
+		//blob->setInertia(0);
+		//blob->setVelocity(eq::Math::Vector2(10,0));
 	}
 
 	if (eq::Input::IsKeyPressed(EQ_T))
@@ -261,8 +261,8 @@ equinoxAppEntryPoint
 
 	world.update(delta);
 
-	wallPart.setCameraDependent(true);
-	wallPart.setPosition(mouseTransformed - wallPart.getScaledSize() * eq::Math::Vector2(1,-1) / 2);
+	//wallPart.setCameraDependent(true);
+	//wallPart.setPosition(mouseTransformed - wallPart.getScaledSize() * eq::Math::Vector2(1,-1) / 2);
 	//eq::Renderer::Draw(wallPart);
 
 
@@ -275,6 +275,7 @@ equinoxAppEntryPoint
 		for (unsigned int y = 0; y < eq::Application::GetResolutionHeight(); y += 64)
 		{
 			wallPart.setPosition(eq::Math::Vector2(x, y));
+			wallPart.setCameraDependent(false);
 			//eq::Renderer::Draw(wallPart);
 		}
 	}
@@ -288,7 +289,7 @@ equinoxAppEntryPoint
 	//eq::Renderer::draw((circle));
 	//sprite.setPosition(box->getPosition() + eq::Math::Vector2(-box->getScale().a.x, box->getScale().b.y) / 2);
 	sprite.setPosition(eq::Math::Vector2());
-	eq::Renderer::Draw((sprite));
+	//eq::Renderer::Draw((sprite));
 	eq::Renderer::Draw((frameRate));
 	eq::Renderer::Draw(world);
 	});

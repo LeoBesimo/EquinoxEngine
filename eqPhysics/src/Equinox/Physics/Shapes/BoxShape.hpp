@@ -2,7 +2,7 @@
 
 #include "Shape.hpp"
 #include "CollisionUtilities.hpp"
-
+#include "CollisionDetectionAlgorithms.hpp"
 
 namespace eq
 {

@@ -106,11 +106,12 @@ namespace eq
 			void clearStatic();
 			void clearAll();
 
+			void removeBodyByTagID(int id);
+			void removeBodyByTagName(std::wstring name);
+
 		private:
 			bool inWorld(Shape* shape);
 			void removeBody(unsigned int index);
-			void removeBodyByTagID(int id);
-			void removeBodyByTagName(std::wstring name);
 		};
 	}
 }
